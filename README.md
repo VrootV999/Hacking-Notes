@@ -1,4 +1,11 @@
-## Outline of the Notes.
+# Hacking-Notes By VrootV999
+
+These are notes that i use for everything.This will be usefull for exams, or even to check out anytime
+
+
+--- 
+
+# Outline of the Notes.
 
 
 - Tools
@@ -13,3 +20,5 @@
 - Attack Vector
     - Consist all the plane of attack
     - two things a checklist and a guide for each(maybe together)
+
+
