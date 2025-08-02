@@ -1,0 +1,13 @@
+fuck it
+
+git clone https://github.com/Datalux/Osintgram.git
+cd Osintgram
+pip install -r requirements.txt
+cd config
+echo "formanr792" > username.conf
+echo "Formanrobert792" > pw.conf
+echo "{}" > setting.json
+python3 -m venv venv 
+source venv/bin/activate
+pip install -r requirements.txt
+put credentials in credentials.ini

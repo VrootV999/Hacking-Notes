@@ -1,0 +1,5 @@
+create a directory of zphisher
+mkdir .........(the name)
+cd to that
+git clone --depth=1 https://github.com/htr-tech/zphisher.git
+bash zphisher.sh

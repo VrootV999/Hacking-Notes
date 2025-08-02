@@ -1,0 +1,15 @@
+airmon-ng			monitor wirless interface
+airdump-ng <interface>		capture packets
+aircrack-ng <capture_file>	crack wifi password from captured
+				packets
+airmon-ng
+
+airmon-ng stop interface
+airmon-ng start interface chanel name
+
+airdump-ng 
+
+-c channel
+-w wordlist
+-u info of pc and the progress
+

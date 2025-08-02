@@ -1,0 +1,25 @@
+download the sources.list for ubuntu from the internet and put it in a folder
+run terminal in that folder 
+supervisor
+mv /etc/apt/sources.list.bak /etc/apt/sources.list
+if it isn't working 
+mv /etc/apt/sources.list /etc/apt/sources.list.bak
+then try previous command
+go to the place where you have the file
+cp sources.list /etc/apt/
+cd /var/lib/apt/lists
+ls (to check aux and partials exist)
+sudo rm *
+ls if they are present(they should be present) auxfiles and partials
+cd ..
+exit and enter supervisor mode 
+sudo apt update
+pubkey will be there so add it by
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys (pubkey)
+        do it for the two pubkeys
+apt update 
+sudo apt upgrade
+sudo apt install snort
+thats it  
+also configuration no changes while installing it for your domain. 
+you'll thank me later.

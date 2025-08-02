@@ -1,0 +1,11 @@
+pip install -U --user shodan
+shodan
+shodan init YOUR_API_KEY
+
+easy_install -U --user shodan
+pip3 install -U --user shodan
+
+
+
+my api key (login to shodan to find it )
+7GotR9oNgDARjQp3a91MTlUvOVnG60Us

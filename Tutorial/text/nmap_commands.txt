@@ -1,0 +1,24 @@
+nmap <target_ip>	target scan
+-sS			stealth scan
+-A			Aggresive scan
+-p			port
+-sP			port scan
+-sT			Tcp connect
+-O			OS scan
+-sn			scan network(full port scan)
+-sV			version of service scan
+-sU			UDP scan 
+-oG			custom file as output
+--script		scripts you can use(from nmap website)
+			vuln	dos	brute	default
+			exploit	fuzzer	external intrusive 
+			malware	safe	broadcast
+
+-oN (normal file)
+-oX (xml file)
+
+-D (decoy -ip)
+
+
+nmap argument ip/24(netmask)
+

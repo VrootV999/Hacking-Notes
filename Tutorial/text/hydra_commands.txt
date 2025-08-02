@@ -1,0 +1,5 @@
+hydra -l <username> -P <password_list> <protocol>://<target>:
+
+-o output file
+-t n.o of parallel connections
+

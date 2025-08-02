@@ -1,0 +1,6 @@
+john --wordlist=password.txt hashes.txt
+john --show hashes.txt
+john --single username_hashes.txt
+john --incremental hashes.txt
+john (mode) --format=raw=(format) (or)    --format=(format)
+

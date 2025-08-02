@@ -1,0 +1,5 @@
+mkdir Maskphish
+cd Maskphish
+git clone https://github.com/jaykali/maskphish
+cd maskphish
+./maskphish.sh

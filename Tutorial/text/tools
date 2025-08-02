@@ -1,0 +1,61 @@
+things to install if new setup is added
+
+gdebi
+gdebi-gtk
+tor
+torbrowser-launcher
+openssh-server
+openvpn
+riseup-vpn
+vs code
+all apps in backup folder
+sqlninja
+dnstracer
+cisco-torch
+cisco-auditing-tool
+cisco-global-exploiter
+bed
+GIKismet
+ghostphisher
+stegosuite
+wine (if wanted)
+docker 
+docker-ce
+sublime
+juice-shop
+
+cain&abel * only windows 
+vega *
+wpscan
+joomscan 
+tlssled *
+w3af * 
+armitage  
+pof
+dumpzilla
+ddrescue 
+DFF *
+slowhttptest
+inviteflood
+laxflood *
+thc-ssl-dos
+mitmproxy
+sslstrip
+johnny
+rainbowcrack
+sqldict *
+hash-identifier
+sdb *
+webshells
+weevely
+http-tunnel *
+dns2tcp
+cryptcat
+netcat * 
+ollydbg
+dex2jar
+jd-gui
+apktool
+dradis
+metagoofil
+ 

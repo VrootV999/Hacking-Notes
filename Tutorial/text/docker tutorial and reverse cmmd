@@ -1,0 +1,66 @@
+sudo apt install -y docker.io
+sudo systemctl enable docker --now while installation and after installation use the same command but without --now
+also 
+sudo systemctl enable containerd.service
+restart to run service
+disable containerd.service
+disable docker
+
+to run docker daemon
+service docker status to see if it is running or not
+
+sudo usermod -aG docker $USER
+logout and if it didn't work put another command  newgrp docker 
+still not reboot the system 
+
+
+to test it
+
+ 
+docker --version
+docker info 
+docker run hello-world
+docker images
+docker ps
+
+to run a environment 
+
+example dvwa 
+
+cmmd 
+docker run -rm -it -p 80:80 vulnerable/web-dvwa 
+try it again if it didnt work 
+let it download and it will start
+try 127.0.0.1 to access 
+admin password 
+create a database 
+redirectlogin and login 
+you should close it and if to use it again you should use docker run command
+to shut it down 
+terminal 
+control c to terminate environment 
+               * you'll thank me later for this shit*
+               
+               issue starting the Docker service, and it recommends checking the details using systemctl status docker.service and journalctl -xeu docker.service
+               
+               solution 
+
+to remove docker 
+
+sudo apt-cache policy docker*    to check its status either instaled or not
+docker ps
+docker ps -a
+docker rm -f $(docker ps -a -q)
+               
+               
+note 
+
+just see those commands to understand shit but to run docker. it is just simple. 
+just if there is any sort of error just remove it]
+
+by 
+sudo spt-get purge docker.io 
+sudo rm -rf /var/lib/docker
+sudo rm -rf /etc/docker
+               
+               

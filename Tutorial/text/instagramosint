@@ -1,0 +1,7 @@
+it is a tool to get info of a victim in insta
+so 
+git clone https://github.com/sc1341/InstagramOSINT.git
+then 
+go to the folder
+pip3 install -r requirements.txt
+python3 main.py --username USERNAME

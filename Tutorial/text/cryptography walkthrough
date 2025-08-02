@@ -1,0 +1,46 @@
+1. Cryptographic Fundamentals
+Encryption vs. Hashing: Understand the difference between encryption (reversible) and hashing (one-way transformation).
+Symmetric vs. Asymmetric Encryption: Learn how they differ and when to use each.
+Symmetric Encryption: Single key for encryption and decryption (e.g., AES, DES, 3DES).
+Asymmetric Encryption: Public and private key pair (e.g., RSA, ECC).
+Hashing: One-way functions that convert data into a fixed-size string (e.g., MD5, SHA-256).
+Learn about salt and pepper in hashing to strengthen security.
+Digital Signatures: Used to verify authenticity and integrity of data.
+Key Exchange Protocols: How keys are securely exchanged, e.g., Diffie-Hellman.
+2. Symmetric Key Algorithms
+AES (Advanced Encryption Standard): A modern, widely used encryption algorithm. Study its block size and key length.
+DES (Data Encryption Standard) and 3DES: Older algorithms, but useful for understanding cryptography history and legacy systems.
+Stream vs. Block Ciphers: Understand how these ciphers operate. Stream ciphers (e.g., RC4) encrypt data bit by bit, while block ciphers (e.g., AES) encrypt fixed-size blocks of data.
+3. Asymmetric Key Algorithms
+RSA: One of the most widely used public-key algorithms. Learn how it works and why it is considered secure.
+ECC (Elliptic Curve Cryptography): A newer, more efficient alternative to RSA with smaller key sizes for the same level of security.
+ElGamal: Another public-key encryption system, often used for digital signatures.
+4. Hashing Algorithms
+MD5: While outdated and vulnerable, it’s important to know for legacy systems and cracking techniques.
+SHA (Secure Hash Algorithm): Learn about different versions like SHA-1, SHA-256, and why they matter for data integrity.
+Bcrypt: A hashing function specifically designed for password hashing.
+Rainbow Tables and Hash Collisions: Learn how attackers use precomputed hash tables to crack passwords.
+5. Digital Signatures and Certificates
+Digital Signatures: Understand how they ensure the authenticity of a message and how they are applied in SSL/TLS certificates.
+Public Key Infrastructure (PKI): Learn about certificate authorities (CAs), certificate issuance, revocation, and trust chains.
+6. Cryptographic Attacks
+Brute Force Attacks: Guessing all possible keys or passwords.
+Man-in-the-Middle (MITM) Attacks: Intercepting and potentially altering communication.
+Side-Channel Attacks: Gaining information from the physical implementation of a cryptosystem (e.g., timing attacks, power analysis).
+Replay Attacks: Intercepting and retransmitting data to trick a system.
+Padding Oracle Attacks: Exploiting padding errors in block cipher modes.
+Cryptanalysis: Techniques used to break cryptographic algorithms (e.g., differential and linear cryptanalysis).
+7. SSL/TLS and Secure Communication Protocols
+SSL (Secure Sockets Layer) and TLS (Transport Layer Security): Learn how these protocols protect web communications, and the role of HTTPS.
+Handshake Process: Understand how encryption keys are negotiated between clients and servers during the SSL/TLS handshake.
+8. Steganography
+Hiding Information: Learn how data can be hidden within other files (like images) and how this can be used both by hackers and ethical hackers to detect hidden threats.
+9. Cryptographic Tools
+OpenSSL: A toolkit for implementing SSL/TLS encryption.
+Hashcat: A powerful tool used for password cracking via brute force and dictionary attacks.
+John the Ripper: A popular password cracking tool that uses cryptography to analyze weak passwords.
+GPG (GNU Privacy Guard): A tool for encrypting files, emails, and creating digital signatures.
+10. Real-World Applications of Cryptography
+Disk Encryption: Tools like BitLocker and VeraCrypt for encrypting hard drives.
+Email Encryption: PGP/GPG for secure email communication.
+VPN Encryption: Study how encryption is applied in VPN technologies (e.g., IPsec, OpenVPN).

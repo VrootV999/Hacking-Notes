@@ -1,0 +1,11 @@
+clear APT cache
+check:		du -sh /var/cache/apt
+clean:		apt-get clean 
+
+clear journal logs
+check:		journalctl --disk-usage
+clean:		journalctl --vacuum-time=3d
+
+clear thumbnail cache
+check:		du -sh ~/.cache/thumbnails
+clean:		rm -rf ~/.cache/thumbnails

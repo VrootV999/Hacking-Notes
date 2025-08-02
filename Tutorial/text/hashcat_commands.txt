@@ -1,0 +1,3 @@
+hashcat -m (mode) -a (attack) hashfile.txt wordlist.txt
+-b benchmark
+--session=(sessionname)

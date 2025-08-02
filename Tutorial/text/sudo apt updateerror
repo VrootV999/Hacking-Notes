@@ -1,0 +1,5 @@
+deb http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware
+deb-src http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware
+#deb [trusted=yes] file:/run/live/medium kali-last-snapshot main contrib non-free non-free-firmware 
+
+solution for sudo apt update thank me later:)

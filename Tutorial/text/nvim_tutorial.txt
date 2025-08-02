@@ -1,0 +1,32 @@
+Cheat Sheet for nvim
+
+B/W tabs
+alt + k/j  l/h 
+
+B/W buffers 
+TAB or shift+TAB 
+create new buffer:    space b 
+kill buffer:          space x
+
+
+QUIT
+Save:                   :w
+Quit:                   :q 
+Not save & Quit:        :q!
+Quit all:               :qa!
+
+Terminal
+Escape:                 ESC 
+Horizontal terminal:    space h 
+Vertical terminal:      space v
+quit:                   exit
+
+Resize
+resize (value):         resize tabs horizontally
+vertical resize (value) resize tabs vertically
+
+Mischellanious
+Open Cheat Sheet:       space c h 
+
+
+ 

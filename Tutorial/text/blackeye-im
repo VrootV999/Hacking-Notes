@@ -1,0 +1,17 @@
+wget https://archive.org/download/github.com-An0nUD4Y-blackeye_-_2018-07-12_13-02-30/An0nUD4Y-blackeye_-_2018-07-12_13-02-30.bundle
+
+ git clone An0nUD4Y-blackeye_-_2018-07-12_13-02-30.bundle  
+ 
+ 
+
+
+ngrok config add-authtoken 2l8QwybL8jsWM7RheDqMdJYXhEk_4L1noVMfkU3fYGxT6d1XG 
+
+if not working 
+
+./ngrok authtoken token 
+
+ngrok http 8080
+
+if not working we have to run the server using apache2
+

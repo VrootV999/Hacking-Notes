@@ -1,0 +1,23 @@
+update
+sudo su
+git clone https://github.com/beefproject/beef.git 
+cd to the beef
+./install
+no error then 
+           ./beef
+if 
+   gem update --system 
+   gem sources --update 
+   bundle force 
+   what shows not installed install it by gem install (package name)
+now run ./install again
+change the password in config.yaml
+robert
+robert
+./beef 
+click on the ui url link with ctl 
+launches the webpage 
+login 
+
+
+fuck you 

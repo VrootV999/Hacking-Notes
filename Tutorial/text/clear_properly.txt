@@ -1,0 +1,7 @@
+you need to clean up properly 
+
+shread -u ~/.local/share/clipman.json
+clipman delete
+pkill clipman && clipman
+
+

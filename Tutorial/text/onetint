@@ -1,0 +1,17 @@
+	
+apt update && 
+apt install gdebi tor torbrowser-launcher openssh-server riseup-vpn sqlninja dnstracer cisco-torch cisco-auditing-tool cisco-global-exploiter bed stegosuite juice-shop joomscan armitage p0f dumpzilla ddrescue slowhttptest inviteflood thc-ssl-dos mitmproxy sslstrip johnny rainbowcrack hash-identifier webshells weevely dns2tcp cryptcat ollydbg dex2jar jd-gui apktool dradis metagoofil plank android-sdk alacarte vlc neovim python3-neovim ghidra jadx
+
+install 
+veracrypt 
+android-studio
+neovim (chad)
+
+
+walpapers
+
+apt install kali-wallpapers-legacy kali-wallpapers-community kali-wallpapers-2025 kali-wallpapers-2024 kali-wallpapers-2023 kali-wallpapers-2022 kali-wallpapers-2020.4 kali-wallpapers-2019.4
+
+nano /etc/apt/sources.list
+deb http://http.kali.org/kali kali-last-snapshot main contrib non-free non-free-firmware
+deb [trusted=yes] file:/run/live/medium kali-last-snapshot main contrib non-free non-free-firmware

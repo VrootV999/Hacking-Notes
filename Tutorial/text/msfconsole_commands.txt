@@ -1,0 +1,49 @@
+metasploit framework
+
+show modules		shows the modules inbuilt
+			exploits
+			payloads
+			auxilaries
+search (modules)	search for modules within framework
+show options		show available modules and exploits
+info			load info about specific exploit or
+			module
+use (name) (number)	use the specific module or number
+LHOST
+RHOST
+
+modules in detail
+
+Auxilary		scanning fuzzing sniffing admin 
+			admin capabilities
+Encoder			ensure payload is perfectly working
+Exploit			module that exploits vulnerability
+NOP(no operation code)	keep payload size consistent
+payload			use the exploit to launch attack
+plugins			additional scripts to add
+post			infornmation gathering
+
+show targets		check who is targeted
+
+types of payload
+	single	exploit and shellcode for the task
+	stagers perfoms specific task and works with stages
+	stages	payloads downloaded by stagers and has adv 
+		features
+
+db update		update db
+location of metasploit /usr/share/metasploit-framework/
+
+search			find the module you want
+then if you found what you want
+use (exploit location)
+
+to set target
+
+set RHOST (ip)
+show targets to verify
+
+use msfpc to generate payload
+/kali/msfpc location
+msfconsole -q -r location to payload
+

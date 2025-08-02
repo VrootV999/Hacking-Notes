@@ -1,0 +1,43 @@
+
+apt update && apt install gdebi tor torbrowser-launcher
+openssh-server riseup-vpn sqlninja dnstracer cisco-torch 
+cisco-auditing-tool cisco-global-exploiter bed stegosuite 
+docker juice-shop joomscan armitage p0f dumpzilla ddrescue 
+slowhttptest inviteflood thc-ssl-dos mitmproxy sslstrip 
+johnny rainbowcrack hash-identifier webshells weevely dns2tcp 
+cryptcat ollydbg dex2jar jd-gui apktool dradis metagoofil plank 
+
+
+or 
+apt install gdebi tor torbrowser-launcher openssh-server riseup-vpn sqlninja dnstracer cisco-torch cisco-auditing-tool cisco-global-exploiter bed stegosuite juice-shop joomscan armitage p0f dumpzilla ddrescue slowhttptest inviteflood thc-ssl-dos mitmproxy sslstrip johnny rainbowcrack hash-identifier webshells weevely dns2tcp cryptcat ollydbg dex2jar jd-gui apktool dradis metagoofil plank android-sdk alacarte vlc neovim python3-neovim ghidra jadx bleachbit zbar-tools foremost steghide exiv2 gimp stegcracker apktools sane-airscan squashfs-tools mugshot xfce4-terminal bloodhound bloodhound.py nxc
+
+gem install zteg 
+veracrypt 
+android-studio
+neovim (chad)
+docker
+sonic-visualiser
+oh-my-zsh
+nerd-fonts (JetBrains)
+~/.local/share/fonts
+/usr/share/fonts
+/usr/local/share/fonts
+
+nano /etc/apt/sources.list
+deb http://http.kali.org/kali kali-last-snapshot main contrib non-free non-free-firmware
+deb [trusted=yes] file:/run/live/medium kali-last-snapshot main contrib non-free non-free-firmware
+
+apt install kali-wallpapers-legacy kali-wallpapers-community kali-wallpapers-2025 kali-wallpapers-2024 kali-wallpapers-2023 kali-wallpapers-2022 kali-wallpapers-2020.4 kali-wallpapers-2019.4
+
+
+
+for wine
+sudo dpkg --add-architecture i386
+sudo mkdir -pm755 /etc/apt/keyrings
+wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key -
+sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
+sudo apt install --install-recommends winehq-stable
+
+
+
+

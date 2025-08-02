@@ -1,0 +1,66 @@
+Terminal Commands 
+ls -lah
+cd /path/to/directory
+cp source /where/to
+mv source /where/to
+rm file/orlocation
+rm -rf file/location
+uname -a
+df -h 
+free -m
+ifconfig 
+ip a s
+ifconfig interfacename
+ifconfig interface newaddress netmask (newmask)
+ifconfig interface newaddress
+ifconfig interface (down/up)
+ping (hostname/ip)
+traceroute (hostname/ip)
+adduser username
+deluser username
+passwd username
+chmod 
++ (add)
+- (remove)
+binary	octal	rwx
+000	  0	---
+001	  1	--x
+010	  2	-w-
+011	  3	-wx
+100	  4	r--
+101	  5	r-w
+110	  6	rw-
+111	  7	rwx
+
+chown user:group filename 
+ps aux
+kill -(number)	PID
+1 hangup and restart
+2 intrupt
+3 terminate and saves memory in cwd
+9 absolute kill
+15 default kill
+
+pkill process_name
+
+apt update
+apt upgrade
+apt install pkg_name
+apt remove pkg_name
+apt purge pkg_name
+
+
+find /path -name "filename"
+grep "what to find within the file" filename
+wget "https://filelink/file"
+git clone "https://www.github.com/whatever the link is"
+sytemctl status/restart/stop/start/enable/disable service.service
+service service status/restart/stop/start/enable/disable 
+
+
+macchnager 
+down the interface 
+macchanger -A/-a/-r interface
+up the interface
+
+

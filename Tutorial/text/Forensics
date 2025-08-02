@@ -1,0 +1,23 @@
+Covering Tracks 
+
+Auditing: taking all the things that has happened in the os
+2021:
+Auditpol.exe    windows 
+rm files for linux (logs and audits)
+
+tools
+
+clearlogs.exe      
+meterspleter in metasploit
+go to control panel system and security and administrator tools got to event viwer and delet the logs
+
+in linux var/log/messages
+
+
+MRU features in windows can show that you did something in the system and also windows registry has telltale signs which says what has the attacker done.
+
+
+ccleaner: temp, logs, memory dumps, online history
+MRU Blaster: can clear MRU, REg edit, microsoft office, recent folders, all the apps that use MRU
+IN Windows AuditPaul: can turn of auditing policy 
+but it doesn't have a backup point to get back to the previous settings so what is the best thing to do is to remember what to change to get back to the previous 

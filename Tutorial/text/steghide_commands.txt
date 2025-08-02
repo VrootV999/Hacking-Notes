@@ -1,0 +1,8 @@
+steghide embed -cf cover.jpg -ef secret.txt
+steghide extract -sf cover.jpg
+
+embed    extract
+-cf	coverfile
+-ef	embedfile
+-sf	extractfile
+

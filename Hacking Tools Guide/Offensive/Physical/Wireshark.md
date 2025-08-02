@@ -1,0 +1,12 @@
+## Wireshark has no fucking commands in it you dumbass
+## sorting
+- ip.addr = (ip address)
+- ip.addr != (ip address)
+- ipv6.addr = (ipv6 address)
+- ipv6 addr != (ipv6 address)
+- just put the protocol to find the things in the search to find the packet with the protocol
+- tcp.port == (port)
+- udp.port == (port)
+- && and
+- || or
+- ! not
