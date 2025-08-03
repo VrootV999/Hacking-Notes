@@ -1,13 +1,20 @@
 forensic way to recover any type of file
 
 # fdisk -l
-// note never run foremost on the same partition that is being used
+> [!NOTE]
+> Never run foremost on the same partition that is being used
 
-# sudo foremost -i (device name from foremost)
-the files are stored at the cwd at output folder
+```bash
+sudo foremost -i (device name from foremost)
+```
+
+> [!NOTE]
+> the files are stored at the cwd at output folder
+
 
 # restrict search
 
 sudo foremost -v -q -t png,zip,jpg -i /dev/name -o $HOME/Desktop/recover
--v    for verbose
--q    for quick mode
+`-v`    for verbose
+`-t`    for type
+`-q`    for quick mode

@@ -40,8 +40,8 @@ Tasks completion:   ▱▱▱▱▱▱▱▱▱▱ 00%
 
 >[!IMPORTANT] Add a Checklist and a tool guide for all the things under phase 1
 
-- [ ] Forensics tools to be completed
-- [ ] Anti Forensics tools to be completed 
+- [x] Forensics tools to be completed
+- [x] Anti Forensics tools to be completed 
 - [ ] Web App Tools to be completed
 - [ ] Recon Tools
 - [ ] Reverse Engineering Tools
