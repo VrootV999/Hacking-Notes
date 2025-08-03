@@ -2,6 +2,11 @@
 
 These are notes that i use for everything.This will be usefull for exams, or even to check out anytime
 
+> [!NOTE] STILL UNDER PROGRESS
+
+Total Progress:     ▰▰▱▱▱▱▱▱▱▱ 10%
+Tasks completion:   ▱▱▱▱▱▱▱▱▱▱ 00%
+
 --- 
 
 # Outline of the Notes.
