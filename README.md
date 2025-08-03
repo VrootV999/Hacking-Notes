@@ -5,6 +5,7 @@ These are notes that i use for everything.This will be usefull for exams, or eve
 > [!NOTE] STILL UNDER PROGRESS
 
 Total Progress:     ▰▰▱▱▱▱▱▱▱▱ 10%
+
 Tasks completion:   ▱▱▱▱▱▱▱▱▱▱ 00%
 
 --- 
