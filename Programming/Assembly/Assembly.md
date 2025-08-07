@@ -138,6 +138,8 @@ mov source, destination
 | R15    | R15D   | R15W   | —          | R15B      | Same                        |
 
 
+
+
 ### Classic Purpose Registers
 
 - RAX / EAX: Return value of functions, accumulator for arithmetic
@@ -180,6 +182,36 @@ Diagram
 | VIF  | 19    | Virtual Interrupt Flag           |
 | VIP  | 20    | Virtual Interrupt Pending        |
 | ID   | 21    | Able to use CPUID instruction    |
+
+
+--- 
+
+## Syscalls
+[[x86_32_syscalls.md]]
+[[x86_syscalls.md]]
+    
+---
+
+## Variable Storage Space
+
+| Directive | Purpose            | Storage space |
+| --------- | ------------------ | ------------- |
+| DB        | Define Byte        | 1 byte        |
+| DW        | Define word        | 2 byte        |
+| DD        | Define double word | 4 byte        |
+| DQ        | Define quad word   | 8 byte        |
+| DT        | Define ten bytes   | 10 byte       |
+
+## Allocating Storage Space for Uninitialized Data
+
+
+| Directive | Purpose          |
+| --------- | ---------------- |
+| RESB      | Reserve a byte   |
+| RESW      | Reserve 2 bytes  |
+| RESD      | Reserve 4 bytes  |
+| RESQ      | Reserve 8 bytes  |
+| REST      | Reserve 10 bytes |
 
 
 --- 
@@ -461,120 +493,315 @@ Macros can generate readable, reusable logic blocks for things like syscall wrap
 
 --- 
 
-# III. 🧩 Reverse Engineering with Assembly
 
+##  SIMD and Floating Point Instructions
 
-##     Reading Disassembled Code
+### SSE, AVX, and Vector Registers
+
+| Name   | Width | Purpose                    |
+|--------|-------|----------------------------|
+| XMM0–XMM15 | 128-bit | SSE (Streaming SIMD Extensions) |
+| YMM0–YMM15 | 256-bit | AVX (Advanced Vector Extensions) |
+| ZMM0–ZMM31 | 512-bit | AVX-512 (High-performance SIMD)  |
+
+### Common SIMD Instructions (Intel)
+
+| Instruction     | Description                          |
+|------------------|--------------------------------------|
+| `MOVAPS`        | Move aligned packed single-precision |
+| `MOVUPS`        | Move unaligned packed singles        |
+| `ADDPS`         | Add packed singles                   |
+| `MULPS`         | Multiply packed singles              |
+| `PXOR`          | Bitwise XOR for integer vectors      |
+| `PADDQ`         | Add packed quadwords                 |
+
+> Requires CPU feature detection and proper alignment for max performance.
+
+---
+ 
+## II. 🎯 Position-Independent Code (PIC)
+
+### What is PIC?
+
+Position-Independent Code can be loaded at **any memory address** and still function correctly, without relocation.
+
+- Used in **shared libraries** and **shellcode**.
+- Avoid absolute addresses – use **relative addressing** with `RIP` (x86_64).
+
+```asm
+    lea rdi, [rel message]
+    call printf
+```
+
 ---
 
-##     Recognizing Compiler Patterns
---- 
+## Inline Assembly (GCC / MSVC / Clang)
+- GCC-Style Inline Assembly (x86/x64)
+```cpp
+int add(int a, int b) {
+    int result;
+    __asm__ (
+        "addl %%ebx, %%eax;"
+        : "=a"(result)
+        : "a"(a), "b"(b)
+    );
+    return result;
+}
+```
 
-##     Identifying Common Functions in Binaries
---- 
+- "=a" → output constraint (EAX)
 
-##     Recognizing Standard Library Calls
---- 
+- "a", "b" → input constraints
 
-##     Static vs Dynamic Analysis
---- 
+- Clobbers can be added with : : : "cc", "memory"
 
-##     Symbol Resolution and Stripped Binaries
---- 
-
-##     Reversing Malware or Packed Executables
---- 
-
-##     Reversing without Source Code
---- 
-
-# IV. 🧨 Buffer Overflows and Exploit Development
-
-##     Stack Layout and Function Prologue/Epilogue
---- 
-
-##     Buffer Overflows (Stack-based, Heap-based)
---- 
-
-##     Shellcode Basics and Writing Shellcode in ASM
---- 
-
-##     NOP Sleds and Return Address Overwrites
---- 
-
-##     SEH Exploits on Windows
 ---
 
-##     Using pwntools and GDB for Exploitation
+
+## Writing Shellcode (Linux/x86_64)
+
+### Characteristics of Shellcode
+
+- Must be position-independent
+
+- Avoid null bytes (0x00)
+
+- No external dependencies (no libc)
+
+> [!EXAMPLE]  Example
+>  Linux execve("/bin/sh")
+```asm
+section .text
+global _start
+
+_start:
+    xor rax, rax
+    mov rbx, 0x68732f6e69622f2f ; "//bin/sh"
+    push rbx
+    mov rdi, rsp
+    xor rsi, rsi
+    xor rdx, rdx
+    mov al, 59         ; syscall execve
+    syscall
+```
+
+> [!NOTE]  NOTE
+> Use objdump -d to verify byte output and check for bad chars.
+
+
 --- 
 
-##     DEP, ASLR, Stack Canaries (Bypassing Defenses)
+## System V ABI (Linux x64) vs Microsoft x64 ABI
+
+### System V ABI (Linux/macOS)
+
+
+| Argument # | Register |
+| ---------- | -------- |
+| 1          | RDI      |
+| 2          | RSI      |
+| 3          | RDX      |
+| 4          | RCX      |
+| 5          | R8       |
+| 6          | R9       |
+| Return     | RAX      |
+
+
+- Caller-saved: RAX, RCX, RDX, R8–R11
+
+- Callee-saved: RBX, RBP, R12–R15
+
+### Microsoft x64 ABI (Windows)
+
+| Argument # | Register |
+| ---------- | -------- |
+| 1          | RCX      |
+| 2          | RDX      |
+| 3          | R8       |
+| 4          | R9       |
+
+ - Return value in RAX
+
+- Stack aligned to 16 bytes before call
+
 --- 
 
-##     Format String Vulnerabilities
+
+## Multithreading and Atomic Instructions
+
+### Atomic Instructions
+| Instruction | Description                  |
+| ----------- | ---------------------------- |
+| `LOCK`      | Prefix for atomic operations |
+| `XCHG`      | Atomic exchange              |
+| `CMPXCHG`   | Compare and exchange         |
+| `XADD`      | Exchange and add             |
+
+
+- Use lock cmpxchg for atomic compare-and-swap loops.
+
 --- 
 
-##     Return-Oriented Programming (ROP)
+## Exception Handling and Interrupts (x86)
+
+### Software Interrupts
+
+```asm
+int 0x80      ; Linux syscall (x86)
+```
+
+### Hardware Interrupt Flow (simplified)
+
+- Interrupt occurs
+
+- CPU pushes flags, CS, and IP onto stack
+
+- Jumps to address in IDT (Interrupt Descriptor Table)
+
+### Return from Interrupt
+
+- IRET or IRETD restores execution state
+
+---
+
+## 📉 Floating Point (x87 FPU)
+
+### x87 Register Stack
+
+
+- 8 registers: ST(0) to ST(7)
+
+- Stack-style (push/pop) operations
+
+### Basic FPU Instructions
+
+
+| Instruction | Meaning                   |
+| ----------- | ------------------------- |
+| `FLD`       | Load floating-point value |
+| `FSTP`      | Store and pop             |
+| `FADD`      | Add ST(0) + ST(i)         |
+| `FDIV`      | Divide ST(0) / ST(i)      |
+
 --- 
 
-##     Jump-Oriented Programming (JOP)
+
+## 🔐 Security Concepts in Assembly
+### Stack Smashing & Buffer Overflows
+
+- Writing past local variables → overwrite return address
+
+- Use NOP sled and shellcode payload
+
+### Return-Oriented Programming (ROP)
+
+- Chain together code snippets ("gadgets") ending in RET
+
+-  Used in modern exploits to bypass DEP/NX
+
+
+## 🔧 Manual Linking and Binary Format (ELF / PE)
+
+### ELF Format (Linux)
+
+- Header
+
+- Program headers (segments)
+
+- Section headers (.text, .data, .bss)
+
+> [!NOTE]  Note
+> Use readelf, objdump, nm to inspect symbols.
+
+```bash
+readelf -h a.out
+```
+
+### PE Format (Windows)
+
+- DOS Header
+
+- PE Header
+
+- Import Address Table
+
+-  .text / .data / .rsrc sections
+
+
+> [!NOTE] Note
+> Use CFF Explorer, x64dbg, or PE-bear to inspect.
+
 --- 
 
-##     Heap Spraying and Use-After-Free
+## 🔐 CPUID and Feature Detection
+### Example: Checking for AVX Support
+
+
+```asm
+mov eax, 1
+cpuid
+bt ecx, 28     ; AVX bit
+jc avx_supported
+```
+- Use CPUID to query features, vendor strings, etc.
+
 --- 
 
-##     Writing Simple Exploits and CTF-style Challenges
+## ⚙️ Control and System Registers (x86 only)
+
+| Register | Use                    |
+| -------- | ---------------------- |
+| CR0      | Paging, protected mode |
+| CR2      | Page fault address     |
+| CR3      | Page directory base    |
+| CR4      | Feature flags          |
+
+
 --- 
 
-# V. 🧬 Hardware Reverse Engineering
+## inking Assembly With C (Multi-File Projects)
 
-##     Microprocessor Architecture (x86, ARM, RISC-V internals)
+1. C File
+```cpp
+extern int my_asm_func(int);
+
+int main() {
+    return my_asm_func(5);
+}
+```
+
+2. Assembly File (NASM)
+```asm
+global my_asm_func
+section .text
+
+my_asm_func:
+    mov eax, edi      ; System V ABI: arg1 in EDI
+    add eax, 2
+    ret
+```
+
+3. Compile & Link:
+
+```bash
+nasm -f elf64 asmfunc.asm
+gcc -no-pie main.c asmfunc.o
+```
+
 --- 
 
-##     Reading and Understanding Datasheets
---- 
+## Tools to use
 
-##     Instruction Cycle: Fetch, Decode, Execute
---- 
+| Tool      | Purpose                    |
+| --------- | -------------------------- |
+| `nasm`    | Assembler for Intel syntax |
+| `objdump` | Disassemble binary files   |
+| `gdb`     | Debugger                   |
+| `strace`  | Syscall tracer (Linux)     |
+| `radare2` | Reverse engineering        |
+| `x64dbg`  | Windows debugging          |
+| `Cutter`  | GUI for radare2            |
 
-##     Bus Systems and I/O Communication
---- 
+---
 
-##     Firmware Dumping and Analysis
---- 
-
-##     BIOS/UEFI Reverse Engineering
---- 
-
-##     Embedded System Debugging (JTAG, UART, SPI)
---- 
-
-##     Using Tools like:
---- 
-
-##     Flashing and Reversing Firmware (Binwalk, Ghidra)
---- 
-
-##    Side Channel Attacks Basics (Timing, EM, Power)
---- 
-
-# VI. 🔧 Advanced Topics and Practice
-
-##    Writing Your Own Assembler / Disassembler
---- 
-
-##    Writing Inline Assembly in C
---- 
-
-##    Debugging with GDB + Assembly
---- 
-
-##    Writing Obfuscated Assembly Code
---- 
-
-##    Anti-Reversing and Anti-Debugging Techniques
---- 
-
-##    Reversing Obfuscated or Virtualized Code
---- 
 
