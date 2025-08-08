@@ -1,40 +1,40 @@
 
 # Basics
 
-### Operators
+## Operators
 - Arithmetic
-	1.  Addition               +
-	2. Subtraction           -
-	3. Multiplication        *
-	4. Division                 //
+	1.  Addition            +
+	2. Subtraction          -
+	3. Multiplication       *
+	4. Division             //
 	5. Floor Division       %
-	6. power                    **
+	6. power                **
 -  Comparison
-     1. compare and equal              ==
-     2. not equal                               !=
-     3. greater than                           >
-     4. lesser than                             <
-     5. greater than or equal to       >=
-     6. lesser than or equal to         <=
+     1. compare and equal           ==
+     2. not equal                   !=
+     3. greater than                >
+     4. lesser than                 <
+     5. greater than or equal to    >=
+     6. lesser than or equal to     <=
 - Logical
       1. and
       2. or 
       3. not
 - Assignment
-      1.  equal to                        =
-      2. add with                     +=
-      3. subtract with              -= 
-      4. multiply with               * =
-      5. divide with                  /=
-      6. modulus with              %=                    (get last digit)
-      7. Divide with                  //=                     (remove last digit)
+      1.  equal to                   =
+      2. add with                    +=
+      3. subtract with               -= 
+      4. multiply with               *=
+      5. divide with                 /=
+      6. modulus with                %=                    (get last digit)
+      7. Divide with                 //=                     (remove last digit)
 - Bitwise
-     1. and                  &
+     1. and                    &
      2. or                     |
-     3. XOR                 ^
-     4. not                   ~
-     5. left shit           <<
-     6. right shift        >>
+     3. XOR                    ^
+     4. not                    ~
+     5. left shit              <<
+     6. right shift            >>
 - Membership
      1. in 
      2. not in
@@ -498,3 +498,5 @@ except FileNotFoundError:
 except IOError:
     print("An error occurred while handling the file!")
 ```
+
+
