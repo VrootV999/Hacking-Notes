@@ -4,9 +4,9 @@ These are notes that i use for everything.This will be usefull for exams, or eve
 
 > [!NOTE] STILL UNDER PROGRESS
 
-Total Progress:     ▰▰▱▱▱▱▱▱▱▱ 12%
+Total Progress:     ▰▰▰▱▱▱▱▱▱▱ 15%
 
-Tasks completion:   ▰▱▱▱▱▱▱▱▱▱ 03%
+Tasks completion:   ▰▱▱▱▱▱▱▱▱▱ 05%
 
 --- 
 
@@ -49,10 +49,10 @@ Tasks completion:   ▰▱▱▱▱▱▱▱▱▱ 03%
 
 
 - [x] Assembly notes writting should be completed
-- [ ] Check if all are ok 
-- [ ] add bash tutorial 
-- [ ] add psh tutorial 
-- [-] add go,rust at last or when time permits
+- [x] Check if all are ok 
+- [x] add bash tutorial 
+- [x] add psh tutorial 
+- [ ] add go,rust at last or when time permits
 
 ## Phase 3: Techniques
 
