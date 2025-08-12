@@ -21,11 +21,6 @@ Tasks completion:   ▰▱▱▱▱▱▱▱▱▱ 03%
 
 ---
 
-> [!WARNING]
-> I don't condone illegal activity with it. I ain't responsible for anything that happens with you blindly using it.
-
----
-
 # todo
 
 - [x] Structure the notes(backbone)
@@ -53,7 +48,7 @@ Tasks completion:   ▰▱▱▱▱▱▱▱▱▱ 03%
 ## Phase 2: Programming
 
 
-- [ ] Assembly notes writting should be completed
+- [x] Assembly notes writting should be completed
 - [ ] Check if all are ok 
 - [ ] add bash tutorial 
 - [ ] add psh tutorial 
