@@ -4,9 +4,9 @@ These are notes that i use for everything.This will be usefull for exams, or eve
 
 > [!NOTE] STILL UNDER PROGRESS
 
-Total Progress:     ▰▰▰▱▱▱▱▱▱▱ 15%
+Total Progress:     ▰▰▰▰▰▱▱▱▱▱ 50%
 
-Tasks completion:   ▰▱▱▱▱▱▱▱▱▱ 05%
+Tasks completion:   ▰▰▰▱▱▱▱▱▱ 25%
 
 --- 
 
@@ -37,8 +37,8 @@ Tasks completion:   ▰▱▱▱▱▱▱▱▱▱ 05%
 
 - [x] Forensics tools to be completed
 - [x] Anti Forensics tools to be completed 
-- [ ] Web App Tools to be completed
-- [ ] Recon Tools
+- [x] Web App Tools to be completed
+- [x] Recon Tools
 - [ ] Reverse Engineering Tools
 - [ ] Buffer Overflow
 - [ ] Steganography tools
