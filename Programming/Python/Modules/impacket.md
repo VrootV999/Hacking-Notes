@@ -1,5 +1,5 @@
 
-# Impacket – Pentester & Red Team Guide
+# Impacket
 
 ---
 
@@ -219,3 +219,5 @@ from impacket.krb5.asn1 import TGS_REQ
 ```
 
 ---
+
+
