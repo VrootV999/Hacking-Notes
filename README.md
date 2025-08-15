@@ -4,7 +4,7 @@ These are notes that i use for everything.This will be usefull for exams, or eve
 
 > [!NOTE] STILL UNDER PROGRESS
 
-Total Progress:     ▰▰▰▰▰▱▱▱▱▱ 50%
+Total Progress:     ▰▰▰▰▱▱▱▱▱▱ 20%
 
 Tasks completion:   ▰▰▰▱▱▱▱▱▱ 25%
 
