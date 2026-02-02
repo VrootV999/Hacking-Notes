@@ -1,4 +1,4 @@
-# I. 📚 Fundamentals of Assembly Language
+# I.  Fundamentals of Assembly Language
 
 ##     Binary Number Systems: Binary, Hexadecimal, Octal, Decimal
 
@@ -113,7 +113,7 @@ mov source, destination
 
 --- 
 
-# II. 🏗️ Core Assembly Programming Concepts
+# II.  Core Assembly Programming Concepts
 
 ##     Registers and Register Classes (General, Segment, Control)
 
@@ -304,7 +304,6 @@ Diagram
 | `ROR`       | Rotate right                                |
 
 
-
 --- 
 
 ##     Control Flow Instructions (JMP, JZ, JNZ, CALL, RET, etc.)
@@ -345,7 +344,6 @@ Diagram
 | `CALL func` | Push return addr, jump to func    |
 | `CALL`      | Push return addr, JMP             |
 | `RET`       | Pop return addr and jump back     |
-
 
 
 --- 
@@ -397,8 +395,8 @@ Diagram
 
    3.  OS ABI (Application Binary Interface)
 
-### 🛠️ 32-bit (x86) Parameter Passing
-- 📌 Stack-Based (cdecl / stdcall)
+###  32-bit (x86) Parameter Passing
+-  Stack-Based (cdecl / stdcall)
 
   1.   Arguments are pushed onto the stack, right to left
 
@@ -803,5 +801,3 @@ gcc -no-pie main.c asmfunc.o
 | `Cutter`  | GUI for radare2            |
 
 ---
-
-

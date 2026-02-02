@@ -5283,56 +5283,44 @@ namespace std {
 ```
 
 ---
+## 3.4 ABI & Calling Conventions 
+### 3.4.1 Function Call Mechanics 
+#### 3.4.1.1 Function Prologue and Epilogue 
+#### 3.4.1.2 Parameter Passing (Registers vs Stack) 
+#### 3.4.1.3 Return Value Conventions 
+#### 3.4.1.4 Stack Cleanup Responsibility 
 
-## 3.4 ABI & Calling Conventions
+--- 
+### 3.4.2 ABI Stability 
+#### 3.4.2.1 Itanium ABI (Linux) 
+#### 3.4.2.2 MSVC ABI (Windows) 
+#### 3.4.2.3 ABI Breakage and Compatibility 
 
-### 3.4.1 Function Call Mechanics
+--- 
+# 4. Organization, Modifiers & Compile-Time 
 
-#### 3.4.1.1 Function Prologue and Epilogue
-
-#### 3.4.1.2 Parameter Passing (Registers vs Stack)
-
-#### 3.4.1.3 Return Value Conventions
-
-#### 3.4.1.4 Stack Cleanup Responsibility
-
----
-
-### 3.4.2 ABI Stability
-
-#### 3.4.2.1 Itanium ABI (Linux)
-
-#### 3.4.2.2 MSVC ABI (Windows)
-
-#### 3.4.2.3 ABI Breakage and Compatibility
-
----
-
-# 4. Organization, Modifiers & Compile-Time
-
-## 4.1 Organization and Linkage
-
-### 4.1.1 Namespace
-#### 4.1.1.1 using namespace
-#### 4.1.1.2 :: Scope Resolution
-#### 4.1.1.3 Nested (C++17+)
+## 4.1 Organization and Linkage 
+### 4.1.1 Namespace 
+#### 4.1.1.1 using namespace 
+#### 4.1.1.2 :: Scope Resolution 
+#### 4.1.1.3 Nested (C++17+) 
 
 --- 
 
-### 4.1.2 Using
-#### 4.1.2.1 using namespace
-#### 4.1.2.2 using std::cout
-#### 4.1.2.3 Type Alias
+### 4.1.2 Using 
+#### 4.1.2.1 using namespace 
+#### 4.1.2.2 using std::cout 
+#### 4.1.2.3 Type Alias 
 
 --- 
 
-### 4.1.3 Libraries
-#### 4.1.3.1 #include
-#### 4.1.3.2 <iostream>
-#### 4.1.3.3 <cmath>
-#### 4.1.3.4 <string>
-#### 4.1.3.5 <vector>
-#### 4.1.3.6 <algorithm>
+### 4.1.3 Libraries 
+#### 4.1.3.1 #include 
+#### 4.1.3.2 <iostream> 
+#### 4.1.3.3 <cmath> 
+#### 4.1.3.4 <string> 
+#### 4.1.3.5 <vector> 
+#### 4.1.3.6 <algorithm> 
 #### 4.1.3.7 <typeinfo>
 #### 4.1.3.8 Static Libraries
 
