@@ -26,7 +26,6 @@ Tasks completion:   ▰▰▰▱▱▱▱▱▱ 25%
 - [x] Structure the notes(backbone)
 - [ ] Complete Tool Guide
 - [ ] Complete Technique Guide 
-- [ ] Assets to be managed
 
 ---
 # Temporary todo
@@ -99,7 +98,4 @@ Tasks completion:   ▰▰▰▱▱▱▱▱▱ 25%
 - [ ] Make it beautiful
 - [ ] change structrure at last
 
-
 --- 
-
-
