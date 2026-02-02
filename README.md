@@ -1,4 +1,4 @@
-# Notes For Cyber Security 🚀
+# Notes For Cyber Security 
 
 These are notes that i use for everything.This will be usefull for exams, or even to check out anytime
 
