@@ -21,7 +21,10 @@ Tasks completion:   ▰▰▰▱▱▱▱▱▱ 25%
 
 ---
 
-To navigate Easily Through notes, look through the main.md
-[Main File](Main.md)
+checklist
+[checklist](checklist.md)
+
+main list
+[main](main.md)
 
 ---
