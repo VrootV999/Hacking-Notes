@@ -86,3 +86,4 @@ didn't add cuz I already own it: solder iron,flux,solder wire, phillip screwdriv
 
 references:
 https://greatscottgadgets.com/greatfet/
+
