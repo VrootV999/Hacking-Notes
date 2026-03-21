@@ -1,5 +1,4 @@
-- Phillip Screwdrivers
-- Spudging tools(also picks and screwdrivers are good)(in case of pressure fitted parts)
+- Phillip Screwdrivers & Spudging tools(also picks and screwdrivers are good)(in case of pressure fitted parts)
 Together ~400
 - Solder Iron (~₹800)
 - Solder wire (~₹150)
@@ -83,7 +82,5 @@ Total(including not available and already having): ₹2,02,138 (₹20363)
 Not Available: glassgow interface explorer, hydrabus, exploitee.rs,
 didn't add cuz I already own it: solder iron,flux,solder wire, phillip screwdriver, Spudging tools
 
-
 references:
 https://greatscottgadgets.com/greatfet/
-
