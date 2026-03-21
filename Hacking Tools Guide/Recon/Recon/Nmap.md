@@ -60,6 +60,7 @@
 
 --top-ports (N)                             Scan top N ports
 -p (p)                                      Specify port(s) to scan
+-p-                                         All ports
 
 ### Level
 
