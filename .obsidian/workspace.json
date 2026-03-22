@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "aee2c2dc74c97cbb",
+        "id": "d4c299d3f314d964",
         "type": "tabs",
         "children": [
           {
-            "id": "2a4625f52ae5ff01",
+            "id": "b2204529795a747f",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -187,8 +187,11 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "2a4625f52ae5ff01",
+  "active": "b2204529795a747f",
   "lastOpenFiles": [
+    "README.md",
+    "main.md",
+    "2026-03-21.md",
     "Hacking_Notes/Programming/Rust.md",
     "Hacking_Notes/Hacking Techniques Guide/Hardware Reversing/list.md",
     "Hacking_Notes/Hacking Techniques Guide/ICS&OT/Basics.md",
