@@ -189,6 +189,24 @@
   },
   "active": "b2204529795a747f",
   "lastOpenFiles": [
+    "checklist.md",
+    "Tutorial/UnityHack.md",
+    "Programming/Rust.md",
+    "Programming/C&CPP/temp/temp3",
+    "Programming/C&CPP/temp/t.md",
+    "Programming/C&CPP/t.md",
+    "Programming/C&CPP/cmake.md",
+    "Programming/Assembly/nasm.md",
+    "Programming/Assembly/gas.md",
+    "Hacking Tools Guide/Reverse Engineering/Pwndbg(lldb).md",
+    "Hacking Tools Guide/Reverse Engineering/Pwndbg(GDB).md",
+    "Hacking Tools Guide/Reverse Engineering",
+    "Hacking Tools Guide/Forensics/Evidence Collection.md",
+    "Hacking Techniques Guide/ICS&OT/Basics.md",
+    "Hacking Techniques Guide/ICS&OT",
+    "Hacking Techniques Guide/Hardware Reversing/list.md",
+    "Hacking Techniques Guide/Hardware Reversing/Basics.md",
+    "Main.md",
     "README.md",
     "main.md",
     "2026-03-21.md",
@@ -203,8 +221,6 @@
     "Hacking_Notes/Extras/nvim.md",
     "Hacking_Notes/Programming/C&CPP/temp/temp3",
     "To do/Os plan.md",
-    "hpng.png",
-    "Hacking_Notes/README.md",
-    "To do/plan.md"
+    "hpng.png"
   ]
 }
