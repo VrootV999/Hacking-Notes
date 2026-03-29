@@ -10,6 +10,8 @@ GAS (GNU Assembler)
 .global _start
 #.section directive is used to switch between sections
 .section .data
+#set syntax to intel
+.intel_syntax noprefix
 #.byte .word .long .quad are used to define variable with specific size
 .word 0x123
 #asciz is used for writing null terminated strings
@@ -60,3 +62,19 @@ w (16 bit) 2 bytes
 l (32 bit) 4 bytes
 q (64 bit) 8 bytes
 ``
+
+- Compiling using gcc
+```bash
+#compiler
+gcc -c file.s -o file.o
+#link using gcc
+gcc file.o -o file
+#convert c file into a asm
+gcc -S file.c -o file.s
+#specify syntax and verbose comment
+gcc -S -masm=intel -fverbose-asm -o file.s file.c
+#assembly with source code info and debug annotation
+gcc -S -g -Wa,-adhln -fverbose-asm -o file.s file.c
+```
+
+---

@@ -39,4 +39,6 @@
 # Critical Infrastructure Sectors
 
 
+https://youtube.com/playlist?list=PLOSJSv0hbPZAlINIh1HcB0L8AZcSPc80g&si=Z6ZZb4jaZQXXmx9U
+
 ---

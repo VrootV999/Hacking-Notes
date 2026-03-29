@@ -4,22 +4,31 @@
     "type": "split",
     "children": [
       {
-        "id": "d4c299d3f314d964",
+        "id": "583a974816c9eb0d",
         "type": "tabs",
         "children": [
           {
-            "id": "b2204529795a747f",
+            "id": "347ba283957f7b17",
             "type": "leaf",
             "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.12.7"
-              },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.12.7"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          },
+          {
+            "id": "8484e16df233505a",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -189,7 +198,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b2204529795a747f",
+  "active": "8484e16df233505a",
   "lastOpenFiles": [
     "checklist.md",
     "Tutorial/UnityHack.md",

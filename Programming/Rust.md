@@ -8,7 +8,7 @@
 /* this is a multi-line comment in rust
     this works like charm
     look at this
-*
+*/
 ```
 ---
 
@@ -73,12 +73,69 @@ In rust, Data types can be divided into two types.
     - Struct
         The struct is a curstom data type that lets you package together and name mutiple related values. It's like an object's data attributes.
         ```rust
+            #[derive(Debug)]
+            struct Rectangle{
+                width: i32,
+                height: i32,
+            }
 
+            impl Rectangle{
+                fn area(&self) -> i32{
+                    self.width * self.height
+                }
+            }
+
+
+            #[derive(Debug)]
+            struct Player{
+                username: String,
+                email: String, 
+                active: bool,
+            }
+
+            struct Color(u8,u8,u8);
+
+            fn build(email: String, username: String) -> Player{
+                Player{
+                    username,
+                    email,
+                    active: true,
+                }
+            }
+
+            fn area(dimensions: (u8,u8)) -> u8{
+                dimensions.0 * dimensions.1
+            }
+
+            fn main(){
+                let mut user1: Player =  Player{username: String::from("Alex22"), email: String::from("alex@hotmale.com"), active: true};
+                let id = user1.username;
+                user1.username = String::from("SAlex22");
+                let user2: Player = Player{username: String::from("Alex22"), ..user1}
+                let rect: (u8,u8) = (20,30);
+                println!("{:?}",rect );
+                let rectangle1: Rectangle = Rectangle{width: 20, height: 30};
+                println!("{}",rectangle1.area());
+            }
         ```
     - Enum
         The Enum allows you to say a value is one of a possible set of values. Rust enums are particularly powerful because they can hold data directly.
         ```rust
+        enum IpAddr{
+            V4,
+            V6,
+        }
 
+        fn main(){
+            let four: IpAddr = IpAddr::V4;
+            let six: IpAddr = IpAddr::V6;
+            let lhost: IpAddr = Ip{kind: IpAddr::V4,address: String::from("127.0.0.1") };
+        }
+
+        struct Ip(){
+            kind: IpAddr,
+            address: String,
+        }
         ```
     - Unions
         Used mainly for interfacing with c code(FFI). A union shares the same memory location for all its fields, so only one field can be used at a time.
@@ -600,10 +657,155 @@ println!("{}", sum(&vec[1..]));  // pass partial slice
 ---
 # Structs
 The struct is a curstom data type that lets you package together and name mutiple related values. It's like an object's data attributes.
+```rust
+[derive(Debug)]
+struct Rectangle{
+    width: i32,
+    height: i32,
+}
+
+impl Rectangle{
+    fn area(&self) -> i32{
+        self.width * self.height
+    }
+}
+
+
+#[derive(Debug)]
+struct Player{
+    username: String,
+    email: String, 
+    active: bool,
+}
+
+struct Color(u8,u8,u8);
+
+fn build(email: String, username: String) -> Player{
+    Player{
+        username,
+        email,
+        active: true,
+    }
+}
+
+fn area(dimensions: (u8,u8)) -> u8{
+    dimensions.0 * dimensions.1
+}
+
+fn main(){
+    let mut user1: Player =  Player{username: String::from("Alex22"), email: String::from("alex@hotmale.com"), active: true};
+    let id = user1.username;
+    user1.username = String::from("SAlex22");
+    let user2: Player = Player{username: String::from("Alex22"), ..user1}
+    let rect: (u8,u8) = (20,30);
+    println!("{:?}",rect );
+    let rectangle1: Rectangle = Rectangle{width: 20, height: 30};
+    println!("{}",rectangle1.area());
+}
+```
 
 ---
 # Enums
+```rust
+enum IpAddr{
+    V4(String),
+    V6(String),
+    V8(u8,u8,u8,u8),
+    Secret{name: String, message: String, size: u8},
+}
+
+
+enum State{
+    Bliss,
+    Tx,
+    Rx,
+}
+
+enum Coin{
+    Small,
+    Medium,
+    Large(State),
+}
+
+impl IpAddr{
+    fn check(&mut self) {
+        match self{
+            IpAddr::Secret{name: n, message: m, size: s} => {
+                if n.len() != *s as usize {
+                    *s = m.len() as u8;
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+enum Country{
+    Position,
+    Gdp,
+}
+
+struct Ctry{
+    gdp: Country,
+    name: String,
+    position: Country,
+}
+
+fn main(){
+    let localhost: IpAddr = IpAddr::V4(String::from("127.0.0.1"));
+    let us: Ctry = Ctry{gdp: Country::Gdp,name: String::from("USA") ,position: Country::Position};
+    let ip: IpAddr = IpAddr::V8(127,0,0,1);
+    let mut sec: IpAddr = IpAddr::Secret{name: String::from("Alex"),message: String::from("Testing enums"), size: 8 };
+    sec.check();
+    match sec {
+        IpAddr::Secret {size, ..} => { println!("{}", size)},
+        _ => {}
+    }
+
+    let coin: Coin = Coin::Large(State::Bliss);
+
+    match coin{
+        Coin::Large(s) => {
+            match s{
+                State::Bliss => println!("state of bliss"),
+                State::Tx => println!("State of text"),
+                State::Rx => println!("State of Regret"),
+                _ => {},
+            }
+        },
+        _ => {},
+    }
+}
+
+```
+
+## Option Enum
+```rust
+//looks like this
+enum Option<T>{
+        Some(T),
+        None,
+}
+
+//implementation
+fn main(){
+    let some_number: Option<u8> = Some(5);
+    let some_string: option<String> = Some(String::from("something"));
+    let absent_number: Option<i32> = None;
+
+    let x: i8 = 4;
+    let y: Option<i8> = Some(6);
+
+    //let sum: i8 = x + y; //not possible 
+    let sum: i8 = x + y.unwrap_or();//default 0
+}
+
+```
+
+---
 # Match
+
+---
 # Destructuring
 # if-let
 # Common-Collections
