@@ -16,19 +16,8 @@
               "icon": "lucide-file",
               "title": "New tab"
             }
-          },
-          {
-            "id": "8484e16df233505a",
-            "type": "leaf",
-            "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -198,8 +187,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "8484e16df233505a",
+  "active": "347ba283957f7b17",
   "lastOpenFiles": [
+    "Programming/test.md",
     "checklist.md",
     "Tutorial/UnityHack.md",
     "Programming/Rust.md",
@@ -231,7 +221,6 @@
     "Hacking_Notes/Hacking Techniques Guide/Hardware Reversing/Basics.md",
     "Hacking_Notes/Extras/nvim.md",
     "Hacking_Notes/Programming/C&CPP/temp/temp3",
-    "To do/Os plan.md",
     "hpng.png"
   ]
 }

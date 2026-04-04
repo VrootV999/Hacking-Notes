@@ -132,7 +132,7 @@ In rust, Data types can be divided into two types.
             let lhost: IpAddr = Ip{kind: IpAddr::V4,address: String::from("127.0.0.1") };
         }
 
-        struct Ip(){
+        struct Ip{
             kind: IpAddr,
             address: String,
         }
@@ -398,25 +398,128 @@ fn main(){
 - When some other variable requires it(in a different scope) we need to borrow it from the owner to use it.
 - Borrowing can be done in 4 ways(Mutable Reference,Reference,Smart Pointers,raw pointers)
 
+```rust
+// ============================================
+// Ownership rules
+// ============================================
+
+fn main() {
+    // Each value has an owner
+    let s1 = String::from("hello");
+    let s2 = s1; // ownership moved to s2
+    // println!("{}", s1); // ERROR: s1 is no longer valid
+
+    // Clone creates a deep copy (both remain valid)
+    let s3 = String::from("world");
+    let s4 = s3.clone();
+    println!("s3: {}, s4: {}", s3, s4); // both valid
+
+    // Copy types (integers, bools, chars) are copied automatically
+    let x = 5;
+    let y = x;
+    println!("x: {}, y: {}", x, y); // both valid
+
+    // ============================================
+    // Ownership and functions
+    // ============================================
+
+    let s = String::from("hello");
+    takes_ownership(s);
+    // s is no longer valid here
+
+    let x = 5;
+    makes_copy(x);
+    println!("x is still valid: {}", x); // i32 implements Copy
+
+    // ============================================
+    // Return values transfer ownership
+    // ============================================
+
+    let s5 = gives_ownership();
+    let s6 = String::from("hello");
+    let s7 = takes_and_gives_back(s6);
+    println!("s5: {}, s7: {}", s5, s7);
+}
+
+fn takes_ownership(some_string: String) {
+    println!("Got: {}", some_string);
+} // some_string goes out of scope and is dropped
+
+fn makes_copy(some_integer: i32) {
+    println!("Got: {}", some_integer);
+}
+
+fn gives_ownership() -> String {
+    String::from("yours")
+}
+
+fn takes_and_gives_back(a_string: String) -> String {
+    a_string
+}
+```
+
 ---
 # References
 Reference is the idea of providing the address of a specific variable to another variable to let it access and modify or view it.
 
-- Reference Pointers: They refer to something.
-- Mutable References: They allow the pointed variable to be mutable.
 ```rust
-// Reference pointers
-let x = 30;
-let y = &x;
-println!("{}", y); //prints 30 
-println!("{}", &y); //& is optional here (auto-deref)
+// ============================================
+// Immutable references (&T)
+// ============================================
 
-//mutable reference
-let mut a = 20;
-let b = &mut a;
+fn main() {
+    let s1 = String::from("hello");
+    let len = calculate_length(&s1); // borrow s1
+    println!("Length of '{}' is {}", s1, len); // s1 still valid
 
-*b = 40;   //must add *, can't deref automatically
-println!("{}", &b); //can auto-deref so optional &
+    // Multiple immutable references allowed
+    let r1 = &s1;
+    let r2 = &s1;
+    let r3 = &s1;
+    println!("{}, {}, {}", r1, r2, r3);
+
+    // ============================================
+    // Mutable references (&mut T)
+    // ============================================
+
+    let mut s2 = String::from("hello");
+    change(&mut s2);
+    println!("After change: {}", s2);
+
+    // Only ONE mutable reference at a time
+    let r1 = &mut s2;
+    r1.push_str(" world");
+    // let r2 = &mut s2; // ERROR: cannot borrow s2 as mutable more than once
+
+    // Mutable and immutable refs cannot coexist
+    // let r_immutable = &s2;
+    // let r_mutable = &mut s2; // ERROR
+
+    // ============================================
+    // Dangling references (prevented by compiler)
+    // ============================================
+
+    // fn dangle() -> &String {
+    //     let s = String::from("hello");
+    //     &s // ERROR: s is dropped at end of function
+    // }
+
+    // ============================================
+    // Reference rules summary
+    // ============================================
+    // 1. At any time, you can have EITHER:
+    //    - One mutable reference, OR
+    //    - Any number of immutable references
+    // 2. References must always be valid
+}
+
+fn calculate_length(s: &String) -> usize {
+    s.len()
+} // s goes out of scope but doesn't drop (doesn't own it)
+
+fn change(s: &mut String) {
+    s.push_str(", world");
+}
 ```
 
 ---
@@ -790,14 +893,14 @@ enum Option<T>{
 //implementation
 fn main(){
     let some_number: Option<u8> = Some(5);
-    let some_string: option<String> = Some(String::from("something"));
+    let some_string: Option<String> = Some(String::from("something"));
     let absent_number: Option<i32> = None;
 
     let x: i8 = 4;
     let y: Option<i8> = Some(6);
 
     //let sum: i8 = x + y; //not possible 
-    let sum: i8 = x + y.unwrap_or();//default 0
+    let sum: i8 = x + y.unwrap_or(0); // default 0
 }
 
 ```
@@ -847,8 +950,8 @@ fn main(){
         [0,s,t] => println!("the values are {} {}, first value is 0", s, t),
         [0,_,t] => {println!("second value is ignored, first value is 0 and the last value is {}",t)},
         [-2,s ,..] => println!("third value is ignored, second value is {}, first value is -2 ", s),
-        [3, _ , tail @ ..] => println!("the other elements after the third value is", tail), //can't use more than one ..
-        [3, name @ ..] => println!("the other elements from the second ones {}", name)
+        [3, _ , tail @ ..] => println!("the other elements after the third value is {:?}", tail), //can't use more than one ..
+        [3, name @ ..] => println!("the other elements from the second ones {:?}", name)
     }
 }
 ```
@@ -1752,45 +1855,4069 @@ fn main() {
 
 ---
 # Methods(impl)
-```rust
+Methods are similar to functions but are defined within `impl` blocks and are associated with a specific type (struct, enum, or trait). The first parameter is always `self`, which represents the instance the method is being called on.
 
+```rust
+// ============================================
+// Basic impl block with methods
+// ============================================
+
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    // Associated function (no self parameter)
+    // Called using :: syntax: Rectangle::square(10)
+    fn square(size: u32) -> Rectangle {
+        Rectangle { width: size, height: size }
+    }
+
+    // Method taking immutable reference (&self)
+    // Can read data but cannot modify it
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    // Method taking mutable reference (&mut self)
+    // Can read and modify data
+    fn resize(&mut self, new_width: u32, new_height: u32) {
+        self.width = new_width;
+        self.height = new_height;
+    }
+
+    // Method taking ownership (self)
+    // Consumes the instance, cannot be used after call
+    fn into_parts(self) -> (u32, u32) {
+        (self.width, self.height)
+    }
+
+    // Method chaining (builder pattern — takes ownership, returns Self)
+    fn with_width(mut self, width: u32) -> Self {
+        self.width = width;
+        self
+    }
+
+    fn with_height(mut self, height: u32) -> Self {
+        self.height = height;
+        self
+    }
+}
+
+// ============================================
+// Multiple impl blocks are allowed
+// ============================================
+
+impl Rectangle {
+    // Separate impl block for organization
+    fn perimeter(&self) -> u32 {
+        2 * (self.width + self.height)
+    }
+
+    fn is_square(&self) -> bool {
+        self.width == self.height
+    }
+}
+
+// ============================================
+// Methods on enums
+// ============================================
+
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+impl Message {
+    fn call(&self) {
+        match self {
+            Message::Quit => println!("Quitting"),
+            Message::Move { x, y } => println!("Moving to ({}, {})", x, y),
+            Message::Write(text) => println!("Writing: {}", text),
+            Message::ChangeColor(r, g, b) => println!("Color: ({}, {}, {})", r, g, b),
+        }
+    }
+
+    fn description(&self) -> &str {
+        match self {
+            Message::Quit => "quit message",
+            Message::Move { .. } => "move message",
+            Message::Write(_) => "write message",
+            Message::ChangeColor(..) => "color change message",
+        }
+    }
+}
+
+// ============================================
+// Nested structs with methods
+// ============================================
+
+#[derive(Debug)]
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+#[derive(Debug)]
+struct Circle {
+    center: Point,
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * self.radius * self.radius
+    }
+
+    fn circumference(&self) -> f64 {
+        2.0 * std::f64::consts::PI * self.radius
+    }
+
+    fn contains(&self, point: &Point) -> bool {
+        let dx = point.x - self.center.x;
+        let dy = point.y - self.center.y;
+        (dx * dx + dy * dy).sqrt() <= self.radius
+    }
+
+    fn translate(&mut self, dx: f64, dy: f64) {
+        self.center.x += dx;
+        self.center.y += dy;
+    }
+}
+
+// ============================================
+// Usage examples
+// ============================================
+
+fn main() {
+    // Creating and using methods
+    let mut rect = Rectangle { width: 30, height: 50 };
+    println!("Area: {}", rect.area());           // 1500
+    println!("Perimeter: {}", rect.perimeter()); // 160
+    println!("Is square: {}", rect.is_square()); // false
+
+    // Mutating through methods
+    rect.resize(100, 200);
+    println!("After resize: {:?}", rect);
+
+    // Consuming method (takes ownership)
+    let rect2 = Rectangle { width: 10, height: 20 };
+    let (w, h) = rect2.into_parts();
+    // rect2 is no longer valid here
+
+    // Associated function (no instance needed)
+    let sq = Rectangle::square(25);
+    println!("Square area: {}", sq.area()); // 625
+
+    // Method chaining pattern
+    let chained = Rectangle { width: 0, height: 0 }
+        .with_width(40)
+        .with_height(60);
+    println!("Chained rectangle: {:?}", chained);
+
+    // Enum methods
+    let msg = Message::Move { x: 10, y: 20 };
+    msg.call();                          // "Moving to (10, 20)"
+    println!("Type: {}", msg.description());
+
+    // Nested struct methods
+    let circle = Circle {
+        center: Point { x: 0.0, y: 0.0 },
+        radius: 5.0,
+    };
+    println!("Circle area: {:.2}", circle.area());
+    println!("Circumference: {:.2}", circle.circumference());
+
+    let point = Point { x: 3.0, y: 4.0 };
+    println!("Contains point: {}", circle.contains(&point)); // true (distance = 5.0)
+}
 ```
 
 ---
 # Generics
-```rust
+Generics allow you to write code that works with multiple types without duplicating logic. Rust uses monomorphization — the compiler generates concrete type-specific versions at compile time, so there is zero runtime overhead.
 
+```rust
+// ============================================
+// Generic functions
+// ============================================
+
+// Single generic type parameter
+fn largest<T: PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0];
+    for item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+    largest
+}
+
+// Multiple generic type parameters
+fn pair<T, U>(first: T, second: U) -> (T, U) {
+    (first, second)
+}
+
+// Generic function returning a new value
+fn duplicate<T: Clone>(value: &T) -> (T, T) {
+    (value.clone(), value.clone())
+}
+
+// ============================================
+// Generic structs
+// ============================================
+
+// Generic struct with one type parameter
+#[derive(Debug)]
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+// Generic struct with multiple type parameters
+#[derive(Debug)]
+struct MixedPoint<T, U> {
+    x: T,
+    y: U,
+}
+
+// Generic struct with multiple fields of same type
+#[derive(Debug)]
+struct Container<T> {
+    value: T,
+    label: String,
+}
+
+// ============================================
+// Generic enums
+// ============================================
+
+// Rust's built-in Option<T> and Result<T, E> are generic enums
+#[derive(Debug)]
+enum Maybe<T> {
+    Just(T),
+    Nothing,
+}
+
+#[derive(Debug)]
+enum Outcome<T, E> {
+    Success(T),
+    Failure(E),
+}
+
+// ============================================
+// Generic impl blocks
+// ============================================
+
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+
+    fn y(&self) -> &T {
+        &self.y
+    }
+}
+
+// impl block restricted to a specific concrete type
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
+
+// impl block with additional trait bounds
+impl<T: std::fmt::Display> Container<T> {
+    fn describe(&self) -> String {
+        format!("Container('{}') holds: {}", self.label, self.value)
+    }
+}
+
+// ============================================
+// Generic methods that introduce new type parameters
+// ============================================
+
+impl<T> Point<T> {
+    // This method introduces its own generic parameter U
+    fn mixup<U>(self, other: Point<U>) -> MixedPoint<T, U> {
+        MixedPoint {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+// ============================================
+// Generic structs with const generics
+// ============================================
+
+// Const generics allow values (not just types) as parameters
+#[derive(Debug)]
+struct FixedArray<T, const N: usize> {
+    data: [T; N],
+}
+
+impl<T: Default + Copy, const N: usize> FixedArray<T, N> {
+    fn new() -> Self {
+        FixedArray {
+            data: [T::default(); N],
+        }
+    }
+
+    fn len(&self) -> usize {
+        N
+    }
+
+    fn get(&self, index: usize) -> Option<&T> {
+        if index < N {
+            Some(&self.data[index])
+        } else {
+            None
+        }
+    }
+}
+
+// ============================================
+// Generic newtype wrappers
+// ============================================
+
+#[derive(Debug)]
+struct Wrapper<T>(T);
+
+impl<T> Wrapper<T> {
+    fn inner(&self) -> &T {
+        &self.0
+    }
+
+    fn into_inner(self) -> T {
+        self.0
+    }
+}
+
+// ============================================
+// Usage examples
+// ============================================
+
+fn main() {
+    // Generic functions
+    let numbers = vec![34, 50, 25, 100, 65];
+    let result = largest(&numbers);
+    println!("Largest number: {}", result); // 100
+
+    let chars = vec!['y', 'm', 'a', 'q'];
+    let result = largest(&chars);
+    println!("Largest char: {}", result); // 'y'
+
+    let p = pair(5, "hello");
+    println!("Pair: {:?}", p); // (5, "hello")
+
+    let val = 42;
+    let dup = duplicate(&val);
+    println!("Duplicated: {:?}", dup); // (42, 42)
+
+    // Generic structs
+    let int_point = Point { x: 5, y: 10 };
+    let float_point = Point { x: 1.0, y: 4.0 };
+    println!("Int point: {:?}", int_point);
+    println!("Float point: {:?}", float_point);
+
+    // Mixed type generic struct
+    let mixed = MixedPoint { x: 5, y: 4.0 };
+    println!("Mixed point: {:?}", mixed);
+
+    // Generic enum
+    let something: Maybe<i32> = Maybe::Just(42);
+    let nothing: Maybe<i32> = Maybe::Nothing;
+    println!("{:?}, {:?}", something, nothing);
+
+    let ok: Outcome<&str, &str> = Outcome::Success("done");
+    let err: Outcome<&str, &str> = Outcome::Failure("error");
+    println!("{:?}, {:?}", ok, err);
+
+    // Generic impl methods
+    println!("Point x: {}", int_point.x());
+    println!("Distance: {}", float_point.distance_from_origin());
+
+    // mixup — combines two Points of different types
+    let p1 = Point { x: 5, y: 10 };
+    let p2 = Point { x: 1.0, y: 4.0 };
+    let p3 = p1.mixup(p2);
+    println!("Mixed point after mixup: x={}, y={}", p3.x, p3.y);
+
+    // Const generics
+    let arr: FixedArray<i32, 5> = FixedArray::new();
+    println!("FixedArray length: {}", arr.len()); // 5
+    println!("FixedArray[0]: {:?}", arr.get(0));  // Some(0)
+    println!("FixedArray[5]: {:?}", arr.get(5));  // None
+
+    let filled = FixedArray { data: [1, 2, 3, 4, 5] };
+    println!("Filled FixedArray: {:?}", filled);
+
+    // Generic newtype
+    let w = Wrapper(42);
+    println!("Wrapper inner: {}", w.inner());
+    let inner = w.into_inner();
+    println!("Unwrapped: {}", inner);
+}
 ```
 
 ---
 # Interior-Mutability
+Interior mutability is a design pattern in Rust that allows you to mutate data even when there are immutable references to it. Normally, Rust enforces borrowing rules at compile time: either one `&mut T` or many `&T`. Interior mutability defers this enforcement to runtime using `unsafe` internally, wrapped in safe APIs.
+
+Key types: `Cell`, `RefCell`, `Mutex`, `RwLock`, `Atomic*`, `OnceCell`/`OnceLock`
+
+```rust
+use std::cell::{Cell, RefCell};
+use std::sync::{Mutex, RwLock};
+use std::sync::atomic::{AtomicUsize, Ordering};
+
+// ============================================
+// Cell<T> — for Copy types only
+// Copies values in and out. No runtime checks.
+// ============================================
+
+fn demo_cell() {
+    let c = Cell::new(5);
+
+    // Get a copy of the value
+    let val = c.get();
+    println!("Cell value: {}", val); // 5
+
+    // Set a new value (works through &Cell, not &mut)
+    c.set(10);
+    println!("After set: {}", c.get()); // 10
+
+    // Replace and take
+    let old = c.replace(20);
+    println!("Replaced: {}, now: {}", old, c.get()); // 10, 20
+
+    let taken = c.take(); // replaces with Default::default() (0 for i32)
+    println!("Taken: {}, remaining: {}", taken, c.get()); // 20, 0
+}
+
+// ============================================
+// RefCell<T> — runtime borrow checking
+// Panics if you violate borrowing rules at runtime.
+// ============================================
+
+fn demo_refcell() {
+    let data = RefCell::new(vec![1, 2, 3]);
+
+    // Immutable borrow
+    let borrowed = data.borrow();
+    println!("RefCell contents: {:?}", *borrowed);
+    // `borrowed` must be dropped before mutable borrow
+
+    // Mutable borrow
+    let mut borrowed_mut = data.borrow_mut();
+    borrowed_mut.push(4);
+    borrowed_mut.push(5);
+    // drops here
+
+    println!("After mutation: {:?}", data.borrow()); // [1, 2, 3, 4, 5]
+
+    // try_borrow returns Result instead of panicking
+    match data.try_borrow() {
+        Ok(b) => println!("Borrowed: {:?}", *b),
+        Err(e) => println!("Borrow failed: {}", e),
+    }
+}
+
+// ============================================
+// Interior mutability in structs (common pattern)
+// Allows mutation through &self methods
+// ============================================
+
+#[derive(Debug)]
+struct Cache {
+    data: RefCell<Vec<String>>,
+    hit_count: Cell<u32>,
+}
+
+impl Cache {
+    fn new() -> Self {
+        Cache {
+            data: RefCell::new(Vec::new()),
+            hit_count: Cell::new(0),
+        }
+    }
+
+    // Mutates internal state through &self (not &mut self)
+    fn add(&self, item: String) {
+        self.data.borrow_mut().push(item);
+    }
+
+    fn hits(&self) -> u32 {
+        self.hit_count.set(self.hit_count.get() + 1);
+        self.hit_count.get()
+    }
+
+    fn dump(&self) -> Vec<String> {
+        self.data.borrow().clone()
+    }
+}
+
+// ============================================
+// Mutex<T> — thread-safe interior mutability
+// Uses OS-level locking. Blocks threads.
+// ============================================
+
+fn demo_mutex() {
+    let counter = Mutex::new(0);
+
+    // Lock and mutate
+    {
+        let mut num = counter.lock().unwrap();
+        *num += 1;
+    } // lock released here
+
+    println!("Mutex counter: {}", *counter.lock().unwrap()); // 1
+
+    // try_lock returns Result instead of blocking/deadlocking
+    match counter.try_lock() {
+        Ok(mut num) => *num += 1,
+        Err(_) => println!("Could not acquire lock"),
+    }
+}
+
+// ============================================
+// RwLock<T> — multiple readers OR one writer
+// ============================================
+
+fn demo_rwlock() {
+    let data = RwLock::new(vec![1, 2, 3]);
+
+    // Multiple readers can coexist
+    let r1 = data.read().unwrap();
+    let r2 = data.read().unwrap();
+    println!("Readers: {:?}, {:?}", *r1, *r2);
+    drop(r1);
+    drop(r2);
+
+    // Exclusive write access
+    {
+        let mut w = data.write().unwrap();
+        w.push(4);
+    }
+
+    println!("After write: {:?}", *data.read().unwrap()); // [1, 2, 3, 4]
+}
+
+// ============================================
+// Atomic types — lock-free thread-safe mutation
+// ============================================
+
+fn demo_atomics() {
+    let counter = AtomicUsize::new(0);
+
+    // Atomic operations with memory ordering
+    counter.fetch_add(1, Ordering::SeqCst);
+    counter.fetch_add(1, Ordering::SeqCst);
+
+    // load and store
+    println!("Atomic counter: {}", counter.load(Ordering::SeqCst)); // 2
+
+    // compare-and-swap style
+    counter.compare_exchange(
+        2,          // expected
+        10,         // new value
+        Ordering::SeqCst,
+        Ordering::SeqCst,
+    ).ok();
+
+    println!("After CAS: {}", counter.load(Ordering::SeqCst)); // 10
+}
+
+// ============================================
+// Rc<RefCell<T>> — shared ownership + mutation (single-threaded)
+// ============================================
+
+use std::rc::Rc;
+
+fn demo_rc_refcell() {
+    let shared = Rc::new(RefCell::new(vec![1, 2, 3]));
+
+    let a = Rc::clone(&shared);
+    let b = Rc::clone(&shared);
+
+    // Both can mutate the same data
+    a.borrow_mut().push(4);
+    b.borrow_mut().push(5);
+
+    println!("Shared data: {:?}", shared.borrow()); // [1, 2, 3, 4, 5]
+    println!("Reference count: {}", Rc::strong_count(&shared)); // 3
+}
+
+// ============================================
+// Practical example: Observer pattern with interior mutability
+// ============================================
+
+#[derive(Debug)]
+struct Observable {
+    value: Cell<i32>,
+    observers: RefCell<Vec<Box<dyn Fn(i32)>>>,
+}
+
+impl Observable {
+    fn new(initial: i32) -> Self {
+        Observable {
+            value: Cell::new(initial),
+            observers: RefCell::new(Vec::new()),
+        }
+    }
+
+    fn subscribe<F: Fn(i32) + 'static>(&self, callback: F) {
+        self.observers.borrow_mut().push(Box::new(callback));
+    }
+
+    fn set(&self, new_value: i32) {
+        self.value.set(new_value);
+        for cb in self.observers.borrow().iter() {
+            cb(new_value);
+        }
+    }
+
+    fn get(&self) -> i32 {
+        self.value.get()
+    }
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    demo_cell();
+    demo_refcell();
+    demo_mutex();
+    demo_rwlock();
+    demo_atomics();
+    demo_rc_refcell();
+
+    // Cache with interior mutability
+    let cache = Cache::new();
+    cache.add("item1".to_string());
+    cache.add("item2".to_string());
+    println!("Cache hits: {}", cache.hits()); // 1
+    println!("Cache hits: {}", cache.hits()); // 2
+    println!("Cache dump: {:?}", cache.dump());
+
+    // Observable pattern
+    let obs = Observable::new(0);
+    obs.subscribe(|v| println!("Observer 1 got: {}", v));
+    obs.subscribe(|v| println!("Observer 2 got: {}", v));
+    obs.set(42);
+    // Observer 1 got: 42
+    // Observer 2 got: 42
+}
+```
 
 ---
 # Type-Aliases
+Type aliases give an existing type a new name using the `type` keyword. They do not create new types — just aliases for readability.
+
+```rust
+// ============================================
+// Basic type aliases
+// ============================================
+
+type Kilometers = i32;
+type Thunk = Box<dyn std::fmt::Display + Send>;
+
+fn main() {
+    let x: Kilometers = 5;
+    println!("x = {}", x);
+
+    // Alias for long types
+    type Result<T> = std::result::Result<T, std::io::Error>;
+    type Map = std::collections::HashMap<String, Vec<i32>>;
+
+    let mut map: Map = std::collections::HashMap::new();
+    map.insert("key".to_string(), vec![1, 2, 3]);
+
+    // Alias for function pointers
+    type Callback = fn(i32, i32) -> i32;
+
+    fn add(a: i32, b: i32) -> i32 { a + b }
+    fn mul(a: i32, b: i32) -> i32 { a * b }
+
+    let op: Callback = add;
+    println!("Result: {}", op(3, 4)); // 7
+
+    let op2: Callback = mul;
+    println!("Result: {}", op2(3, 4)); // 12
+}
+```
+
+---
 # Lifetime
+Lifetimes ensure that references are valid for as long as they are used. The compiler can often infer them, but explicit annotations are needed when it cannot.
+
+```rust
+// ============================================
+// Lifetime annotations on functions
+// ============================================
+
+// Both params and return share the same lifetime
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}
+
+// Return lifetime tied to first param only
+fn first_word<'a>(s: &'a str, _other: &str) -> &'a str {
+    s.split_whitespace().next().unwrap_or(s)
+}
+
+// ============================================
+// Lifetime annotations on structs
+// ============================================
+
+struct Excerpt<'a> {
+    part: &'a str,
+}
+
+impl<'a> Excerpt<'a> {
+    fn text(&self) -> &str {
+        self.part
+    }
+
+    fn announce_and_return(&self, announcement: &str) -> &str {
+        println!("Attention: {}", announcement);
+        self.part
+    }
+}
+
+// ============================================
+// Lifetime elision rules
+// ============================================
+
+// Compiler infers: each param gets its own lifetime,
+// return gets the lifetime of self if it exists
+struct Parser {
+    input: String,
+}
+
+impl Parser {
+    // Elided: fn parse(&self) -> &str
+    fn parse(&self) -> &str {
+        &self.input
+    }
+}
+
+// ============================================
+// Static lifetime
+// ============================================
+
+fn get_static() -> &'static str {
+    "I live for the entire program duration"
+}
+
+// ============================================
+// Lifetime bounds on generics
+// ============================================
+
+fn longest_with_announcement<'a, T>(
+    x: &'a str,
+    y: &'a str,
+    ann: T,
+) -> (&'a str, T)
+where
+    T: std::fmt::Display,
+{
+    println!("Announcement: {}", ann);
+    (if x.len() > y.len() { x } else { y }, ann)
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    let s1 = String::from("long string");
+    let result;
+    {
+        let s2 = String::from("xyz");
+        result = longest(s1.as_str(), s2.as_str());
+        println!("Longest: {}", result);
+    }
+
+    let excerpt = Excerpt { part: "important text" };
+    println!("Excerpt: {}", excerpt.text());
+
+    let parser = Parser { input: "hello world".to_string() };
+    println!("Parsed: {}", parser.parse());
+
+    let s = get_static();
+    println!("Static: {}", s);
+
+    let (longest, _) = longest_with_announcement("dog", "horse", 7);
+    println!("Longest: {}", longest);
+}
+```
+
+---
 # Trait
+Traits define shared behavior — similar to interfaces in other languages. They specify what methods a type must have.
+
+```rust
+// ============================================
+// Defining and implementing traits
+// ============================================
+
+pub trait Summary {
+    // Required method (no default)
+    fn summarize_author(&self) -> String;
+
+    // Default implementation (can be overridden)
+    fn summarize(&self) -> String {
+        format!("(Read more from {}...)", self.summarize_author())
+    }
+}
+
+struct NewsArticle {
+    headline: String,
+    location: String,
+    author: String,
+    content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize_author(&self) -> String {
+        format!("@{}", self.author)
+    }
+}
+
+struct Tweet {
+    username: String,
+    content: String,
+    reply: bool,
+    retweet: bool,
+}
+
+impl Summary for Tweet {
+    fn summarize_author(&self) -> String {
+        format!("@{}", self.username)
+    }
+
+    // Override default implementation
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+// ============================================
+// Trait as function parameters
+// ============================================
+
+fn notify(item: &impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+
+// Equivalent with trait bound syntax
+fn notify2<T: Summary>(item: &T) {
+    println!("Breaking news! {}", item.summarize());
+}
+
+// Multiple trait bounds
+fn notify3(item: &(impl Summary + std::fmt::Display)) {}
+fn notify4<T: Summary + std::fmt::Display>(item: &T) {}
+
+// Where clause (cleaner for many bounds)
+fn notify5<T>(item: &T)
+where
+    T: Summary + std::fmt::Display,
+{
+}
+
+// ============================================
+// Returning types that implement traits
+// ============================================
+
+fn returns_summarizable() -> impl Summary {
+    Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from("of course"),
+        reply: false,
+        retweet: false,
+    }
+}
+
+// ============================================
+// Conditional implementations with traits
+// ============================================
+
+use std::fmt::Display;
+
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Pair { x, y }
+    }
+}
+
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("x >= y: {}", self.x);
+        } else {
+            println!("y > x: {}", self.y);
+        }
+    }
+}
+
+// ============================================
+// Blanket implementations
+// ============================================
+
+trait ToJson {
+    fn to_json(&self) -> String;
+}
+
+// Automatically implemented for all types that implement Display
+impl<T: Display> ToJson for T {
+    fn to_json(&self) -> String {
+        format!("{{\"value\": \"{}\"}}", self)
+    }
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    let tweet = Tweet {
+        username: String::from("user"),
+        content: String::from("hello world"),
+        reply: false,
+        retweet: false,
+    };
+    println!("Tweet: {}", tweet.summarize());
+
+    let article = NewsArticle {
+        headline: String::from("Headline"),
+        location: String::from("NY"),
+        author: String::from("Author"),
+        content: String::from("Content"),
+    };
+    println!("Article: {}", article.summarize());
+
+    notify(&tweet);
+    notify(&article);
+
+    let ret = returns_summarizable();
+    println!("Returned: {}", ret.summarize());
+
+    let pair = Pair::new(10, 20);
+    pair.cmp_display();
+
+    // Blanket impl — i32 implements Display, so it gets ToJson
+    println!("{}", 42.to_json());
+    println!("{}", 3.14.to_json());
+}
+```
+
+---
 # Closures
+Closures are anonymous functions that can capture variables from their environment. They are written with `|args| body` syntax.
+
+```rust
+// ============================================
+// Closure syntax variations
+// ============================================
+
+fn main() {
+    // No parameters, no capture
+    let greet = || println!("Hello!");
+    greet();
+
+    // With parameters
+    let add = |a: i32, b: i32| a + b;
+    println!("Add: {}", add(3, 4)); // 7
+
+    // Type inference on params
+    let double = |x| x * 2;
+    println!("Double: {}", double(5)); // 10
+
+    // Multi-line closure
+    let process = |x: i32| {
+        let result = x * x;
+        println!("Processing: {} -> {}", x, result);
+        result
+    };
+    process(6);
+
+    // ============================================
+    // Capturing environment
+    // ============================================
+
+    let x = 10;
+    let print_x = || println!("Captured x: {}", x);
+    print_x();
+
+    // ============================================
+    // Fn, FnMut, FnOnce traits
+    // ============================================
+
+    // Fn: captures by reference, can be called multiple times
+    let s = String::from("hello");
+    let borrow = || println!("{}", s);
+    borrow();
+    borrow();
+    println!("s still valid: {}", s);
+
+    // FnMut: captures by mutable reference
+    let mut count = 0;
+    let mut increment = || {
+        count += 1;
+        count
+    };
+    println!("Count: {}", increment()); // 1
+    println!("Count: {}", increment()); // 2
+
+    // FnOnce: takes ownership, can only be called once
+    let greeting = String::from("hi");
+    let consume = || {
+        println!("{}", greeting);
+    };
+    consume();
+    // consume(); // Error: FnOnce, already consumed
+
+    // ============================================
+    // move keyword — force ownership capture
+    // ============================================
+
+    let data = vec![1, 2, 3];
+    let handle = std::thread::spawn(move || {
+        println!("Thread got: {:?}", data);
+    });
+    handle.join().unwrap();
+    // data is moved, no longer accessible here
+
+    // ============================================
+    // Closures as function parameters
+    // ============================================
+
+    fn apply<F>(f: F, val: i32) -> i32
+    where
+        F: Fn(i32) -> i32,
+    {
+        f(val)
+    }
+
+    println!("Apply: {}", apply(|x| x * x, 7)); // 49
+
+    // ============================================
+    // Closures returning iterators
+    // ============================================
+
+    let nums = vec![1, 2, 3, 4, 5];
+    let doubled: Vec<_> = nums.iter().map(|x| x * 2).collect();
+    println!("Doubled: {:?}", doubled);
+
+    let evens: Vec<_> = nums.iter().filter(|x| *x % 2 == 0).collect();
+    println!("Evens: {:?}", evens);
+}
+```
+
+---
 # Common-Macros
+Rust provides several built-in macros that are used frequently.
+
+```rust
+// ============================================
+// println! / print! — formatted output
+// ============================================
+
+fn main() {
+    let name = "World";
+    let num = 42;
+
+    println!("Hello, {}!", name);           // positional
+    println!("{0} + {1} = {result}", 1, 2, result = 3); // named
+    println!("{:?}", vec![1, 2, 3]);        // Debug
+    println!("{:#?}", vec![1, 2, 3]);       // Pretty Debug
+    println!("{:x}", 255);                  // Hex
+    println!("{:b}", 10);                   // Binary
+    println!("{:.2}", 3.14159);             // 2 decimal places
+    println!("{:>10}", "right");            // Right-aligned width 10
+    println!("{:0>5}", 42);                 // Zero-padded: 00042
+
+    // ============================================
+    // format! — returns String instead of printing
+    // ============================================
+
+    let s = format!("{} is {}", name, num);
+    println!("Formatted: {}", s);
+
+    // ============================================
+    // eprintln! / eprint! — stderr output
+    // ============================================
+
+    eprintln!("This goes to stderr");
+
+    // ============================================
+    // vec! — create Vec with values
+    // ============================================
+
+    let v = vec![1, 2, 3, 4, 5];
+    let repeated = vec![0; 10]; // ten zeros
+
+    // ============================================
+    // assert! / assert_eq! / assert_ne!
+    // ============================================
+
+    assert!(true);
+    assert_eq!(1 + 1, 2);
+    assert_ne!(1 + 1, 3);
+
+    // With custom message
+    // assert!(false, "This will panic with this message");
+
+    // ============================================
+    // dbg! — quick debug printing
+    // ============================================
+
+    let x = 5;
+    let y = dbg!(x * 2); // prints [file:line] x * 2 = 10
+    println!("y = {}", y);
+
+    // ============================================
+    // panic! — explicit panic
+    // ============================================
+
+    // panic!("Something went wrong!");
+
+    // ============================================
+    // todo! / unimplemented! / unreachable!
+    // ============================================
+
+    // todo!();           // "not yet implemented"
+    // unimplemented!();  // same as todo!
+    // unreachable!();    // "internal error: entered unreachable code"
+
+    // ============================================
+    // concat! / env! / env!
+    // ============================================
+
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/src/main.rs");
+    println!("Path: {}", path);
+
+    // ============================================
+    // stringify! — turns tokens into string literal
+    // ============================================
+
+    let s = stringify!(1 + 2);
+    println!("Stringified: {}", s); // "1 + 2"
+
+    // ============================================
+    // include! / include_str! / include_bytes!
+    // ============================================
+
+    // let code = include_str!("path/to/file.rs");
+    // let data = include_bytes!("path/to/file.bin");
+}
+```
+
+---
 # Macros
+Macros are code that writes code. Declarative macros (`macro_rules!`) match patterns and expand, while procedural macros operate on the AST.
+
+```rust
+// ============================================
+// Declarative macros with macro_rules!
+// ============================================
+
+// Simple macro
+macro_rules! say_hello {
+    () => {
+        println!("Hello from macro!");
+    };
+}
+
+// Macro with arguments
+macro_rules! create_function {
+    ($func_name:ident) => {
+        fn $func_name() {
+            println!("Function {:?} was called!", stringify!($func_name));
+        }
+    };
+}
+
+create_function!(foo);
+create_function!(bar);
+
+// Macro with expressions
+macro_rules! my_vec {
+    ( $( $x:expr ),* ) => {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($x);
+            )*
+            temp_vec
+        }
+    };
+}
+
+// Macro with repetition and separators
+macro_rules! hashmap {
+    ( $( $key:expr => $value:expr ),* $(,)? ) => {
+        {
+            let mut map = std::collections::HashMap::new();
+            $(
+                map.insert($key, $value);
+            )*
+            map
+        }
+    };
+}
+
+// Macro with different match arms
+macro_rules! match_type {
+    ($e:expr) => {
+        match $e {
+            $e:ident => println!("identifier: {}", stringify!($e)),
+            $e:literal => println!("literal: {}", $e),
+            _ => println!("something else"),
+        }
+    };
+}
+
+// ============================================
+// Procedural macros (require separate crate)
+// ============================================
+
+// #[derive(MyMacro)]   — Custom derive
+// #[my_attribute]      — Attribute-like
+// my_macro!(...)        — Function-like
+
+// Example of a derive macro (would be in a proc-macro crate):
+// use proc_macro::TokenStream;
+// #[proc_macro_derive(HelloMacro)]
+// pub fn hello_macro_derive(input: TokenStream) -> TokenStream { ... }
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    say_hello!();
+    foo();
+    bar();
+
+    let v = my_vec![1, 2, 3, 4, 5];
+    println!("my_vec: {:?}", v);
+
+    let map = hashmap! {
+        "a" => 1,
+        "b" => 2,
+        "c" => 3,
+    };
+    println!("hashmap: {:?}", map);
+}
+```
+
+---
 # Iterators
+Iterators provide a way to process sequences of items lazily. All iterators implement the `Iterator` trait.
+
+```rust
+// ============================================
+// Creating and using iterators
+// ============================================
+
+fn main() {
+    let v = vec![1, 2, 3, 4, 5];
+
+    // iter() — borrows each element
+    for val in v.iter() {
+        println!("Borrowed: {}", val);
+    }
+
+    // into_iter() — takes ownership
+    for val in v.clone().into_iter() {
+        println!("Owned: {}", val);
+    }
+
+    // iter_mut() — mutable borrow
+    let mut v2 = vec![1, 2, 3];
+    for val in v2.iter_mut() {
+        *val += 10;
+    }
+    println!("Mutated: {:?}", v2); // [11, 12, 13]
+
+    // ============================================
+    // Iterator adaptors (lazy — do nothing until consumed)
+    // ============================================
+
+    let nums = vec![1, 2, 3, 4, 5];
+
+    // map — transform each element
+    let doubled: Vec<_> = nums.iter().map(|x| x * 2).collect();
+    println!("Doubled: {:?}", doubled);
+
+    // filter — keep elements matching predicate
+    let evens: Vec<_> = nums.iter().filter(|x| *x % 2 == 0).collect();
+    println!("Evens: {:?}", evens);
+
+    // filter_map — filter and transform in one step
+    let parsed: Vec<i32> = ["1", "two", "3", "4"]
+        .iter()
+        .filter_map(|s| s.parse().ok())
+        .collect();
+    println!("Parsed: {:?}", parsed); // [1, 3, 4]
+
+    // enumerate — add index
+    let enumerated: Vec<_> = nums.iter().enumerate().collect();
+    println!("Enumerated: {:?}", enumerated);
+
+    // zip — combine two iterators
+    let a = [1, 2, 3];
+    let b = [4, 5, 6];
+    let zipped: Vec<_> = a.iter().zip(b.iter()).collect();
+    println!("Zipped: {:?}", zipped); // [(1,4), (2,5), (3,6)]
+
+    // take / skip
+    let first_three: Vec<_> = nums.iter().take(3).collect();
+    println!("First 3: {:?}", first_three);
+
+    let skipped: Vec<_> = nums.iter().skip(2).collect();
+    println!("Skipped 2: {:?}", skipped);
+
+    // chain — concatenate iterators
+    let chained: Vec<_> = a.iter().chain(b.iter()).collect();
+    println!("Chained: {:?}", chained);
+
+    // flat_map — flatten nested iterators
+    let nested = vec![vec![1, 2], vec![3, 4], vec![5]];
+    let flat: Vec<_> = nested.iter().flat_map(|v| v.iter()).collect();
+    println!("Flattened: {:?}", flat);
+
+    // ============================================
+    // Iterator consumers (produce a final value)
+    // ============================================
+
+    let nums = vec![1, 2, 3, 4, 5];
+
+    // sum / product
+    let total: i32 = nums.iter().sum();
+    let product: i32 = nums.iter().product();
+    println!("Sum: {}, Product: {}", total, product);
+
+    // fold / reduce
+    let folded = nums.iter().fold(0, |acc, x| acc + x);
+    println!("Folded: {}", folded);
+
+    // find — first matching element
+    let found = nums.iter().find(|x| *x > 3);
+    println!("Found > 3: {:?}", found);
+
+    // position — index of first match
+    let pos = nums.iter().position(|x| *x == 3);
+    println!("Position of 3: {:?}", pos);
+
+    // count
+    let count = nums.iter().count();
+    println!("Count: {}", count);
+
+    // max / min
+    println!("Max: {:?}", nums.iter().max());
+    println!("Min: {:?}", nums.iter().min());
+
+    // any / all
+    println!("Any > 4: {}", nums.iter().any(|x| *x > 4));
+    println!("All > 0: {}", nums.iter().all(|x| *x > 0));
+
+    // collect into different types
+    let squares: std::collections::HashMap<_, _> =
+        nums.iter().map(|x| (x, x * x)).collect();
+    println!("Squares map: {:?}", squares);
+
+    // ============================================
+    // Implementing Iterator for a custom type
+    // ============================================
+
+    struct Counter {
+        count: u32,
+        max: u32,
+    }
+
+    impl Counter {
+        fn new(max: u32) -> Self {
+            Counter { count: 0, max }
+        }
+    }
+
+    impl Iterator for Counter {
+        type Item = u32;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            if self.count < self.max {
+                self.count += 1;
+                Some(self.count)
+            } else {
+                None
+            }
+        }
+    }
+
+    let counter = Counter::new(5);
+    let sum: u32 = counter.zip(Counter::new(5).skip(1))
+        .map(|(a, b)| a * b)
+        .sum();
+    println!("Counter product sum: {}", sum);
+}
+```
+
+---
 # Attributes
+Attributes are metadata applied to modules, crates, functions, etc. They use `#[...]` syntax. Inner attributes use `#![...]`.
+
+```rust
+// ============================================
+// Crate-level attributes (inner)
+// ============================================
+
+// #![warn(unused)]
+// #![allow(dead_code)]
+
+// ============================================
+// Conditional compilation
+// ============================================
+
+#[cfg(target_os = "linux")]
+fn linux_only() {
+    println!("Running on Linux");
+}
+
+#[cfg(target_os = "windows")]
+fn windows_only() {
+    println!("Running on Windows");
+}
+
+#[cfg(debug_assertions)]
+fn debug_only() {
+    println!("Debug build");
+}
+
+#[cfg(feature = "serde")]
+fn with_serde() {
+    println!("Serde feature enabled");
+}
+
+#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+fn linux_x86_64() {
+    println!("Linux x86_64");
+}
+
+#[cfg(any(unix, windows))]
+fn unix_or_windows() {
+    println!("Unix or Windows");
+}
+
+// ============================================
+// Derive macros
+// ============================================
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]
+struct User {
+    name: String,
+    age: u32,
+}
+
+// ============================================
+// Test attribute
+// ============================================
+
+#[test]
+fn it_works() {
+    assert_eq!(2 + 2, 4);
+}
+
+#[test]
+#[should_panic]
+fn this_panics() {
+    panic!("expected panic");
+}
+
+#[test]
+#[ignore]
+fn expensive_test() {
+    // Skipped unless --include-ignored is passed
+}
+
+// ============================================
+// Lint control attributes
+// ============================================
+
+#[allow(dead_code)]
+fn unused_function() {}
+
+#[warn(unused_variables)]
+fn with_warning(x: i32) {
+    let _y = 5;
+}
+
+#[deny(unused_mut)]
+fn strict_mut(x: i32) {
+    let _y = x;
+}
+
+// ============================================
+// Other common attributes
+// ============================================
+
+#[must_use]
+fn important_result() -> bool {
+    true
+}
+
+#[inline]
+fn fast_function() {}
+
+#[inline(always)]
+fn always_inline() {}
+
+#[cold]
+fn rarely_called() {}
+
+// ============================================
+// Doc comments (desugar to #[doc = "..."])
+// ============================================
+
+/// Adds two numbers together.
+///
+/// # Examples
+/// 
+/// let result = add(2, 3);
+/// assert_eq!(result, 5);
+/// 
+///fn add(a: i32, b: i32) -> i32 {
+/// a + b
+///}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    let user = User {
+        name: "Alice".to_string(),
+        age: 30,
+    };
+    println!("{:?}", user);
+
+    #[cfg(target_os = "linux")]
+    linux_only();
+
+    let _ = important_result();
+    println!("Add: {}", add(2, 3));
+}
+```
+
+---
 # Arc
+`Arc<T>` (Atomic Reference Counted) enables shared ownership across multiple threads. It uses atomic operations for thread-safe reference counting.
+
+```rust
+use std::sync::Arc;
+use std::thread;
+
+fn main() {
+    // ============================================
+    // Basic Arc usage
+    // ============================================
+
+    let data = Arc::new(vec![1, 2, 3, 4, 5]);
+    let mut handles = vec![];
+
+    for i in 0..3 {
+        let data_clone = Arc::clone(&data);
+        let handle = thread::spawn(move || {
+            println!("Thread {}: {:?}", i, data_clone);
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    // ============================================
+    // Arc with Mutex for shared mutable access
+    // ============================================
+
+    let counter = Arc::new(std::sync::Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Counter: {}", *counter.lock().unwrap()); // 10
+
+    // ============================================
+    // Arc::strong_count
+    // ============================================
+
+    let val = Arc::new(42);
+    println!("Count: {}", Arc::strong_count(&val)); // 1
+
+    let v2 = Arc::clone(&val);
+    println!("Count: {}", Arc::strong_count(&val)); // 2
+
+    drop(v2);
+    println!("Count: {}", Arc::strong_count(&val)); // 1
+
+    // ============================================
+    // Arc::try_unwrap — convert back to owned T
+    // ============================================
+
+    let arc = Arc::new(String::from("hello"));
+    if let Ok(inner) = Arc::try_unwrap(arc) {
+        println!("Unwrapped: {}", inner);
+    }
+}
+```
+
+---
 # Box
+`Box<T>` allocates data on the heap. It provides single ownership of heap-allocated data.
+
+```rust
+fn main() {
+    // ============================================
+    // Basic Box usage
+    // ============================================
+
+    let b = Box::new(5);
+    println!("b = {}", b);
+
+    // ============================================
+    // Recursive types (Box is required)
+    // ============================================
+
+    #[derive(Debug)]
+    enum List {
+        Cons(i32, Box<List>),
+        Nil,
+    }
+
+    use List::{Cons, Nil};
+    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+    println!("List: {:?}", list);
+
+    // ============================================
+    // Trait objects (dynamic dispatch)
+    // ============================================
+
+    trait Draw {
+        fn draw(&self);
+    }
+
+    struct Button;
+    struct TextField;
+
+    impl Draw for Button {
+        fn draw(&self) { println!("Drawing button"); }
+    }
+
+    impl Draw for TextField {
+        fn draw(&self) { println!("Drawing text field"); }
+    }
+
+    let components: Vec<Box<dyn Draw>> = vec![
+        Box::new(Button),
+        Box::new(TextField),
+    ];
+
+    for c in &components {
+        c.draw();
+    }
+
+    // ============================================
+    // Box::leak — convert to &'static mut
+    // ============================================
+
+    let s: &'static mut String = Box::leak(Box::new(String::from("leaked")));
+    s.push_str(" forever");
+    println!("Leaked: {}", s);
+
+    // ============================================
+    // From/Into conversions
+    // ============================================
+
+    let boxed: Box<[i32]> = vec![1, 2, 3].into_boxed_slice();
+    println!("Boxed slice: {:?}", boxed);
+}
+```
+
+---
 # Channels
+Channels enable message-passing between threads using `mpsc` (multi-producer, single-consumer).
+
+```rust
+use std::sync::mpsc;
+use std::thread;
+use std::time::Duration;
+
+fn main() {
+    // ============================================
+    // Basic channel usage
+    // ============================================
+
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        tx.send("Hello from thread!").unwrap();
+    });
+
+    let received = rx.recv().unwrap();
+    println!("Received: {}", received);
+
+    // ============================================
+    // Multiple messages
+    // ============================================
+
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let vals = vec![
+            String::from("msg 1"),
+            String::from("msg 2"),
+            String::from("msg 3"),
+        ];
+        for val in vals {
+            tx.send(val).unwrap();
+            thread::sleep(Duration::from_millis(100));
+        }
+    });
+
+    for received in rx {
+        println!("Got: {}", received);
+    }
+
+    // ============================================
+    // Multiple producers (clone tx)
+    // ============================================
+
+    let (tx, rx) = mpsc::channel();
+    let tx1 = tx.clone();
+
+    thread::spawn(move || {
+        tx.send(vec![1, 2, 3]).unwrap();
+    });
+
+    thread::spawn(move || {
+        tx1.send(vec![4, 5, 6]).unwrap();
+    });
+
+    for received in rx {
+        println!("Got vector: {:?}", received);
+    }
+
+    // ============================================
+    // sync_channel — bounded (synchronous)
+    // ============================================
+
+    let (tx, rx) = mpsc::sync_channel(1); // buffer size 1
+
+    thread::spawn(move || {
+        tx.send("synced").unwrap();
+    });
+
+    println!("Bounded: {}", rx.recv().unwrap());
+
+    // ============================================
+    // try_recv — non-blocking receive
+    // ============================================
+
+    let (tx, rx) = mpsc::channel();
+    tx.send("quick").unwrap();
+
+    match rx.try_recv() {
+        Ok(msg) => println!("try_recv: {}", msg),
+        Err(_) => println!("No message"),
+    }
+}
+```
+
+---
 # Deref and DerefMut
+The `Deref` trait allows customizing the behavior of the `*` dereference operator. It enables smart pointers to behave like references.
+
+```rust
+use std::ops::{Deref, DerefMut};
+
+// ============================================
+// Custom Deref implementation
+// ============================================
+
+struct MyBox<T>(T);
+
+impl<T> MyBox<T> {
+    fn new(x: T) -> MyBox<T> {
+        MyBox(x)
+    }
+}
+
+impl<T> Deref for MyBox<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl<T> DerefMut for MyBox<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
+
+// ============================================
+// Deref coercion
+// ============================================
+
+fn hello(name: &str) {
+    println!("Hello, {}!", name);
+}
+
+// ============================================
+// Smart pointer with Deref
+// ============================================
+
+struct Wrapper {
+    data: String,
+    cached_len: std::cell::Cell<usize>,
+}
+
+impl Deref for Wrapper {
+    type Target = String;
+
+    fn deref(&self) -> &Self::Target {
+        &self.data
+    }
+}
+
+impl DerefMut for Wrapper {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.data
+    }
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    let x = MyBox::new(5);
+    println!("Dereferenced: {}", *x);
+
+    // Deref coercion: &MyBox<String> → &String → &str
+    let m = MyBox::new(String::from("World"));
+    hello(&m); // automatically coerced
+
+    // DerefMut
+    let mut w = Wrapper {
+        data: String::from("hello"),
+        cached_len: std::cell::Cell::new(5),
+    };
+    w.push_str(" world");
+    println!("Wrapper: {}", w);
+}
+```
+
+---
 # Drop
+The `Drop` trait lets you run code when a value goes out of scope — useful for cleanup like closing files, releasing locks, or freeing resources.
+
+```rust
+use std::ops::Drop;
+
+// ============================================
+// Basic Drop implementation
+// ============================================
+
+struct CustomSmartPointer {
+    data: String,
+}
+
+impl Drop for CustomSmartPointer {
+    fn drop(&mut self) {
+        println!("Dropping CustomSmartPointer with data `{}`", self.data);
+    }
+}
+
+// ============================================
+// Drop order (reverse of declaration)
+// ============================================
+
+struct NamedDrop(&'static str);
+
+impl Drop for NamedDrop {
+    fn drop(&mut self) {
+        println!("Dropping {}", self.0);
+    }
+}
+
+// ============================================
+// std::mem::drop — force early drop
+// ============================================
+
+fn main() {
+    let c = CustomSmartPointer {
+        data: String::from("my stuff"),
+    };
+    let d = CustomSmartPointer {
+        data: String::from("other stuff"),
+    };
+    println!("Smart pointers created.");
+    // d drops first, then c (reverse order)
+
+    // Force drop early
+    let e = CustomSmartPointer {
+        data: String::from("early drop"),
+    };
+    std::mem::drop(e); // explicit drop
+    // e.drop() would be error — Drop::drop takes &mut self
+    println!("e dropped early.");
+
+    // Drop order demo
+    {
+        let _a = NamedDrop("a");
+        let _b = NamedDrop("b");
+        let _c = NamedDrop("c");
+        // Drops: c, b, a
+    }
+
+    // ============================================
+    // Drop with resource cleanup
+    // ============================================
+
+    struct TempFile {
+        path: String,
+    }
+
+    impl Drop for TempFile {
+        fn drop(&mut self) {
+            println!("Cleaning up temp file: {}", self.path);
+            // std::fs::remove_file(&self.path).ok();
+        }
+    }
+
+    let _file = TempFile {
+        path: "/tmp/test.txt".to_string(),
+    };
+}
+```
+
+---
 # rc
+`Rc<T>` (Reference Counted) enables shared ownership within a single thread. It tracks how many references point to a value and cleans up when the count reaches zero.
+
+```rust
+use std::rc::Rc;
+
+fn main() {
+    // ============================================
+    // Basic Rc usage
+    // ============================================
+
+    let a = Rc::new(vec![1, 2, 3]);
+    let b = Rc::clone(&a);
+    let c = Rc::clone(&a);
+
+    println!("a: {:?}", a);
+    println!("b: {:?}", b);
+    println!("c: {:?}", c);
+    println!("Strong count: {}", Rc::strong_count(&a)); // 3
+
+    drop(c);
+    println!("After drop(c): {}", Rc::strong_count(&a)); // 2
+
+    // ============================================
+    // Rc with nested data
+    // ============================================
+
+    #[derive(Debug)]
+    enum List {
+        Cons(i32, Rc<List>),
+        Nil,
+    }
+
+    use List::{Cons, Nil};
+
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    let b = Cons(3, Rc::clone(&a));
+    let c = Cons(4, Rc::clone(&a));
+
+    println!("b: {:?}", b);
+    println!("c: {:?}", c);
+    println!("Rc count after creating b and c: {}", Rc::strong_count(&a)); // 3
+
+    // ============================================
+    // Rc::try_unwrap — convert to owned if count == 1
+    // ============================================
+
+    let rc = Rc::new(42);
+    drop(b);
+    drop(c);
+
+    if let Ok(val) = Rc::try_unwrap(a) {
+        println!("Unwrapped: {:?}", val);
+    }
+
+    // ============================================
+    // Weak references (avoid cycles)
+    // ============================================
+
+    use std::rc::Weak;
+
+    struct Node {
+        value: i32,
+        children: std::cell::RefCell<Vec<Rc<Node>>>,
+        parent: std::cell::RefCell<Weak<Node>>,
+    }
+
+    let leaf = Rc::new(Node {
+        value: 3,
+        children: std::cell::RefCell::new(vec![]),
+        parent: std::cell::RefCell::new(Weak::new()),
+    });
+
+    println!("Leaf parent: {:?}", leaf.parent.borrow().upgrade()); // None
+
+    let branch = Rc::new(Node {
+        value: 5,
+        children: std::cell::RefCell::new(vec![Rc::clone(&leaf)]),
+        parent: std::cell::RefCell::new(Weak::new()),
+    });
+
+    *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
+    println!("Leaf parent: {:?}", leaf.parent.borrow().upgrade()); // Some
+}
+```
+
+---
 # Standard libraries
+Key modules in Rust's standard library (`std`).
+
+```rust
+// ============================================
+// std::env — environment variables
+// ============================================
+
+fn demo_env() {
+    for (key, value) in std::env::vars() {
+        println!("{}: {}", key, value);
+    }
+
+    match std::env::var("HOME") {
+        Ok(val) => println!("HOME: {}", val),
+        Err(e) => println!("No HOME: {}", e),
+    }
+
+    println!("Current dir: {:?}", std::env::current_dir().unwrap());
+    println!("Temp dir: {:?}", std::env::temp_dir());
+}
+
+// ============================================
+// std::fs — file system operations
+// ============================================
+
+fn demo_fs() {
+    // Read entire file
+    // let content = std::fs::read_to_string("file.txt").unwrap();
+
+    // Write entire file
+    // std::fs::write("output.txt", "hello").unwrap();
+
+    // Read directory
+    for entry in std::fs::read_dir(".").unwrap() {
+        let entry = entry.unwrap();
+        println!("{:?}", entry.path());
+    }
+
+    // Create directory
+    // std::fs::create_dir_all("nested/path").unwrap();
+
+    // Copy / remove
+    // std::fs::copy("src", "dst").unwrap();
+    // std::fs::remove_file("file.txt").unwrap();
+}
+
+// ============================================
+// std::io — input/output
+// ============================================
+
+use std::io::{self, BufRead, Write, BufReader};
+
+fn demo_io() {
+    // Read from stdin line by line
+    // let stdin = io::stdin();
+    // for line in stdin.lock().lines() {
+    //     println!("Got: {}", line.unwrap());
+    // }
+
+    // Write to stdout
+    let mut stdout = io::stdout();
+    stdout.write_all(b"Hello stdout\n").unwrap();
+
+    // Read from a string as a reader
+    let data = "line1\nline2\nline3";
+    let reader = BufReader::new(data.as_bytes());
+    for line in reader.lines() {
+        println!("Line: {}", line.unwrap());
+    }
+}
+
+// ============================================
+// std::path — path manipulation
+// ============================================
+
+fn demo_path() {
+    use std::path::{Path, PathBuf};
+
+    let path = Path::new("/home/user/file.txt");
+    println!("File name: {:?}", path.file_name());
+    println!("Extension: {:?}", path.extension());
+    println!("Parent: {:?}", path.parent());
+    println!("Is absolute: {}", path.is_absolute());
+
+    let mut buf = PathBuf::from("/tmp");
+    buf.push("subdir");
+    buf.push("file.txt");
+    println!("PathBuf: {:?}", buf);
+}
+
+// ============================================
+// std::time — time and duration
+// ============================================
+
+use std::time::{Duration, Instant, SystemTime};
+
+fn demo_time() {
+    let now = Instant::now();
+    std::thread::sleep(Duration::from_millis(10));
+    println!("Elapsed: {:?}", now.elapsed());
+
+    let sys_now = SystemTime::now();
+    println!("System time: {:?}", sys_now);
+
+    let dur = Duration::from_secs(3600)
+        + Duration::from_millis(500)
+        + Duration::from_nanos(100);
+    println!("Duration: {:?}", dur);
+}
+
+// ============================================
+// std::process — spawning processes
+// ============================================
+
+use std::process::Command;
+
+fn demo_process() {
+    let output = Command::new("echo")
+        .arg("Hello from child process")
+        .output()
+        .expect("Failed to execute");
+
+    println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
+    println!("exit status: {}", output.status);
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    demo_env();
+    demo_path();
+    demo_time();
+    demo_io();
+    // demo_fs();
+    // demo_process();
+}
+```
+
+---
 # async-await
+Async/await enables writing non-blocking code that looks synchronous. Rust uses a poll-based async model with `Future`.
+
+```rust
+// Requires an async runtime like tokio or async-std
+// #[tokio::main]
+// async fn main() { ... }
+
+// ============================================
+// Basic async function
+// ============================================
+
+async fn fetch_data(url: &str) -> String {
+    // Simulated async work
+    format!("Data from {}", url)
+}
+
+// ============================================
+// Async blocks
+// ============================================
+
+async fn demo_blocks() {
+    let result = async {
+        let a = 10;
+        let b = 20;
+        a + b
+    }
+    .await;
+
+    println!("Block result: {}", result);
+}
+
+// ============================================
+// Concurrent execution with join!
+// ============================================
+
+async fn demo_concurrent() {
+    // With tokio:
+    // let (a, b) = tokio::join!(
+    //     fetch_data("http://example.com/1"),
+    //     fetch_data("http://example.com/2"),
+    // );
+    // println!("{} and {}", a, b);
+
+    // Sequential (not concurrent):
+    let a = fetch_data("http://example.com/1").await;
+    let b = fetch_data("http://example.com/2").await;
+    println!("{} then {}", a, b);
+}
+
+// ============================================
+// Async traits (Rust 1.75+ with return-position impl Trait in trait)
+// ============================================
+
+trait AsyncProcessor {
+    async fn process(&self, data: &str) -> String;
+}
+
+struct SimpleProcessor;
+
+impl AsyncProcessor for SimpleProcessor {
+    async fn process(&self, data: &str) -> String {
+        format!("Processed: {}", data)
+    }
+}
+
+// ============================================
+// Async streams (with async-stream crate or tokio-stream)
+// ============================================
+
+// async fn tick_stream() -> impl futures::Stream<Item = u64> {
+//     async_stream::stream! {
+//         let mut i = 0;
+//         loop {
+//             yield i;
+//             i += 1;
+//             tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+//         }
+//     }
+// }
+
+// ============================================
+// Select — race between futures
+// ============================================
+
+async fn demo_select() {
+    // With tokio:
+    // tokio::select! {
+    //     val = fetch_data("url1") => println!("First: {}", val),
+    //     val = fetch_data("url2") => println!("Second: {}", val),
+    // }
+}
+
+// ============================================
+// Manual Future implementation
+// ============================================
+
+use std::future::Future;
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
+struct ReadyFuture<T>(Option<T>);
+
+impl<T> Future for ReadyFuture<T> {
+    type Output = T;
+
+    fn poll(mut self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
+        Poll::Ready(self.0.take().expect("polled after ready"))
+    }
+}
+
+// ============================================
+// Usage (requires runtime)
+// ============================================
+
+fn main() {
+    // In a real project with tokio:
+    // tokio::runtime::Runtime::new().unwrap().block_on(async {
+    //     demo_blocks().await;
+    //     demo_concurrent().await;
+    // });
+
+    // Without runtime, you can define async functions but not .await them
+    println!("Async functions defined. Use a runtime to execute them.");
+}
+```
+
+---
 # Concurrency
+Rust provides multiple approaches to concurrent programming: threads, channels, shared state, and async.
+
+```rust
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::Duration;
+
+// ============================================
+// Thread basics
+// ============================================
+
+fn demo_threads() {
+    let mut handles = vec![];
+
+    for i in 0..5 {
+        let handle = thread::spawn(move || {
+            println!("Thread {} started", i);
+            thread::sleep(Duration::from_millis(100));
+            println!("Thread {} done", i);
+            i * 2
+        });
+        handles.push(handle);
+    }
+
+    for (i, handle) in handles.into_iter().enumerate() {
+        let result = handle.join().unwrap();
+        println!("Thread {} returned: {}", i, result);
+    }
+}
+
+// ============================================
+// Shared state with Arc + Mutex
+// ============================================
+
+fn demo_shared_state() {
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        handles.push(thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        }));
+    }
+
+    for h in handles {
+        h.join().unwrap();
+    }
+
+    println!("Counter: {}", *counter.lock().unwrap()); // 10
+}
+
+// ============================================
+// Thread-local storage
+// ============================================
+
+thread_local! {
+    static THREAD_ID: std::cell::Cell<u32> = const { std::cell::Cell::new(0) };
+}
+
+fn demo_thread_local() {
+    let mut handles = vec![];
+
+    for i in 0..3 {
+        handles.push(thread::spawn(move || {
+            THREAD_ID.with(|id| id.set(i));
+            THREAD_ID.with(|id| println!("Thread {} has id {}", i, id.get()));
+        }));
+    }
+
+    for h in handles {
+        h.join().unwrap();
+    }
+}
+
+// ============================================
+// Scoped threads (no move required)
+// ============================================
+
+fn demo_scoped() {
+    let mut a = vec![1, 2, 3];
+    let mut x = 0;
+
+    thread::scope(|s| {
+        s.spawn(|| {
+            println!("Hello from {:?}", a);
+        });
+
+        s.spawn(|| {
+            x += 1;
+            println!("x is now {}", x);
+        });
+    });
+
+    println!("a: {:?}", a);
+    println!("x: {}", x);
+}
+
+// ============================================
+// Rayon-style parallel iterators (conceptual)
+// ============================================
+
+fn demo_parallel() {
+    let nums: Vec<u64> = (0..1_000_000).collect();
+
+    // With rayon: let sum: u64 = nums.par_iter().sum();
+    let sum: u64 = nums.iter().sum(); // sequential version
+    println!("Sum: {}", sum);
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    demo_threads();
+    demo_shared_state();
+    demo_thread_local();
+    demo_scoped();
+    demo_parallel();
+}
+```
+
+---
 # Threads
+Threads are lightweight processes that run concurrently. Rust's `std::thread` module provides OS-level threads.
+
+```rust
+use std::thread;
+use std::time::Duration;
+
+fn main() {
+    // ============================================
+    // Spawning threads
+    // ============================================
+
+    let handle = thread::spawn(|| {
+        for i in 1..10 {
+            println!("Child: {}", i);
+            thread::sleep(Duration::from_millis(1));
+        }
+    });
+
+    for i in 1..5 {
+        println!("Main: {}", i);
+        thread::sleep(Duration::from_millis(1));
+    }
+
+    handle.join().unwrap(); // wait for child
+
+    // ============================================
+    // Thread with move closure
+    // ============================================
+
+    let v = vec![1, 2, 3];
+    let handle = thread::spawn(move || {
+        println!("Thread got vector: {:?}", v);
+    });
+    handle.join().unwrap();
+
+    // ============================================
+    // Thread naming
+    // ============================================
+
+    let builder = thread::Builder::new()
+        .name("worker".to_string())
+        .stack_size(32 * 1024); // 32KB
+
+    let handle = builder
+        .spawn(|| {
+            println!(
+                "Thread name: {:?}",
+                thread::current().name()
+            );
+        })
+        .unwrap();
+
+    handle.join().unwrap();
+
+    // ============================================
+    // Thread yield / park
+    // ============================================
+
+    let child = thread::spawn(move || {
+        thread::park(); // sleeps until unparked
+        println!("Child unparked!");
+    });
+
+    thread::sleep(Duration::from_millis(100));
+    child.thread_handle().map(|h| {
+        // Note: thread::Thread::unpark requires the thread handle
+    });
+    child.join().unwrap();
+
+    // ============================================
+    // Thread::sleep vs thread::yield_now
+    // ============================================
+
+    thread::yield_now(); // give up current timeslice
+    thread::sleep(Duration::from_millis(10)); // sleep for duration
+
+    // ============================================
+    // Available parallelism
+    // ============================================
+
+    match thread::available_parallelism() {
+        Ok(n) => println!("Available CPUs: {}", n),
+        Err(e) => println!("Could not determine: {}", e),
+    }
+}
+```
+
+---
 # Future
+A `Future` represents a value that may not be ready yet. It is the foundation of async Rust.
+
+```rust
+use std::future::Future;
+use std::pin::Pin;
+use std::task::{Context, Poll, Waker};
+use std::sync::{Arc, Mutex};
+
+// ============================================
+// What is a Future?
+// ============================================
+
+// A Future is a trait:
+// pub trait Future {
+//     type Output;
+//     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
+// }
+//
+// Poll::Ready(T)  — value is available
+// Poll::Pending   — value not ready, waker will notify when ready
+
+// ============================================
+// Simple custom Future
+// ============================================
+
+struct DelayedValue {
+    ready: bool,
+    value: Option<i32>,
+}
+
+impl Future for DelayedValue {
+    type Output = i32;
+
+    fn poll(mut self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
+        if self.ready {
+            Poll::Ready(self.value.take().unwrap())
+        } else {
+            self.ready = true;
+            Poll::Pending
+        }
+    }
+}
+
+// ============================================
+// async fn desugars to a Future
+// ============================================
+
+async fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+// This is roughly equivalent to:
+fn add_future(a: i32, b: i32) -> impl Future<Output = i32> {
+    async move { a + b }
+}
+
+// ============================================
+// Pin — preventing moves of self-referential data
+// ============================================
+
+fn demo_pin() {
+    let mut x = 42;
+    let pin = Pin::new(&mut x);
+    println!("Pinned value: {}", *pin);
+
+    // Box::pin for heap-pinned data
+    let boxed = Box::pin(async { 100 });
+    // boxed can be polled
+}
+
+// ============================================
+// Context and Waker
+// ============================================
+
+struct NotifyingFuture {
+    count: u32,
+}
+
+impl Future for NotifyingFuture {
+    type Output = u32;
+
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        self.count += 1;
+        if self.count >= 3 {
+            Poll::Ready(self.count)
+        } else {
+            cx.waker().wake_by_ref(); // schedule re-poll
+            Poll::Pending
+        }
+    }
+}
+
+// ============================================
+// JoinHandle (from thread::spawn) is also a Future in async runtimes
+// ============================================
+
+fn main() {
+    demo_pin();
+
+    // To actually poll futures you need an executor/runtime
+    // e.g., tokio, async-std, smol, or a simple executor
+
+    println!("Futures defined. Use an executor to poll them.");
+}
+```
+
+---
 # Streams
+Streams are async iterators — they produce a sequence of values over time. Not in std; use `futures` crate or `tokio-stream`.
+
+```rust
+// Requires: futures = "0.3" or tokio-stream
+// use futures::stream::{self, Stream, StreamExt};
+// use futures::pin_mut;
+
+// ============================================
+// Stream trait (conceptual)
+// ============================================
+
+// pub trait Stream {
+//     type Item;
+//     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>;
+// }
+
+// ============================================
+// Creating streams
+// ============================================
+
+// From iterator:
+// let s = stream::iter(vec![1, 2, 3, 4, 5]);
+
+// From async block:
+// let s = stream::once(async { 42 });
+
+// Repeated:
+// let s = stream::repeat(1).take(5);
+
+// ============================================
+// Stream combinators
+// ============================================
+
+// async fn demo_stream_combinators() {
+//     let s = stream::iter(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+//
+//     // map
+//     let doubled: Vec<_> = s.map(|x| x * 2).collect().await;
+//
+//     // filter
+//     let evens: Vec<_> = stream::iter(1..=10)
+//         .filter(|x| futures::future::ready(x % 2 == 0))
+//         .collect()
+//         .await;
+//
+//     // take / skip
+//     let first3: Vec<_> = stream::iter(1..=10).take(3).collect().await;
+//
+//     // fold
+//     let sum = stream::iter(1..=10).fold(0, |acc, x| async move { acc + x }).await;
+//
+//     // chain
+//     let chained: Vec<_> = stream::iter(vec![1,2])
+//         .chain(stream::iter(vec![3,4]))
+//         .collect().await;
+//
+//     // flatten (flatten nested streams)
+//     let nested = stream::iter(vec![
+//         stream::iter(vec![1, 2]),
+//         stream::iter(vec![3, 4]),
+//     ]);
+//     let flat: Vec<_> = nested.flatten().collect().await;
+// }
+
+// ============================================
+// Async read as stream (tokio)
+// ============================================
+
+// use tokio_stream::wrappers::LinesStream;
+// use tokio::io::BufReader;
+
+// async fn read_lines() {
+//     let file = tokio::fs::File::open("input.txt").await.unwrap();
+//     let reader = BufReader::new(file);
+//     let lines = tokio::io::AsyncBufReadExt::lines(reader);
+//     let stream = LinesStream::new(lines);
+//
+//     tokio::pin!(stream);
+//     while let Some(line) = stream.next().await {
+//         println!("Line: {}", line.unwrap());
+//     }
+// }
+
+// ============================================
+// Interval stream
+// ============================================
+
+// use tokio_stream::wrappers::IntervalStream;
+
+// async fn tick_every_second() {
+//     let mut interval = tokio::time::interval(Duration::from_secs(1));
+//     let stream = IntervalStream::new(interval);
+//
+//     tokio::pin!(stream);
+//     while let Some(_) = stream.next().await {
+//         println!("Tick!");
+//     }
+// }
+
+fn main() {
+    println!("Streams require an async runtime and the futures/tokio-stream crate.");
+    println!("Key methods: .next().await, .collect().await, .map(), .filter(), .fold()");
+}
+```
+
+---
 # oop
+Rust is not an OOP language but supports OOP patterns through structs, traits, and composition.
+
+```rust
+// ============================================
+// Encapsulation — private fields, public API
+// ============================================
+
+mod encapsulated {
+    pub struct AveragedCollection {
+        list: Vec<i32>,
+        average: f64,
+    }
+
+    impl AveragedCollection {
+        pub fn new() -> Self {
+            AveragedCollection {
+                list: vec![],
+                average: 0.0,
+            }
+        }
+
+        pub fn add(&mut self, value: i32) {
+            self.list.push(value);
+            self.update_average();
+        }
+
+        pub fn remove(&mut self) -> Option<i32> {
+            let result = self.list.pop();
+            match result {
+                Some(value) => {
+                    self.update_average();
+                    Some(value)
+                }
+                None => None,
+            }
+        }
+
+        pub fn average(&self) -> f64 {
+            self.average
+        }
+
+        fn update_average(&mut self) {
+            let total: i32 = self.list.iter().sum();
+            self.average = total as f64 / self.list.len() as f64;
+        }
+    }
+}
+
+// ============================================
+// Inheritance via traits (composition over inheritance)
+// ============================================
+
+trait Drawable {
+    fn draw(&self);
+    fn bounding_box(&self) -> (f64, f64, f64, f64);
+
+    // Default method (like an inherited implementation)
+    fn render(&self) {
+        self.draw();
+        println!("Rendered at {:?}", self.bounding_box());
+    }
+}
+
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Drawable for Circle {
+    fn draw(&self) {
+        println!("Drawing circle at ({}, {})", self.x, self.y);
+    }
+
+    fn bounding_box(&self) -> (f64, f64, f64, f64) {
+        (
+            self.x - self.radius,
+            self.y - self.radius,
+            self.x + self.radius,
+            self.y + self.radius,
+        )
+    }
+}
+
+struct Rectangle {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+impl Drawable for Rectangle {
+    fn draw(&self) {
+        println!("Drawing rectangle at ({}, {})", self.x, self.y);
+    }
+
+    fn bounding_box(&self) -> (f64, f64, f64, f64) {
+        (self.x, self.y, self.x + self.width, self.y + self.height)
+    }
+}
+
+// ============================================
+// Polymorphism via trait objects
+// ============================================
+
+fn render_all(drawables: &[&dyn Drawable]) {
+    for d in drawables {
+        d.render();
+    }
+}
+
+// ============================================
+// Composition (preferred over inheritance in Rust)
+// ============================================
+
+struct Position {
+    x: f64,
+    y: f64,
+}
+
+struct Size {
+    width: f64,
+    height: f64,
+}
+
+struct GameObject {
+    position: Position,
+    size: Size,
+    name: String,
+}
+
+impl GameObject {
+    fn new(name: &str, x: f64, y: f64, w: f64, h: f64) -> Self {
+        GameObject {
+            position: Position { x, y },
+            size: Size { width: w, height: h },
+            name: name.to_string(),
+        }
+    }
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    let mut collection = encapsulated::AveragedCollection::new();
+    collection.add(10);
+    collection.add(20);
+    collection.add(30);
+    println!("Average: {}", collection.average());
+
+    let circle = Circle { x: 0.0, y: 0.0, radius: 5.0 };
+    let rect = Rectangle { x: 10.0, y: 10.0, width: 20.0, height: 15.0 };
+
+    render_all(&[&circle, &rect]);
+
+    let obj = GameObject::new("Player", 0.0, 0.0, 32.0, 32.0);
+    println!("Object '{}' at ({}, {})", obj.name, obj.position.x, obj.position.y);
+}
+```
+
+---
 # Trait-objects
+Trait objects enable dynamic dispatch — calling methods on values of different types through a common interface at runtime.
+
+```rust
+// ============================================
+// Trait object syntax
+// ============================================
+
+trait Draw {
+    fn draw(&self);
+}
+
+struct Button;
+struct TextField;
+struct SelectBox;
+
+impl Draw for Button {
+    fn draw(&self) { println!("Drawing a button"); }
+}
+
+impl Draw for TextField {
+    fn draw(&self) { println!("Drawing a text field"); }
+}
+
+impl Draw for SelectBox {
+    fn draw(&self) { println!("Drawing a select box"); }
+}
+
+// ============================================
+// Using trait objects in collections
+// ============================================
+
+fn main() {
+    let components: Vec<Box<dyn Draw>> = vec![
+        Box::new(Button),
+        Box::new(TextField),
+        Box::new(SelectBox),
+    ];
+
+    for component in &components {
+        component.draw();
+    }
+
+    // ============================================
+    // Trait objects as function parameters
+    // ============================================
+
+    fn run_gui(components: &[&dyn Draw]) {
+        for c in components {
+            c.draw();
+        }
+    }
+
+    run_gui(&[&Button, &TextField, &SelectBox]);
+
+    // ============================================
+    // &dyn Trait vs Box<dyn Trait>
+    // ============================================
+
+    // &dyn Draw — borrowed, no allocation
+    // Box<dyn Draw> — owned, heap allocated
+    // Rc<dyn Draw> — shared ownership
+
+    let button = Button;
+    let drawable: &dyn Draw = &button;
+    drawable.draw();
+
+    // ============================================
+    // Trait objects with multiple traits (not directly supported)
+    // Use a supertrait or wrapper
+    // ============================================
+
+    trait DebugDraw: Draw + std::fmt::Debug {}
+    impl DebugDraw for Button {}
+    impl DebugDraw for TextField {}
+    impl DebugDraw for SelectBox {}
+
+    // Now you can use: &dyn DebugDraw
+
+    // ============================================
+    // Object safety rules
+    // ============================================
+
+    // A trait is object-safe if:
+    // 1. It does not return Self
+    // 2. It has no generic methods
+    // 3. It does not require Self: Sized
+
+    // NOT object-safe:
+    // trait NotObjectSafe {
+    //     fn clone(&self) -> Self;           // returns Self
+    //     fn generic<T>(&self, x: T);        // generic method
+    // }
+
+    // Object-safe:
+    trait Cloneable {
+        fn clone_box(&self) -> Box<dyn Cloneable>;
+    }
+
+    impl Cloneable for Button {
+        fn clone_box(&self) -> Box<dyn Cloneable> {
+            Box::new(Button)
+        }
+    }
+
+    // ============================================
+    // Dynamic vs static dispatch
+    // ============================================
+
+    // Static (monomorphized) — compile-time, faster:
+    fn draw_static<T: Draw>(item: &T) {
+        item.draw();
+    }
+
+    // Dynamic (trait object) — runtime, flexible:
+    fn draw_dynamic(item: &dyn Draw) {
+        item.draw();
+    }
+
+    draw_static(&Button);
+    draw_dynamic(&Button);
+}
+```
+
+---
 # External-Crates(rand,rayon,serde,chrono,regex)
+Commonly used external crates in Rust projects.
+
+```rust
+// ============================================
+// rand — random number generation
+// ============================================
+
+// use rand::Rng;
+
+fn demo_rand() {
+    // let mut rng = rand::thread_rng();
+
+    // Random integer in range
+    // let n: i32 = rng.gen_range(1..=100);
+
+    // Random float
+    // let f: f64 = rng.gen_range(0.0..1.0);
+
+    // Random boolean
+    // let b: bool = rng.gen();
+
+    // Random element from slice
+    // let choices = [1, 2, 3, 4, 5];
+    // let pick = rng.choice(&choices);
+
+    // Shuffle
+    // let mut nums = vec![1, 2, 3, 4, 5];
+    // nums.shuffle(&mut rng);
+
+    println!("rand: use rand::Rng trait for .gen_range(), .gen(), .choice(), .shuffle()");
+}
+
+// ============================================
+// rayon — data parallelism
+// ============================================
+
+// use rayon::prelude::*;
+
+fn demo_rayon() {
+    // Parallel iterator
+    // let sum: i32 = (1..1_000_000).into_par_iter().sum();
+
+    // Parallel map
+    // let doubled: Vec<_> = vec![1,2,3,4,5].par_iter().map(|x| x * 2).collect();
+
+    // Parallel filter
+    // let evens: Vec<_> = (0..100).into_par_iter().filter(|x| x % 2 == 0).collect();
+
+    // Parallel sort
+    // let mut v = vec![5, 3, 1, 4, 2];
+    // v.par_sort();
+
+    println!("rayon: use .par_iter(), .into_par_iter(), .par_sort(), .par_bridge()");
+}
+
+// ============================================
+// serde — serialization/deserialization
+// ============================================
+
+// use serde::{Serialize, Deserialize};
+
+fn demo_serde() {
+    // #[derive(Serialize, Deserialize, Debug)]
+    // struct User {
+    //     name: String,
+    //     age: u32,
+    //     #[serde(default)]
+    //     active: bool,
+    // }
+
+    // Serialize to JSON
+    // let user = User { name: "Alice".into(), age: 30, active: true };
+    // let json = serde_json::to_string(&user).unwrap();
+
+    // Deserialize from JSON
+    // let parsed: User = serde_json::from_str(&json).unwrap();
+
+    // Serialize to TOML, YAML, etc. with respective crates
+
+    println!("serde: derive Serialize/Deserialize, use serde_json for JSON");
+}
+
+// ============================================
+// chrono — date and time
+// ============================================
+
+// use chrono::{DateTime, Utc, Local, Duration};
+
+fn demo_chrono() {
+    // Current time
+    // let now: DateTime<Utc> = Utc::now();
+
+    // Parse from string
+    // let dt = "2024-01-15T10:30:00Z".parse::<DateTime<Utc>>().unwrap();
+
+    // Arithmetic
+    // let tomorrow = Utc::now() + Duration::days(1);
+    // let yesterday = Utc::now() - Duration::days(1);
+
+    // Formatting
+    // println!("{}", now.format("%Y-%m-%d %H:%M:%S"));
+
+    // Timezone conversion
+    // let local: DateTime<Local> = now.with_timezone(&Local);
+
+    println!("chrono: use Utc::now(), Duration, DateTime, .format()");
+}
+
+// ============================================
+// regex — regular expressions
+// ============================================
+
+// use regex::Regex;
+
+fn demo_regex() {
+    // let re = Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap();
+
+    // Match
+    // assert!(re.is_match("2024-01-15"));
+
+    // Find
+    // if let Some(m) = re.find("Date: 2024-01-15") {
+    //     println!("Found: {}", m.as_str());
+    // }
+
+    // Captures
+    // let re = Regex::new(r"(\d{4})-(\d{2})-(\d{2})").unwrap();
+    // let caps = re.captures("2024-01-15").unwrap();
+    // println!("Year: {}, Month: {}, Day: {}", &caps[1], &caps[2], &caps[3]);
+
+    // Replace
+    // let result = re.replace_all("2024-01-15 and 2023-12-01", "DATE");
+
+    // Find all
+    // for mat in re.find_iter("2024-01-15 2023-12-01") {
+    //     println!("{}", mat.as_str());
+    // }
+
+    println!("regex: use Regex::new(), .is_match(), .find(), .captures(), .replace_all()");
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    demo_rand();
+    demo_rayon();
+    demo_serde();
+    demo_chrono();
+    demo_regex();
+}
+```
+
+---
 # oo
+Object-oriented design patterns in Rust using composition, traits, and generics.
+
+```rust
+// ============================================
+// Factory pattern
+// ============================================
+
+trait Shape {
+    fn area(&self) -> f64;
+    fn name(&self) -> &str;
+}
+
+struct Circle { radius: f64 }
+struct Square { side: f64 }
+
+impl Shape for Circle {
+    fn area(&self) -> f64 { std::f64::consts::PI * self.radius * self.radius }
+    fn name(&self) -> &str { "Circle" }
+}
+
+impl Shape for Square {
+    fn area(&self) -> f64 { self.side * self.side }
+    fn name(&self) -> &str { "Square" }
+}
+
+struct ShapeFactory;
+
+impl ShapeFactory {
+    fn create(kind: &str, size: f64) -> Box<dyn Shape> {
+        match kind {
+            "circle" => Box::new(Circle { radius: size }),
+            "square" => Box::new(Square { side: size }),
+            _ => panic!("Unknown shape"),
+        }
+    }
+}
+
+// ============================================
+// Builder pattern
+// ============================================
+
+#[derive(Debug)]
+struct HttpRequest {
+    method: String,
+    url: String,
+    headers: Vec<(String, String)>,
+    body: Option<String>,
+}
+
+struct HttpRequestBuilder {
+    method: String,
+    url: String,
+    headers: Vec<(String, String)>,
+    body: Option<String>,
+}
+
+impl HttpRequestBuilder {
+    fn new(method: &str, url: &str) -> Self {
+        HttpRequestBuilder {
+            method: method.to_string(),
+            url: url.to_string(),
+            headers: vec![],
+            body: None,
+        }
+    }
+
+    fn header(mut self, key: &str, value: &str) -> Self {
+        self.headers.push((key.to_string(), value.to_string()));
+        self
+    }
+
+    fn body(mut self, body: &str) -> Self {
+        self.body = Some(body.to_string());
+        self
+    }
+
+    fn build(self) -> HttpRequest {
+        HttpRequest {
+            method: self.method,
+            url: self.url,
+            headers: self.headers,
+            body: self.body,
+        }
+    }
+}
+
+// ============================================
+// Strategy pattern
+// ============================================
+
+trait SortStrategy {
+    fn sort(&self, data: &mut Vec<i32>);
+}
+
+struct QuickSort;
+struct BubbleSort;
+
+impl SortStrategy for QuickSort {
+    fn sort(&self, data: &mut Vec<i32>) {
+        data.sort();
+    }
+}
+
+impl SortStrategy for BubbleSort {
+    fn sort(&self, data: &mut Vec<i32>) {
+        let n = data.len();
+        for i in 0..n {
+            for j in 0..n - i - 1 {
+                if data[j] > data[j + 1] {
+                    data.swap(j, j + 1);
+                }
+            }
+        }
+    }
+}
+
+struct Sorter {
+    strategy: Box<dyn SortStrategy>,
+}
+
+impl Sorter {
+    fn new(strategy: Box<dyn SortStrategy>) -> Self {
+        Sorter { strategy }
+    }
+
+    fn set_strategy(&mut self, strategy: Box<dyn SortStrategy>) {
+        self.strategy = strategy;
+    }
+
+    fn sort(&self, data: &mut Vec<i32>) {
+        self.strategy.sort(data);
+    }
+}
+
+// ============================================
+// Observer pattern
+// ============================================
+
+use std::cell::RefCell;
+
+struct EventPublisher {
+    listeners: RefCell<Vec<Box<dyn Fn(&str)>>>,
+}
+
+impl EventPublisher {
+    fn new() -> Self {
+        EventPublisher {
+            listeners: RefCell::new(vec![]),
+        }
+    }
+
+    fn subscribe<F: Fn(&str) + 'static>(&self, listener: F) {
+        self.listeners.borrow_mut().push(Box::new(listener));
+    }
+
+    fn publish(&self, event: &str) {
+        for listener in self.listeners.borrow().iter() {
+            listener(event);
+        }
+    }
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    // Factory
+    let shapes = vec![
+        ShapeFactory::create("circle", 5.0),
+        ShapeFactory::create("square", 4.0),
+    ];
+    for s in &shapes {
+        println!("{} area: {}", s.name(), s.area());
+    }
+
+    // Builder
+    let request = HttpRequestBuilder::new("GET", "https://api.example.com")
+        .header("Content-Type", "application/json")
+        .header("Authorization", "Bearer token")
+        .body("{\"key\": \"value\"}")
+        .build();
+    println!("{:?}", request);
+
+    // Strategy
+    let mut sorter = Sorter::new(Box::new(QuickSort));
+    let mut data = vec![5, 3, 1, 4, 2];
+    sorter.sort(&mut data);
+    println!("Sorted: {:?}", data);
+
+    // Observer
+    let publisher = EventPublisher::new();
+    publisher.subscribe(|e| println!("Listener 1: {}", e));
+    publisher.subscribe(|e| println!("Listener 2: {}", e));
+    publisher.publish("user_login");
+}
+```
+
+---
 # oo-Design-Paterns
+Common design patterns implemented in Rust.
+
+```rust
+// ============================================
+// Singleton (using OnceLock)
+// ============================================
+
+use std::sync::OnceLock;
+
+struct Config {
+    database_url: String,
+    max_connections: u32,
+}
+
+impl Config {
+    fn global() -> &'static Config {
+        static INSTANCE: OnceLock<Config> = OnceLock::new();
+        INSTANCE.get_or_init(|| Config {
+            database_url: "postgres://localhost/db".to_string(),
+            max_connections: 10,
+        })
+    }
+}
+
+// ============================================
+// Adapter pattern
+// ============================================
+
+trait Target {
+    fn request(&self) -> String;
+}
+
+struct Adaptee;
+
+impl Adaptee {
+    fn specific_request(&self) -> String {
+        "Adaptee response".to_string()
+    }
+}
+
+struct Adapter {
+    adaptee: Adaptee,
+}
+
+impl Target for Adapter {
+    fn request(&self) -> String {
+        self.adaptee.specific_request()
+    }
+}
+
+// ============================================
+// Decorator pattern
+// ============================================
+
+trait Component {
+    fn operation(&self) -> String;
+}
+
+struct ConcreteComponent;
+
+impl Component for ConcreteComponent {
+    fn operation(&self) -> String {
+        "ConcreteComponent".to_string()
+    }
+}
+
+struct LoggingDecorator<T: Component> {
+    inner: T,
+}
+
+impl<T: Component> Component for LoggingDecorator<T> {
+    fn operation(&self) -> String {
+        let result = self.inner.operation();
+        format!("[LOG] {}", result)
+    }
+}
+
+// ============================================
+// Repository pattern
+// ============================================
+
+#[derive(Debug)]
+struct User {
+    id: u64,
+    name: String,
+}
+
+trait UserRepository {
+    fn find_by_id(&self, id: u64) -> Option<User>;
+    fn save(&mut self, user: User);
+    fn delete(&mut self, id: u64);
+}
+
+struct InMemoryUserRepo {
+    users: std::collections::HashMap<u64, User>,
+    next_id: u64,
+}
+
+impl UserRepository for InMemoryUserRepo {
+    fn find_by_id(&self, id: u64) -> Option<User> {
+        self.users.get(&id).cloned()
+    }
+
+    fn save(&mut self, user: User) {
+        self.users.insert(user.id, user);
+    }
+
+    fn delete(&mut self, id: u64) {
+        self.users.remove(&id);
+    }
+}
+
+// ============================================
+// Command pattern
+// ============================================
+
+trait Command {
+    fn execute(&self);
+    fn undo(&self);
+}
+
+struct LightOnCommand;
+struct LightOffCommand;
+
+impl Command for LightOnCommand {
+    fn execute(&self) { println!("Light ON"); }
+    fn undo(&self) { println!("Light OFF (undo)"); }
+}
+
+impl Command for LightOffCommand {
+    fn execute(&self) { println!("Light OFF"); }
+    fn undo(&self) { println!("Light ON (undo)"); }
+}
+
+struct RemoteControl {
+    last_command: Option<Box<dyn Command>>,
+}
+
+impl RemoteControl {
+    fn new() -> Self {
+        RemoteControl { last_command: None }
+    }
+
+    fn press(&mut self, cmd: Box<dyn Command>) {
+        cmd.execute();
+        self.last_command = Some(cmd);
+    }
+
+    fn undo(&self) {
+        if let Some(cmd) = &self.last_command {
+            cmd.undo();
+        }
+    }
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    // Singleton
+    let config = Config::global();
+    println!("DB: {}, Max connections: {}", config.database_url, config.max_connections);
+
+    // Adapter
+    let adapter = Adapter { adaptee: Adaptee };
+    println!("Adapter: {}", adapter.request());
+
+    // Decorator
+    let component = ConcreteComponent;
+    let decorated = LoggingDecorator { inner: component };
+    println!("Decorated: {}", decorated.operation());
+
+    // Repository
+    let mut repo = InMemoryUserRepo {
+        users: std::collections::HashMap::new(),
+        next_id: 1,
+    };
+    repo.save(User { id: 1, name: "Alice".to_string() });
+    println!("Find: {:?}", repo.find_by_id(1));
+
+    // Command
+    let mut remote = RemoteControl::new();
+    remote.press(Box::new(LightOnCommand));
+    remote.undo();
+}
+```
+
+---
 # Paterns
+Common Rust patterns and idioms.
+
+```rust
+use std::collections::HashMap;
+
+// ============================================
+// Newtype pattern
+// ============================================
+
+struct Meters(f64);
+struct Feet(f64);
+
+impl Meters {
+    fn to_feet(&self) -> Feet { Feet(self.0 * 3.28084) }
+}
+
+impl Feet {
+    fn to_meters(&self) -> Meters { Meters(self.0 / 3.28084) }
+}
+
+// ============================================
+// RAII (Resource Acquisition Is Initialization)
+// ============================================
+
+struct LockGuard {
+    resource_id: u32,
+}
+
+impl LockGuard {
+    fn acquire(id: u32) -> Self {
+        println!("Acquiring resource {}", id);
+        LockGuard { resource_id: id }
+    }
+}
+
+impl Drop for LockGuard {
+    fn drop(&mut self) {
+        println!("Releasing resource {}", self.resource_id);
+    }
+}
+
+// ============================================
+// Typestate pattern
+// ============================================
+
+struct Draft;
+struct Reviewed;
+struct Published;
+
+struct Article<State> {
+    content: String,
+    _state: std::marker::PhantomData<State>,
+}
+
+impl Article<Draft> {
+    fn new(content: &str) -> Self {
+        Article {
+            content: content.to_string(),
+            _state: std::marker::PhantomData,
+        }
+    }
+
+    fn review(self) -> Article<Reviewed> {
+        Article {
+            content: self.content,
+            _state: std::marker::PhantomData,
+        }
+    }
+}
+
+impl Article<Reviewed> {
+    fn publish(self) -> Article<Published> {
+        Article {
+            content: self.content,
+            _state: std::marker::PhantomData,
+        }
+    }
+}
+
+impl Article<Published> {
+    fn content(&self) -> &str {
+        &self.content
+    }
+}
+
+// ============================================
+// Error handling patterns
+// ============================================
+
+fn divide(a: f64, b: f64) -> Result<f64, String> {
+    if b == 0.0 {
+        Err("Division by zero".to_string())
+    } else {
+        Ok(a / b)
+    }
+}
+
+// Using ? operator
+fn compute() -> Result<f64, String> {
+    let x = divide(10.0, 2.0)?;
+    let y = divide(x, 0.0)?; // returns early with Err
+    Ok(y)
+}
+
+// ============================================
+// Borrowing pattern — entry API
+// ============================================
+
+fn word_count(text: &str) -> HashMap<String, u32> {
+    let mut counts = HashMap::new();
+    for word in text.split_whitespace() {
+        *counts.entry(word.to_string()).or_insert(0) += 1;
+    }
+    counts
+}
+
+// ============================================
+// Smart pointer pattern
+// ============================================
+
+struct SmartPtr<T> {
+    data: T,
+}
+
+impl<T> SmartPtr<T> {
+    fn new(data: T) -> Self {
+        SmartPtr { data }
+    }
+}
+
+impl<T> std::ops::Deref for SmartPtr<T> {
+    type Target = T;
+    fn deref(&self) -> &T { &self.data }
+}
+
+impl<T> std::ops::DerefMut for SmartPtr<T> {
+    fn deref_mut(&mut self) -> &mut T { &mut self.data }
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    // Newtype
+    let m = Meters(10.0);
+    let f = m.to_feet();
+    println!("{} meters = {:?} feet", m.0, f.0);
+
+    // RAII
+    {
+        let _guard = LockGuard::acquire(42);
+        println!("Working with resource...");
+    } // automatically released
+
+    // Typestate
+    let article = Article::new("Draft content")
+        .review()
+        .publish();
+    println!("Published: {}", article.content());
+
+    // Error handling
+    match divide(10.0, 0.0) {
+        Ok(v) => println!("Result: {}", v),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    // Entry API
+    let counts = word_count("the quick brown fox the fox");
+    println!("Word counts: {:?}", counts);
+}
+```
+
+---
 # Refutability
+Refutability determines whether a pattern match can fail. Refutable patterns can fail; irrefutable patterns always match.
+
+```rust
+// ============================================
+// Irrefutable patterns — cannot fail
+// ============================================
+
+fn demo_irrefutable() {
+    // let, function parameters, for loops require irrefutable patterns
+    let x = 5;           // always matches
+    let (a, b) = (1, 2); // always matches
+    let [x, y] = [1, 2]; // always matches
+
+    println!("x={}, a={}, b={}, [{}, {}]", x, a, b, x, y);
+}
+
+// ============================================
+// Refutable patterns — can fail
+// ============================================
+
+fn demo_refutable() {
+    // if let, while let, match arms accept refutable patterns
+
+    let option: Option<i32> = Some(5);
+
+    // if let — refutable
+    if let Some(x) = option {
+        println!("Got: {}", x);
+    }
+
+    // while let — refutable
+    let mut stack = vec![1, 2, 3];
+    while let Some(top) = stack.pop() {
+        println!("Popped: {}", top);
+    }
+
+    // match arms — each arm is refutable
+    let x = Some(5);
+    match x {
+        Some(n) if n > 10 => println!("Big number: {}", n),
+        Some(n) => println!("Small number: {}", n),
+        None => println!("Nothing"),
+    }
+}
+
+// ============================================
+// Where each pattern type is allowed
+// ============================================
+
+fn demo_contexts() {
+    // let — MUST be irrefutable
+    let x = 5;
+
+    // if let — refutable
+    let opt: Option<i32> = Some(3);
+    if let Some(v) = opt {
+        println!("if let: {}", v);
+    }
+
+    // let else — refutable with fallback
+    let val: Option<i32> = None;
+    let Some(v) = val else {
+        println!("let else fallback");
+        return;
+    };
+
+    // for — irrefutable (uses ref pattern internally)
+    for i in 0..3 {
+        println!("for: {}", i);
+    }
+
+    // fn params — irrefutable
+    fn take_tuple((a, b): (i32, i32)) {
+        println!("tuple params: {}, {}", a, b);
+    }
+    take_tuple((1, 2));
+
+    // closure params — irrefutable
+    let add = |(a, b): (i32, i32)| a + b;
+    println!("closure: {}", add((3, 4)));
+}
+
+// ============================================
+// Refutable pattern in wrong context (compile error)
+// ============================================
+
+// let Some(x) = Some(5); // ERROR: refutable pattern in let
+// if let x = 5 { }       // WARNING: irrefutable in if let (useless)
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    demo_irrefutable();
+    demo_refutable();
+    demo_contexts();
+}
+```
+
+---
 # Unsafe-Rust
+Unsafe Rust allows operations the compiler cannot verify for safety. It does not disable the borrow checker — it just relaxes certain checks.
+
+```rust
+// ============================================
+// Dereferencing raw pointers
+// ============================================
+
+fn demo_raw_pointers() {
+    let mut num = 5;
+
+    // Create raw pointers
+    let r1 = &num as *const i32;
+    let r2 = &mut num as *mut i32;
+
+    // Dereference in unsafe block
+    unsafe {
+        println!("r1 = {}", *r1);
+        *r2 = 10;
+        println!("r2 = {}", *r2);
+    }
+
+    // Raw pointers can be null
+    let null_ptr: *const i32 = std::ptr::null();
+    unsafe {
+        if !null_ptr.is_null() {
+            println!("{}", *null_ptr);
+        }
+    }
+
+    // Raw pointers can dangle (but dereferencing is UB)
+    let dangling: *const i32 = {
+        let x = 42;
+        &x as *const i32
+    };
+    // unsafe { println!("{}", *dangling); } // UB! Don't do this.
+}
+
+// ============================================
+// Calling unsafe functions
+// ============================================
+
+unsafe fn dangerous() {
+    println!("This function is unsafe!");
+}
+
+fn demo_unsafe_fn() {
+    unsafe {
+        dangerous();
+    }
+}
+
+// ============================================
+// Creating a safe abstraction over unsafe code
+// ============================================
+
+fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+    assert!(mid <= slice.len());
+
+    let len = slice.len();
+    let ptr = slice.as_mut_ptr();
+
+    unsafe {
+        (
+            std::slice::from_raw_parts_mut(ptr, mid),
+            std::slice::from_raw_parts_mut(ptr.add(mid), len - mid),
+        )
+    }
+}
+
+// ============================================
+// extern "C" — calling C code (FFI)
+// ============================================
+
+extern "C" {
+    fn abs(input: i32) -> i32;
+}
+
+fn demo_ffi() {
+    unsafe {
+        println!("Absolute value of -3: {}", abs(-3));
+    }
+}
+
+// Exporting Rust functions for C to call
+#[no_mangle]
+pub extern "C" fn call_from_c() {
+    println!("Called from C!");
+}
+
+// ============================================
+// Unsafe traits
+// ============================================
+
+unsafe trait Foo {
+    fn foo(&self);
+}
+
+struct Bar;
+
+unsafe impl Foo for Bar {
+    fn foo(&self) {
+        println!("unsafe trait impl");
+    }
+}
+
+// ============================================
+// std::mem — unsafe memory operations
+// ============================================
+
+fn demo_mem() {
+    let mut x = 5;
+    let y = &mut x as *mut i32;
+
+    unsafe {
+        // Read without taking a reference
+        let val = std::ptr::read(y);
+        println!("Read: {}", val);
+
+        // Write without taking a reference
+        std::ptr::write(y, 10);
+        println!("After write: {}", x);
+
+        // Swap
+        let mut a = 1;
+        let mut b = 2;
+        std::mem::swap(&mut a, &mut b);
+        println!("Swapped: a={}, b={}", a, b);
+
+        // Transmute (reinterpret bits — extremely dangerous)
+        let f: f32 = 1.0;
+        let bits: u32 = std::mem::transmute(f);
+        println!("Float bits: {:032b}", bits);
+    }
+}
+
+// ============================================
+// Union (unsafe to access)
+// ============================================
+
+#[repr(C)]
+union MyUnion {
+    f1: u32,
+    f2: f32,
+}
+
+fn demo_union() {
+    let u = MyUnion { f1: 42 };
+    unsafe {
+        println!("f1 = {}", u.f1);
+    }
+
+    let u = MyUnion { f2: 3.14 };
+    unsafe {
+        println!("f2 = {}", u.f2);
+    }
+}
+
+// ============================================
+// Unsafe blocks in safe functions
+// ============================================
+
+fn safe_wrapper() -> i32 {
+    let x = 5;
+    let ptr = &x as *const i32;
+    // This is safe because we know ptr is valid
+    unsafe { *ptr }
+}
+
+// ============================================
+// Usage
+// ============================================
+
+fn main() {
+    demo_raw_pointers();
+    demo_unsafe_fn();
+
+    let v = &mut [1, 2, 3, 4, 5];
+    let (left, right) = split_at_mut(v, 2);
+    println!("Left: {:?}, Right: {:?}", left, right);
+
+    demo_ffi();
+    demo_mem();
+    demo_union();
+
+    println!("Safe wrapper: {}", safe_wrapper());
+
+    let bar = Bar;
+    bar.foo();
+}
+```
