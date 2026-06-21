@@ -1,0 +1,187 @@
+### 1. Core Language Fundamentals & Types
+* **Initialisation of Variables:** Default, Value, Copy, Direct, Direct List (Uniform), Copy List, Type Deduction (**auto**), Aggregate, Designated (**C++20/23**), **Structured Binding**, `std::initializer_list`, Dynamic Allocation, **constexpr**, Lambda Init-Capture, Braced Initializer as function arg.
+* **Data Types Summary:** `int`, `float`, `double`, `char`, `bool`, `long`, `long long`, `unsigned`.
+* **Low-Level/Exploit-Relevant Types:** `std::uint8_t`, `std::uintptr_t` (**Fixed-width Integers**).
+* **Misc:** `sizeof`, `strlen`, `typeid`, `auto`, Overflow.
+* **Type Aliases:** `typedef`, `using`.
+* **Enums:** `enum Color`, `std::to_underlying`.
+* **Literals:** Integer, Hex, Octal, Unsigned, Float.
+* **Booleans:** `bool`, `true`, `false` (Representation: 1, 0).
+* **String Manipulation:** `std::string`, Concatenation, `.length()`, `.size()`, `.at(index)`, `[index]`, `getline`, `std::toupper`, `std::tolower`, `std::towupper`, `std::towlower`, `std::stoi`, etc.
+* **Operators:** Arithmetic, Comparison, Logical (`&&`, `||`, `!`).
+
+***
+
+### 2. Memory, Pointers, References & Casting
+* **Memory & Pointers:** Memory Addressing (`&`), Pointers (`*`), Dereference (`*p`), `nullptr`, `new`, `delete`, `delete[]`.
+* **Raw Pointers (T*)** and **Pointer Arithmetic**.
+* **References:** `int& ref`, Call Site Reference, **Rvalue References (T&&)**.
+* **Type Conversion:** Implicit, Explicit.
+* **Casting:** `static_cast`, `dynamic_cast`, `reinterpret_cast`, `const_cast`, **`std::bit_cast` (C++20)**.
+* **Type Casting (Exploit Context).**
+* **Memory Layout and Alignment:** `alignas`, `alignof`.
+* `sizeof`, `alignof`, `typeid` (RTTI).
+
+***
+
+### 3. Control Flow & Functions
+* **Control Flow:** `if / else if / else`, `switch` (`switch` with strings via workarounds), Ternary Operator, **`if constexpr`**.
+* **Loops:** `for`, `while`, `do-while`, **Range-Based `for`**.
+* **Loop Control:** `break`, `continue`.
+* **Common Functions:** `sqrt`, `pow`, `floor`, `ceil`, `sort`, `reverse`, `min()`, `max()`, `round()`, `log()`.
+* **Math (Header):** `#include <cmath>`.
+* **Functions:** Definition, Prototype, `void`.
+* **Parameters:** Pass by Value, Pass by Reference (`&`), Default Parameters.
+* **Function Overloading** (Different parameter types).
+* **Function Hiding & Overload Resolution.**
+* **Function Pointers:** `int (*funcPtr)(int, int)`, **Callbacks**.
+* **Recursion:** Factorial example.
+* **Scope:** Local, Global Variables.
+* **main:** `int main()`, `{...}`, `return 0 / 1`.
+* **Input and Output:** `#include <iostream>`, `cout`, `cin`, `endl` or `'\n'`.
+
+***
+
+### 4. Organization, Modifiers & Compile-Time (Modern C++ Depth)
+* **Namespace:** `using namespace`, `::` Scope Resolution, Nested (**C++17+**).
+* **Using:** `using namespace`, `using std::cout`, Type Alias.
+* **Libraries:** `#include`, `<iostream>`, `<cmath>`, `<string>`, `<vector>`, `<algorithm>`, `<typeinfo>`, **Static and Dynamic libraries**.
+* **Macros.**
+* **Header:** One Definition Rule (**ODR**), Don't Repeat Yourself (**DRY**).
+* **Modules (C++20):** **`export module`**, **`import`**, **`module partition`** (Crucial for build times and ODR).
+* **Attributes:** Standard attributes for conveying non-code information.
+    * **`[[nodiscard]]`**, **`[[maybe_unused]]`**, **`[[fallthrough]]`**, **`[[likely]]`/`[[unlikely]]` (C++20)**.
+* **Modifiers:** `const`, `static`, `volatile`, `mutable`.
+* **Const Correctness:** `const` on Variables, Parameters, Member Functions; `const T* p` vs. `T* const p`.
+* **`volatile`** (Hardware Access, Multi-threading).
+* **Global Variable:** `extern const`, `static constexpr`, `inline constexpr`.
+* **`static`:** Function variable persistence, Class members, File-scope linkage.
+* **`inline`:** Function (Optimization & ODR), Variable (ODR & Single Instance Guarantee), Nested Namespace.
+* **`constexpr`:** Function (Implicitly inline), Variable.
+* **`consteval`**, **`constinit`**.
+* **Compilation Model & Linking:** Preprocessor, Translation Units, `static` vs. `extern`, **Name Mangling**, **Manual ABI Control (`extern "C"`).**
+* **Compile-Time Programming:** Template Metaprogramming, **SFINAE**, Type Traits, `if constexpr`.
+* **Compile-Time Utilities:** Deeper exploration of the tools used in advanced metaprogramming.
+    * **`std::is_same_v`**, **`std::enable_if_t`** (In-depth Type Traits for template constraints before Concepts).
+    * **Fold Expressions (C++17):** For variadic template expansion.
+    * **Non-Type Template Parameters (NTTP) with classes/auto (C++20).**
+
+***
+
+### 5. Object-Oriented Programming (OOP)
+* **Struct (`struct Point`) & Class Basics (`class Box`):** `public`, `private`, `protected`.
+* **Constructor:** Default, Overloaded, Parameterized, Explicit.
+* **Destructors.**
+* **`this`** (incl. **deducing this**).
+* **Getter/Setter, Encapsulation.**
+* **Inheritance:** Single, Multilevel, Multiple (`class B : public A`), **Virtual Inheritance & Diamond Problem**.
+* **Polymorphism:** **`virtual`**, **`override`**.
+* **Interface:** **Pure virtual functions (`= 0`)**, Virtual Destructor.
+* **Internals:** **VTables Structure and Usage**, **VTable Overwrite Techniques** (RE/Exploit Context).
+* **Operator Overloading.**
+* **`friend`**.
+* **Object Lifetime:** **Rule of Zero/Three/Five** (Copy/Move/Destructor).
+* **Design Patterns:** Essential for advanced development and understanding large codebases (RE context).
+    * **Singleton, Factory, Observer, Strategy, RAII** (key).
+
+***
+
+### 6. Advanced C++ & Idioms
+* **Templates:** `template <typename T>`, Function Templates, Class Templates, Template Specialization, **Concepts (C++20)**, **`requires` Clause**.
+* **Exception Handling:** `try`, `catch`, `throw`, `std::exception`, `noexcept`, **Stack Unwinding**.
+* **Lambda Expressions & Closures:** `[]()`, **Init-Capture**, Syntax and Capture Lists (`[]`, `[=]`, `[&]`), Anonymous Functions.
+* **`std::function` (Type Erasure)**, `std::copyable_function`.
+* **Type Erasure:** `std::any`, `std::function`.
+* **RAII (Resource Acquisition Is Initialization):** Resource Lifetime Management, Scope-based Cleanup, Destructor Guarantees.
+* **CRTP (Curiously Recurring Template Pattern).**
+* **Move Semantics:** **Rvalue Glvalues Prvalues**, **`std::move`**, Move Constructor, Move Assignment Operator, Algorithms and `std` library.
+* **Coroutines (C++20):** **`co_await`**, **`co_yield`**.
+
+***
+
+### 7. Memory Management & Ownership
+* **Garbage Value Initialisation.**
+* **Dynamic Memory:** `new`, `delete[]`.
+* **C-style:** `malloc`/`free`.
+* **C++ Operators:** `new`/`delete`.
+* **Placement New.**
+* **Smart Pointers (Ownership):** **`std::shared_pointer`**, **`std::unique_pointer`**, **`std::weak_ptr`**, `std::make_shared`, `std::make_unique`.
+* **Custom Allocators:** `allocate`, `deallocate` methods, STL Container Customization, Hardened/Embedded Memory Pools.
+
+***
+
+### 8. Standard Template Library (STL) & Utilities (Modern STL)
+* **Containers:** `std::vector` (Dynamic Array), `std::map` (Ordered Key-Value), `std::unordered_map` (Hash Map), `std::deque`, `std::list`, `std::set`, `std::unordered_set`.
+* **Container Utilities:** `push_back`, `remove`, `empty`.
+* **Arrays:** Fixed size, Multi-dimensional, Range-based for.
+* **Iterators & Ranges:** Iterator Categories, `begin()`, `end()`, Range-based for loops, **Ranges (C++20)**, Custom Iterators.
+* **String/Buffer Views (C++17/20):** Essential for performance and avoiding unnecessary copies.
+    * **`std::string_view`** (Non-owning view of a string).
+    * **`std::span`** (Non-owning view of contiguous sequences).
+* **Error Handling/Flow:** **`std::expected`**, **`std::optional`**.
+* **Error Handling/Flow (Heterogeneous):**
+    * **`std::tuple`** (Handling heterogeneous collections).
+* **Type Utilities:** `std::to_underlying`, `std::move`, `std::reference_wrapper`, `std::void`, `std::monostate`, `std::pair`, `std::variant`, `std::visit`, `std::any`.
+* **Address Utilities:** `std::addressof`, `std::to_address`.
+* **Timers:** `std::chrono` (high\_resolution\_clock, duration, time\_point).
+* **Random Function:** `<random>` (`std::random_device`, `std::uniform_int_distribution`, `std::mt19937`).
+* **Input/Output:** IO Streams (`std::iostream`, `std::fstream`).
+* **Algorithms (Deep Dive):** Deeper dive into the high-performance algorithms.
+    * **`std::for_each`**, **`std::transform`**, **`std::accumulate`**, and their equivalents in **`std::ranges` (C++20)**.
+
+***
+
+### 9. Concurrency & Multi-threading
+* **Threading/Concurrency:** `std::thread`, `std::jthread`, `std::promise`, `std::async`.
+* **Synchronization:** `std::mutex`, `std::lock_guard`, `std::scoped_lock`, **`std::condition_variable`**.
+* **`volatile`** (Multi-threading context).
+
+***
+
+### 10. Security, Low-Level & Exploit Development (OSCP/Advanced RE Context) ⚠️
+Defensive study and generic, non-malicious code examples only.
+
+* **Low-Level Types:** Byte-level payload (`uint8_t`, `char`), Port numbers / offsets (`unsigned short`), Shellcode length (`const size_t`), Memory address ops (`void*`, `uintptr_t`).
+* **OS/Architecture Fundamentals:**
+    * **Call Conventions:** Understanding **`cdecl`**, **`stdcall`**, **`fastcall`**, **`vectorcall`** (x86/x64) for development and reverse engineering.
+    * **Compiler Optimization Effects:** How different optimization levels (**`-O1, -O2, -O3`**) affect the generated assembly and complicate reverse engineering.
+    * **PE/ELF File Format Internals:** Understanding sections (`.text, .data, .bss`), imports/exports, and relocation tables.
+    * **Process Memory Layout:** **Stack vs. Heap**, **`BSS, Data, Text` sections**, and **ASLR** effects.
+* **Undefined Behavior & Pitfalls (Understanding for Defense):**
+    * **Use-After-Free (UAF)**
+    * **Buffer Overflow (BOF)**
+    * **Signed Integer Overflow**
+    * **Accessing Uninitialized Memory**
+    * **Dangling Pointers/References**
+    * Integer overflow bugs (`int`, `unsigned`).
+* **Bit Manipulation:** Bitwise Operators (`&`, `|`, `^`, `~`), Bit Shifting (`<<`, `>>`), Setting/Clearing/Toggling Bits.
+* **Advanced Exploit Techniques (Conceptual/Defensive Knowledge):**
+    * **VTable Overwrite Techniques** (Run-time Polymorphism Internals).
+    * **ROP & Shellcode Integration:** `VirtualAlloc`/`VirtualProtect` (Memory Permissions), Function Pointer Execution, Payload Loading Techniques.
+    * **Direct Syscalls / Syscall Stubbing:** Bypassing Userland API Hooks (`ntdll.dll` hooks), `GetProcAddress` to find kernel functions, Manual Syscall Invocation (Conceptual).
+    * C++ Templates + Metaprogramming (Obfuscation): Compile-Time String/Data Obfuscation (e.g., XOR).
+    * **Heap Exploitation Primitives:** Understanding heap metadata, chunk structures, and techniques like **House of Force** (conceptual/historical for defense).
+    * **Control-Flow Integrity (CFI):** Understanding defenses like **CFG (Windows)** and how they limit **ROP**/**JOP** (Jump-Oriented Programming).
+    * **Data-Oriented Programming (DOP):** Attacks that manipulate non-control data to achieve malicious goals, bypassing DEP and NX.
+    * **Anti-Debugging/Anti-VM:** Techniques used in malware/licensed software to detect debuggers (e.g., **`IsDebuggerPresent`**) and virtual machines, and how a reverse engineer must bypass them.
+
+***
+
+### 11. External Development, Debugging & Resources
+* **Build System Mastery:** Deep knowledge of the build system is required for large projects (Dev) and for reproducing builds/patching (RE).
+    * **CMake** (Modern Standard), including **`FetchContent`** and **cross-compilation**.
+* **Networking and Inter-Process Communication (IPC):**
+    * **`Boost.Asio`** or **Standalone Asio** for modern network programming.
+    * **Named Pipes**, **Shared Memory**, **Sockets** for **IPC** (relevant for all three roles).
+* **External:** Libraries (`std`, Networking, UI), Abstraction, Metabuild System, Build System, Dependency, File Management, Other File Accessing ABI, Serialization, Networking, Cryptography.
+* **File Handling:** `ofstream`, `.close()`.
+* **Tooling (Deep Dive):**
+    * **Disassemblers/Decompilers:** **IDA Pro/Ghidra** proficiency (static analysis and binary patching).
+    * **System Call Tracing:** Using tools like **`strace` (Linux)** or **`ProcMon/ApiMonitor` (Windows)** to understand program execution flow.
+* **Debugging Tools:**
+    * **GDB** (Breakpoints, Stepping, Backtrace).
+    * **Valgrind** (Memory Leak/Error Detection).
+    * **AddressSanitizer** (`-fsanitize=address`).
+* **Code Quality:** Clean C++ Code Writing, Safe C++ Code Writing.
+* **Compiler Support Portability.**
+* **Resources:** Cherno, CppCon, Jason Turner, Low Level Learning.

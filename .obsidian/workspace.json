@@ -1,14 +1,14 @@
 {
   "main": {
-    "id": "79831b0acdab1909",
+    "id": "6253db0217034392",
     "type": "split",
     "children": [
       {
-        "id": "583a974816c9eb0d",
+        "id": "d0993954a455b58a",
         "type": "tabs",
         "children": [
           {
-            "id": "347ba283957f7b17",
+            "id": "3b8ae130cd189667",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -23,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "1c7e50521df377e6",
+    "id": "67050ec4ee30f61f",
     "type": "split",
     "children": [
       {
-        "id": "0b3081df80f7bb37",
+        "id": "6fe8f26c69eb0f0d",
         "type": "tabs",
         "children": [
           {
-            "id": "1068e4f996a71fef",
+            "id": "17994ce369669240",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -44,7 +44,7 @@
             }
           },
           {
-            "id": "8e438305642a5280",
+            "id": "e4dc3baae6407506",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -61,7 +61,7 @@
             }
           },
           {
-            "id": "615568bc1046a028",
+            "id": "c97cc36a7b29c741",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -77,15 +77,15 @@
     "width": 300
   },
   "right": {
-    "id": "032a5dd7adc8df87",
+    "id": "18f26afbcd5d4d68",
     "type": "split",
     "children": [
       {
-        "id": "e8a125aa94496eb1",
+        "id": "99504563be379651",
         "type": "tabs",
         "children": [
           {
-            "id": "fc527f9231591f5e",
+            "id": "7f5ad8ae8750d757",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -103,7 +103,7 @@
             }
           },
           {
-            "id": "b61b6053230dd82c",
+            "id": "c633b92cec12dd18",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
@@ -116,7 +116,7 @@
             }
           },
           {
-            "id": "2453ddb6393d82dc",
+            "id": "38ae6d58830b48ce",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -131,7 +131,7 @@
             }
           },
           {
-            "id": "f8a749fdf139a4a9",
+            "id": "0e331df203b3545e",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -145,7 +145,7 @@
             }
           },
           {
-            "id": "bd84a7c83587317f",
+            "id": "e16b0c511dc40de8",
             "type": "leaf",
             "state": {
               "type": "outline",
@@ -157,23 +157,13 @@
               "icon": "lucide-list",
               "title": "Outline"
             }
-          },
-          {
-            "id": "66cb2238ecd51d3b",
-            "type": "leaf",
-            "state": {
-              "type": "git-view",
-              "state": {},
-              "icon": "git-pull-request",
-              "title": "Source Control"
-            }
           }
-        ],
-        "currentTab": 5
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -183,44 +173,47 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false,
-      "obsidian-git:Open Git source control": false
+      "bases:Create new base": false
     }
   },
-  "active": "347ba283957f7b17",
+  "active": "3b8ae130cd189667",
   "lastOpenFiles": [
-    "Programming/test.md",
-    "checklist.md",
-    "Tutorial/UnityHack.md",
-    "Programming/Rust.md",
+    "Programming/C&CPP/Modules/networking/windows/winsock2.md",
+    "Programming/C&CPP/Modules/networking/windows/ws2tcpip.md",
+    "Programming/C&CPP/Modules/networking/windows/iphlpapi.md",
+    "Programming/C&CPP/Modules/networking/netintet/netinet_udp.md",
+    "Programming/C&CPP/Modules/networking/netintet/netinet_tcp.md",
+    "Programming/C&CPP/Modules/networking/netintet/netinet_ip.md",
+    "Programming/C&CPP/Modules/networking/netintet/netinet_in.md",
+    "Programming/C&CPP/Modules/wkdm/wdf.md",
+    "Programming/C&CPP/Modules/wkdm/ntstatus.md",
+    "Programming/C&CPP/Modules/wkdm/ntoskrnl.md",
+    "Programming/C&CPP/Modules/wkdm/ntifs.md",
+    "Programming/C&CPP/Modules/wkdm/ntdll.md",
+    "Programming/C&CPP/Modules/wkdm/ntdef windef.md",
+    "Programming/C&CPP/Modules/wkdm/ntddk wdm.md",
+    "Programming/C&CPP/Modules/win32/winsock2.md",
+    "Programming/C&CPP/Modules/win32/winnt.md",
+    "Programming/C&CPP/Modules/win32/windows.md",
+    "Programming/C&CPP/Modules/win32/tlhelp32.md",
+    "Programming/C&CPP/Modules/win32/psapi.md",
+    "Programming/C&CPP/Modules/win32/dbghelp.md",
+    "Programming/C&CPP/Modules/sys/sys_sysent conf.md",
+    "Programming/C&CPP/Modules/sys/sys_shm.md",
+    "Programming/C&CPP/Modules/sys/sys_resource.md",
+    "Programming/C&CPP/Modules/sys/sys_proc.md",
+    "Programming/C&CPP/Modules/sys/sys_personality.md",
+    "Programming/C&CPP/Modules/sys/sys_module.md",
+    "Programming/C&CPP/Modules/networking/windows",
+    "Programming/C&CPP/Modules/networking/netintet",
     "Programming/C&CPP/temp/temp3",
-    "Programming/C&CPP/temp/t.md",
-    "Programming/C&CPP/t.md",
-    "Programming/C&CPP/cmake.md",
-    "Programming/Assembly/nasm.md",
-    "Programming/Assembly/gas.md",
-    "Hacking Tools Guide/Reverse Engineering/Pwndbg(lldb).md",
-    "Hacking Tools Guide/Reverse Engineering/Pwndbg(GDB).md",
-    "Hacking Tools Guide/Reverse Engineering",
-    "Hacking Tools Guide/Forensics/Evidence Collection.md",
-    "Hacking Techniques Guide/ICS&OT/Basics.md",
-    "Hacking Techniques Guide/ICS&OT",
-    "Hacking Techniques Guide/Hardware Reversing/list.md",
-    "Hacking Techniques Guide/Hardware Reversing/Basics.md",
-    "Main.md",
-    "README.md",
-    "main.md",
-    "2026-03-21.md",
-    "Hacking_Notes/Programming/Rust.md",
-    "Hacking_Notes/Hacking Techniques Guide/Hardware Reversing/list.md",
-    "Hacking_Notes/Hacking Techniques Guide/ICS&OT/Basics.md",
-    "Hacking_Notes/Hacking Techniques Guide/ICS&OT",
-    "Hacking_Notes/Hacking Techniques Guide/Malware/ICS&OT",
-    "Hacking_Notes/Basics/Laws.md",
-    "Hacking_Notes/Hacking Techniques Guide/Hardware Reversing/Safety.md",
-    "Hacking_Notes/Hacking Techniques Guide/Hardware Reversing/Basics.md",
-    "Hacking_Notes/Extras/nvim.md",
-    "Hacking_Notes/Programming/C&CPP/temp/temp3",
-    "hpng.png"
+    "Programming/C&CPP/temp/temp2",
+    "Programming/C&CPP/temp/temp",
+    "Programming/C&CPP/temp/fin",
+    "Programming/C&CPP/Modules/wkdm",
+    "Programming/C&CPP/Modules/win32",
+    "Programming/C&CPP/Modules/sys",
+    "Programming/C&CPP/Modules/std",
+    "Extra Concepts/Graphics Rendering/pipeline.png"
   ]
 }

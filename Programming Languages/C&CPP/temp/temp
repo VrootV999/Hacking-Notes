@@ -1,0 +1,816 @@
+1. Core Language Fundamentals
+
+Initialisation of Variables: Default, Value, Copy, Direct, Direct List (Uniform), Copy List, Type Deduction (auto), Aggregate, Designated (C++20/23), Structured Binding, std::initializer_list, Dynamic Allocation, constexpr, Lambda Init-Capture, Braced Initializer as function arg.
+
+Data Types Summary: int, float, double, char, bool, long, long long, unsigned.
+
+Type Conversion: Implicit, Explicit.
+
+Casting: static_cast, dynamic_cast, reinterpret_cast, const_cast, std::bit_cast (C++20).
+
+Memory & Pointers: Memory Addressing (&), Pointers (*), Dereference (*p), nullptr, new, delete.
+
+References: int& ref, call site reference.
+
+Literals: Integer, Hex, Octal, Unsigned, Float.
+
+Misc: sizeof, strlen, typeid, auto, Overflow.
+
+Type Aliases: typedef, using.
+
+Enums: enum Color.
+
+2. Control Flow & Functions
+
+Control Flow: if / else if / else, switch, Ternary Operator, switch with strings.
+
+Loops: for, while, do-while, Range-Based for.
+
+Loop Control: break, continue.
+
+Common Functions: sqrt, pow, floor, ceil, sort, reverse.
+
+Recursion: Factorial example.
+
+Function Overloading: Different parameter types.
+
+Default Args: Optional parameters.
+
+Function Pointers: int (*funcPtr)(int, int).
+
+Lambda Expressions: [](){}, Init-Capture.
+
+Free Functions
+
+3. Organization & Linkage
+
+Namespace: using namespace, :: Scope Resolution, Nested (C++17+).
+
+Using: using namespace, using std::cout, Type Alias.
+
+Libraries: #include, <iostream>, <cmath>, <string>, <vector>, <algorithm>, <typeinfo>, Static and Dynamic libraries.
+
+Macros
+
+Header: One Definition Rule (ODR), Don't Repeat Yourself (DRY).
+
+Compiler Support Portability
+
+4. Modifiers & Compile-Time
+
+Modifiers: const, static, volatile, mutable.
+Global Variable: extern const, static constexpr, inline constexpr.
+static: Function variable persistence, Class members, File-scope linkage.
+inline: Function (Optimization & ODR), Variable (ODR & Single Instance Guarantee), Nested Namespace.
+constexpr: Function (Implicitly inline), Variable (Must be explicitly inline constexpr in headers).
+consteval
+constinit
+Compile Time Programming
+Template Metaprogramming
+SFINAE
+5. Object-Oriented Programming (OOP)
+
+Struct: struct Point.
+
+Class Basics: class Box, public, private, protected.
+
+Constructor: Default, Overloaded.
+
+Getter/Setter
+
+Destructors
+
+this
+
+Inheritance: class B : public A.
+
+Polymorphism: virtual, override.
+
+Interface: Pure virtual functions (= 0), Virtual Destructor.
+
+Operator Overloading
+
+friend
+
+6. Advanced C++ & Idioms
+
+Templates: template <typename T>.
+
+Exception Handling: try, catch, throw, std::exception.
+
+Dynamic Memory: new, delete[].
+
+constexpr Functions (compile-time computation)
+
+Initialization
+
+RAII (Resource Acquisition Is Initialization)
+
+CRTP (Curiously Recurring Template Pattern)
+
+deducing this
+
+cpp concepts features
+
+Clean C++ Code Writing
+
+Safe C++ Code Writing
+
+7. Memory Management & Ownership
+
+Garbage Value Initialisation
+
+Ownership and Move Semantics
+
+Rvalue Glvalues Prvalues: value_cast (rvalue prvalue glvalue lvalue rvalue).
+
+Move Semantics: Algorithms and std library.
+
+std::shared_pointer
+
+std::unique_pointer
+
+8. Standard Template Library (STL) & Utilities
+
+Containers: std::vector, std::map, std::deque, std::list, std::set, std::unordered_set, std::unordered_map.
+
+Container Utilities: push_back, remove, empty.
+
+Ranges: Sequential Generation, Filtering, Slicing, Reduction, Flattening, Method Chaining, Set Operations.
+
+Type Utilities: std::to_underlying, std::move, std::reference_wrapper, std::void, std::monostate, std::pair, std::variant, std::visit.
+
+Address Utilities: std::addressof, std::to_address.
+
+Error Handling/Flow: std::expected, std::optional.
+
+Threading/Concurrency: std::lock_guard, std::scoped_lock, std::thread, std::jthread, std::promise, std::async.
+
+Function Utilities: std::function, std::copyable_function.
+
+Memory/Views: std::span.
+
+String Manipulation: std::toupper, std::tolower, std::towupper, std::towlower, std::stoi, std::stol, std::stoll, std::stof, std::stod, std::stold.
+
+Random Function: <random> (std::random_device, std::uniform_int_distribution, std::mt19937).
+
+9. External & Development
+
+Libraries: std, Networking, UI (C++ or C#).
+
+Abstraction
+
+Metabuild System
+
+Build System
+
+Dependency
+
+File Management
+
+Other File Accessing ABI
+
+Serialization
+
+Networking
+
+Cryptography
+
+10. Security & Exploit Development (OSCP Context)
+
+Byte-level payload: uint8_t, char.
+
+Port numbers / offsets: unsigned short.
+
+Shellcode length: const size_t.
+
+Integer overflow bugs: int, unsigned.
+
+Memory address ops: void*, uintptr_t.
+
+11. Resources
+
+Cherno
+
+CppCon
+
+Jason Turner
+
+Low Level Learning
+
+
+Main
+
+    int main()
+
+    Function body: { ... }
+
+Return Value
+
+    return 0 (Success)
+
+    return 1 (Failure/Error)
+
+Input and Output
+
+    Header: #include <iostream>
+
+    cout (Output)
+
+    cin (Input)
+
+    endl or '\n' (Newline)
+
+Operators
+
+    Arithmetic: Same as Python (No difference)
+
+    Comparison: Same as Python (No difference)
+
+    Logical:
+
+        && (AND)
+
+        || (OR)
+
+        ! (NOT)
+
+String
+
+    Header: #include <string>
+
+    Declaration:
+
+        std::string
+
+        using std::string
+
+        typedef std::string string
+
+    Concatenation: + operator
+
+    Length/Size:
+
+        .length()
+
+        .size()
+
+    Access:
+
+        .at(index)
+
+        [index]
+
+    Size (Memory):
+
+        sizeof() (Type/Object size in bytes)
+
+        string.sizeof() (Incorrect C++ usage - use sizeof(string) or .size()/.length())
+
+    Input: getline(std::cin, string_variable) (Seen in While loop example)
+
+Math
+
+    Built-in:
+
+        min()
+
+        max()
+
+    Header: #include <cmath>
+
+    Functions:
+
+        sqrt()
+
+        round()
+
+        log()
+
+Booleans
+
+    bool keyword
+
+    true (Represents 1)
+
+    false (Represents 0)
+
+    Boolean expressions (e.g., x > y)
+
+Conditional Statements
+
+    if
+
+    else if
+
+    else
+
+Switch
+
+    switch statement
+
+    case labels
+
+    break
+
+    default
+
+    Limitation: Cannot directly use string with switch (Requires enums or other workarounds)
+
+Enums
+
+    enum keyword
+
+    Assigning integer values to names (e.g., Monday = 1)
+
+    Creating a custom data type (e.g., enum Day)
+
+Loops
+
+    While Loop:
+
+        while (condition)
+
+        break (Exit loop)
+
+    For Loop:
+
+        for (initialization; condition; update)
+
+    Loop Control:
+
+        continue (Skip current iteration)
+
+        break (Exit loop)
+
+Data Structures
+
+    Arrays:
+
+        Fixed size declaration: type name[size]
+
+        Implicit size declaration: type name[]
+
+        Multi-dimensional arrays: type name[d1][d2]
+
+        Iteration:
+
+            Standard for loop
+
+            Range-based for loop (for (int i : myNumbers))
+
+    Vector:
+
+        vector<type> name
+
+        Dynamic size
+
+        .push_back() (Add element)
+
+    Struct:
+
+        struct name { members }
+
+        Member access: object.member
+
+        Default member values
+
+Memory & Pointers
+
+    References: type &ref_name = variable
+
+    Memory Address: &variable (Address-of operator)
+
+    Pointers:
+
+        Declaration: type* pointer_name = &variable
+
+        Dereference: *pointer_name (Value at address)
+
+        Changing value via pointer: *ptr = new_value
+
+Functions
+
+    Definition: return_type function_name(parameters) { code }
+
+    void (No return value)
+
+    Declaration/Prototype: return_type function_name(parameters);
+
+    Parameters & Arguments:
+
+        Pass by Value (Creates a copy; original variable unchanged)
+
+        Pass by Reference (Uses & in parameter; original variable is changed)
+
+    Default Parameters: type name = value
+
+    Function Overload: Same function name, different parameter types/number (e.g., plusFuncInt vs plusFuncDouble in your example)
+
+    Scope:
+
+        Local Variable: Defined inside a function/block.
+
+        Global Variable: Defined outside functions.
+
+    Recursion: A function calling itself (return k + sum(k - 1))
+
+Object-Oriented Programming (OOP)
+
+    Class & Objects:
+
+        class MyClass { ... } (Blueprint)
+
+        MyClass myObj; (Object/Instance)
+
+        Attributes: Member variables (e.g., int myNum;)
+
+    Methods:
+
+        Functions defined Inside the class.
+
+        Functions defined Outside the class (using ClassName::methodName).
+
+    Constructor:
+
+        A method with the same name as the class.
+
+        Automatically called when an object is created.
+
+        Used for object initialization (e.g., Car(string x, string y, int z)).
+
+    Acceess Specifiers:
+
+        public (Accessible from outside)
+
+        private (Not accessible from outside)
+
+        protected (Not accessible from outside, but accessible in derived classes)
+
+    Encapsulation:
+
+        Hiding internal data (making attributes private).
+
+        Providing controlled access via public Getter and Setter methods.
+
+    Inheritance:
+
+        Base Class (Parent)
+
+        Derived Class (Child)
+
+        Types:
+
+            Single (class Child : public Parent)
+
+            Multilevel
+
+            Multiple (class Child : public Parent1, public Parent2)
+
+    Polymorphism: (Many forms)
+
+        Compile-time (Function Overloading)
+
+        Run-time (Virtual functions and override)
+
+File Handling
+
+    Output File Stream: ofstream file("example.txt")
+
+    .close()
+
+Exception Handling
+
+    try block
+
+    throw statement
+
+    catch block
+
+
+
+1. ⚙️ Compilation Model & Linking
+
+    Preprocessor
+
+    Translation Units
+
+    static vs. extern
+
+    Name Mangling
+
+2. 🔥 Memory Management
+
+    malloc/free (C-style)
+
+    new/delete (C++ operators)
+
+    Placement New
+
+    Memory Layout and Alignment
+
+3. 🧠 Smart Pointers
+
+    std::unique_ptr
+
+    std::shared_ptr
+
+    std::weak_ptr
+
+    std::make_shared, std::make_unique
+
+4. ⚔️ RAII (Resource Acquisition Is Initialization)
+
+    Resource Lifetime Management
+
+    Scope-based Cleanup
+
+    Destructor Guarantees
+
+5. 🔩 STL & Containers
+
+    std::vector (Dynamic Array)
+
+    std::map (Ordered Key-Value)
+
+    std::unordered_map (Hash Map)
+
+    std::set, std::list, std::deque
+
+6. 🧠 Pointers, References & Aliasing
+
+    Raw Pointers (T*)
+
+    References (T&)
+
+    Pointer Arithmetic
+
+7. 🧵 Const Correctness
+
+    const on Variables, Parameters
+
+    const on Member Functions
+
+    const T* p vs. T* const p
+
+8. 📐 Object Lifetime, Constructors, & Destructors
+
+    Default/Parameterized/Explicit Constructors
+
+    Destructors
+
+    Rule of Zero/Three/Five (Copy/Move/Destructor)
+
+9. 🧬 Templates & Metaprogramming
+
+    Function Templates
+
+    Class Templates
+
+    Template Specialization
+
+    SFINAE (Substitution Failure Is Not An Error)
+
+10. 🧪 Polymorphism Internals (VTables)
+
+    Virtual Functions
+
+    Virtual Destructors
+
+    VTable Structure and Usage
+
+    VTable Overwrite Techniques
+
+11. 🔁 Move Semantics
+
+    Rvalue References (T&&)
+
+    Move Constructor
+
+    Move Assignment Operator
+
+    std::move
+
+12. 📦 Libraries & Frameworks
+
+    Standard Template Library (STL)
+
+    Networking (e.g., Boost.Asio)
+
+    File System (std::filesystem)
+
+    Timers (std::chrono)
+
+    IO Streams (std::iostream, std::fstream)
+
+13. 🔁 Iterators & Ranges
+
+    Iterator Categories (Input, Output, Forward, Bidirectional, Random Access)
+
+    begin(), end()
+
+    Range-based for loops
+
+    Ranges (C++20)
+
+14. 🧩 Lambdas, std::function, and Closures
+
+    Lambda Syntax and Capture Lists ([], [=], [&])
+
+    Anonymous Functions
+
+    std::function (Type Erasure)
+
+15. 🕳️ Undefined Behavior & Pitfalls
+
+    Use-After-Free (UAF)
+
+    Buffer Overflow (BOF)
+
+    Signed Integer Overflow
+
+    Accessing Uninitialized Memory
+
+    Dangling Pointers/References
+
+16. ⚗️ Bit Manipulation
+
+    Bitwise Operators (&, |, ^, ~)
+
+    Bit Shifting (<<, >>)
+
+    Setting/Clearing/Toggling Bits
+
+17. ⚠️ Exceptions & noexcept
+
+    try, catch, throw
+
+    Stack Unwinding
+
+    std::exception Hierarchy
+
+    noexcept Specifier
+
+18. 🧱 Low-Level / Exploit-Relevant Types
+
+    std::uint8_t, std::uintptr_t (Fixed-width Integers)
+
+    Type Casting (static_cast, reinterpret_cast)
+
+19. 🧾 Volatile, Inline, Alignas
+
+    volatile (Hardware Access, Multi-threading)
+
+    inline (Compiler Hint for Inlining)
+
+    alignas, alignof (Memory Alignment)
+
+20. 🪓 Custom Allocators
+
+    allocate, deallocate methods
+
+    STL Container Customization
+
+    Hardened/Embedded Memory Pools
+
+21. 🪤 Function Pointers & Callbacks
+
+    Syntax (ReturnType (*ptr)(Args))
+
+    Invoking Functions
+
+    Callbacks
+
+22. 🧬 Type Traits & Metaprogramming
+
+    <type_traits> (e.g., std::is_integral, std::remove_reference)
+
+    Type Information at Compile Time
+
+23. 🧵 Multithreading (C++11+)
+
+    std::thread
+
+    std::mutex, std::lock_guard
+
+    std::condition_variable
+
+    Thread Synchronization
+
+24. 🧠 Modern Features Summary
+
+    auto, decltype
+
+    constexpr, consteval
+
+    std::optional, std::variant, std::any
+
+    Structured Bindings
+
+    Concepts (C++20)
+
+25. 🔣 if constexpr & Compile-Time Branching
+
+    Compile-Time Logic
+
+    Integration with Type Traits
+
+26. 📏 sizeof, alignof, typeid
+
+    Object Size Determination
+
+    Type Information (RTTI)
+
+27. 🧰 Concepts (C++20)
+
+    Template Constraints
+
+    requires Clause
+
+28. ⚡ Coroutines (C++20)
+
+    co_await, co_yield
+
+    std::suspend_always, std::suspend_never
+
+    Asynchronous Programming
+
+29. ⚙️ Custom Iterators
+
+    Iterator Implementations (for custom containers)
+
+    Operator Overloading (*, ++, !=)
+
+30. 🧩 Memory Alignment
+
+    alignas Specifier
+
+    Impact on Performance (SIMD) and Stability
+
+31. 🧱 Manual ABI Control
+
+    extern "C"
+
+    Name Mangling Control
+
+    Binary Interfacing
+
+32. 🎭 Function Hiding & Overload Resolution
+
+    Hiding Base Class Methods
+
+    using Declaration for Inheritance
+
+33. 🔍 RTTI Internals & typeid
+
+    type_info Structure
+
+34. 💎 Virtual Inheritance & Diamond Problem
+
+    virtual Keyword on Inheritance
+
+    VTable Complexity
+
+35. ⏱️ std::chrono
+
+    high_resolution_clock
+
+    duration, time_point
+
+    Timing and Profiling
+
+36. 🛠️ Debugging Tools
+
+    GDB (Breakpoints, Stepping, Backtrace)
+
+    Valgrind (Memory Leak/Error Detection)
+
+    AddressSanitizer (-fsanitize=address)
+
+37. 🧳 Type Erasure
+
+    std::any
+
+    std::function
+
+    Dynamic Polymorphism without Inheritance
+
+38. 🧬 C++ Templates + Metaprogramming (Obfuscation)
+
+    Compile-Time String/Data Obfuscation (e.g., XOR)
+
+39. 🔥 ROP & Shellcode Integration
+
+    VirtualAlloc/VirtualProtect (Memory Permissions)
+
+    Function Pointer Execution
+
+    Payload Loading Techniques
+
+40. 🔧 Direct Syscalls / Syscall Stubbing
+
+    Bypassing Userland API Hooks (ntdll.dll hooks)
+
+    GetProcAddress to find kernel functions
+
+    Manual Syscall Invocation (Conceptual)

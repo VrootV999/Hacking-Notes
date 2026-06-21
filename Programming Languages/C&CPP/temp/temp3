@@ -1,0 +1,147 @@
+◦ Comments
+◦ Types
+◦ Type inference
+▪ Declaring variables and code blocks
+◦ Mutability (changing)
+▪ Shadowing
+◦ The stack, the heap, and pointers
+◦ Strings
+◦ const and static
+◦ More on references
+◦ Mutable references
+▪ Shadowing again
+◦ Giving references to functions
+◦ Copy types
+▪ Variables without values
+◦ Collection types
+▪ Arrays
+◦ Vectors
+◦ Tuples
+◦ Control flow
+◦ Structs
+◦ Enums
+▪ Enums to use multiple types
+ Loops
+◦ Implementing structs and enums
+◦ Destructuring
+◦ References and the dot operator
+◦ Generics
+◦ Option and Result
+▪ Option
+▪ Result
+ Other collections
+▪ HashMap (and BTreeMap)
+▪ HashSet and BTreeSet
+▪ BinaryHeap
+▪ VecDeque
+◦ The ? operator
+▪ When panic and unwrap are good
+◦ Traits
+▪ The From trait
+▪ Taking a String and a &str in a function
+◦ Chaining methods
+◦ Iterators
+▪ How an iterator works
+◦ Closures
+▪ |_| in a closure
+▪ Helpful methods for closures and iterators
+◦ The dbg! macro and .inspect
+◦ Types of &str
+◦ Lifetimes
+◦ Interior mutability
+▪ Cell
+▪ RefCell
+▪ Mutex
+▪ RwLock
+◦ Cow
+◦ Type aliases
+▪ Importing and renaming inside a function
+◦ The todo! macro
+◦ Rc
+◦ Multiple threads
+◦ Closures in functions
+◦ impl Trait
+◦ Arc
+◦ Channels
+◦ Reading Rust documentation
+▪ assert_eq!
+▪ Searching
+▪ [src] button
+▪ Information on traits
+◦ Attributes
+◦ Box
+◦ Box around traits
+◦ Default and the builder pattern
+◦ Deref and DerefMut
+◦ Crates and modules
+◦ Testing
+▪ Test-driven development
+◦ External crates
+▪ rand
+▪ rayon
+▪ serde
+▪ regex
+▪ chrono
+◦ A tour of the standard library
+▪ Arrays
+▪ char
+▪ Integers
+▪ Floats
+▪ Bool
+▪ Vec
+▪ String
+▪ OsString and CString
+▪ Mem
+▪ Prelude
+▪ Time
+▪ Other-macros
+◦ Writing macros
+• Part 2 - Rust on your computer
+◦ Cargo
+◦ Taking_user_input
+◦ Using files
+◦ Cargo doc
+
+
+
+
+In rust we have 2 data types
+- Scalar Type
+    1. Integer Type
+
+    Integers are of two types, Signed and Unsigned integer
+
+
+    | Length | Signed | Unsigned | 
+    | --- | --- | --- |
+    | 8 bit | i8 | u8 |
+    | 16 bit | i16 | u16 | 
+    | 32 bit | i32 | u32 |
+    | 64 bit | i64 | u64 | 
+    | 128 bit | i128 | u128 |
+    | arch | isize | usize |
+
+
+    Integer Literals are of few types.
+
+
+    | Number Literal | Example | 
+    | ---- | ----- |
+    | Decimal | 98_222 |
+    | Hex | 0xff |
+    | Octal | Oo77 | 
+    | Binary | Ob1111_0000 | 
+    | Byte(u8 only) | b'A' |
+
+
+    2. Floating-Point Type
+    There are two types of floating point type,f32 and f64
+
+    3. Boolean Type
+
+    4. Character Type
+
+- Compound Type
+    1. Tuple Type
+    2. Array Type
+
