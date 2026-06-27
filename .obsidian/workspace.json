@@ -179,6 +179,8 @@
   },
   "active": "3b8ae130cd189667",
   "lastOpenFiles": [
+    "Hacking Techniques Guide/Cloud Security/Basics.md",
+    "Hacking Techniques Guide/Cloud Security",
     "Hacking Techniques Guide/LLM Red Teaming/Basics.md",
     "Hacking Techniques Guide/LLM Red Teaming",
     "Hacking Techniques Guide/LLM Hacking",
@@ -210,11 +212,9 @@
     "Programming Languages/C&CPP/Modules/win32/tlhelp32.md",
     "Programming Languages/C&CPP/Modules/win32/psapi.md",
     "Programming Languages/C&CPP/Modules/win32/dbghelp.md",
-    "Programming Languages/C&CPP/Modules/sys/sys_sysent conf.md",
     "Programming Languages/C&CPP/Modules/networking/windows",
     "Programming Languages/C&CPP/Modules/networking/netintet",
     "Programming Languages/C&CPP/temp/temp3",
-    "Programming Languages/C&CPP/temp/temp2",
     "Extra Concepts/Graphics Rendering/pipeline.png"
   ]
 }
