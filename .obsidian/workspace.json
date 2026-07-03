@@ -179,6 +179,7 @@
   },
   "active": "3b8ae130cd189667",
   "lastOpenFiles": [
+    "Basics/Blue_Teaming.md",
     "Hacking Techniques Guide/Defensive Security/Reverse Engineering/Checklist/Rev Checklist.md",
     "Hacking Techniques Guide/Defensive Security/Reverse Engineering/Checklist",
     "Hacking Techniques Guide/Defensive Security/Reverse Engineering",
@@ -214,7 +215,6 @@
     "Programming Languages/C&CPP/Modules/wkdm/ntifs.md",
     "Programming Languages/C&CPP/Modules/wkdm/ntdll.md",
     "Programming Languages/C&CPP/Modules/wkdm/ntdef windef.md",
-    "Programming Languages/C&CPP/Modules/wkdm/ntddk wdm.md",
     "Extra Concepts/Graphics Rendering/pipeline.png"
   ]
 }
