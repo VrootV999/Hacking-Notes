@@ -900,6 +900,6 @@ When the LLM retrieves and summarizes it, the injection triggers.
 7. **Monitor everything** — you can't fix what you don't measure; use LangKit + WhyLabs or equivalent
 8. **Treat LLM output as untrusted** — validate and sanitize before acting on it
 
+> **Further reading:** OWASP LLM Top 10 (genai.owasp.org), MITRE ATLAS (atlas.mitre.org), NIST AI RMF (nist.gov/ai-rmf)
 ---
 
-> **Further reading:** OWASP LLM Top 10 (genai.owasp.org), MITRE ATLAS (atlas.mitre.org), NIST AI RMF (nist.gov/ai-rmf)
