@@ -55,7 +55,6 @@ x86/x86_64 are Little Endian
 - RISC-V: Open-source RISC architecture
 
 --- 
-
 ##     CPU Architecture Basics (Registers, ALU, Stack, Heap, etc.)
 - Registers: Small, fast storage inside the CPU
   -   General: EAX, EBX, ECX, EDX
@@ -70,7 +69,6 @@ x86/x86_64 are Little Endian
 - Data segment: Static/global variables
 
 --- 
-
 ##     Memory Addressing Modes
 
 | Mode          | Example                | Meaning                   |
@@ -157,7 +155,6 @@ Diagram
 [[x86_syscalls.md]]
     
 ---
-
 ## Variable Storage Space
 
 | Directive | Purpose            | Storage space |
@@ -171,7 +168,6 @@ Diagram
 
 ## Allocating Storage Space for Uninitialized Data
 
-
 | Directive | Purpose          |
 | --------- | ---------------- |
 | RESB      | Reserve a byte   |
@@ -180,12 +176,9 @@ Diagram
 | RESQ      | Reserve 8 bytes  |
 | REST      | Reserve 10 bytes |
 
-
 --- 
 ##     Data Movement Instructions (MOV, LEA, etc.)
-
 ### Basic Movement 
-
 
 | Mnemonic | Meaning                  | Example                     |
 | -------- | ------------------------ | --------------------------- |
@@ -209,7 +202,6 @@ Diagram
 
 ### Special movement instructions 
 
-
 | Instruction | Description                              |
 | ----------- | ---------------------------------------- |
 | `MOVSx`     | Move string data (auto src/dest pointer) |
@@ -218,10 +210,8 @@ Diagram
 | `SCASx`     | Compare string with accumulator          |
 | `CMPSx`     | Compare strings                          |
 
-
 --- 
 ##     Arithmetic and Logic Instructions
-
 ### Arithmetic instructions
 
 | Instruction | Description                         | Example        |
@@ -268,13 +258,9 @@ Diagram
 | `ROL`       | Rotate left                                 |
 | `ROR`       | Rotate right                                |
 
-
 --- 
 ##     Control Flow Instructions (JMP, JZ, JNZ, CALL, RET, etc.)
-
-
 ### unconditional
-
 ### Conditional
 
 | Jump        | Meaning (Signed)     | Condition     |
@@ -293,12 +279,9 @@ Diagram
 | `JB`/`JNAE` | Below                | CF=1          |
 | `JBE`/`JNA` | Below or Equal       | CF=1 or ZF=1  |
 
-
 --- 
 ##     Stack Operations (PUSH, POP, CALL, RET)
-
 ### Stack Movement
-
 
 | Instruction | Meaning                           |
 | ----------- | --------------------------------- |
