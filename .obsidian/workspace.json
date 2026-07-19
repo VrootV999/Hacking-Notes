@@ -11,10 +11,14 @@
             "id": "3b8ae130cd189667",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "todo.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "todo"
             }
           }
         ]
@@ -179,6 +183,7 @@
   },
   "active": "3b8ae130cd189667",
   "lastOpenFiles": [
+    "Hacking Techniques Guide/Buffer Overflow/gcc.md",
     "Hacking Techniques Guide/Web App Exploitation/05_XSS/01_Stored_XSS.md",
     "Hacking Techniques Guide/Web App Exploitation/01_Reconnaissance/02_Active_Recon.md",
     "Hacking Techniques Guide/Web App Exploitation/01_Reconnaissance/01_Passive_Recon.md",
@@ -214,7 +219,6 @@
     "Hacking Techniques Guide/Windows AD/06_Kerberos_Attacks/09_Kerberos_RC4_TGS.md",
     "Hacking Techniques Guide/Windows AD/08_Persistence/10_Shadow_Credentials.md",
     "Hacking Techniques Guide/Windows AD/06_Kerberos_Attacks/08_Enterprise_Admin_Cross_Forest.md",
-    "Hacking Techniques Guide/Windows AD/Basics/13_AD_Security_Concepts.md",
     "Extra Concepts/Graphics Rendering/pipeline.png"
   ]
 }

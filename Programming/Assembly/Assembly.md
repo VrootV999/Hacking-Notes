@@ -35,7 +35,6 @@
 -  Assembler: Converts .asm source to machine code (e.g., nasm, masm, gas)
 -  Linker: Resolves symbols and creates an executable (ld, link)
 
-
 --- 
 
 ##    Endianness: Little vs Big Endian
@@ -48,9 +47,7 @@
 x86/x86_64 are Little Endian
 
 --- 
-
 ##     Instruction Sets: x86, x86_64, ARM, MIPS, RISC-V
-
 
 - x86: 32-bit Intel architecture (IA-32)
 
@@ -427,6 +424,7 @@ add:
 --- 
 
 ##     Looping Constructs in Assembly
+
 ```asm
 MOV ECX, 5
 .loop:
@@ -517,7 +515,7 @@ Macros can generate readable, reusable logic blocks for things like syscall wrap
 
 ---
  
-## II. 🎯 Position-Independent Code (PIC)
+## II. Position-Independent Code (PIC)
 
 ### What is PIC?
 
@@ -796,8 +794,13 @@ gcc -no-pie main.c asmfunc.o
 | `objdump` | Disassemble binary files   |
 | `gdb`     | Debugger                   |
 | `strace`  | Syscall tracer (Linux)     |
+| `ltrace` | Libcall Tracer (Linux) | 
 | `radare2` | Reverse engineering        |
 | `x64dbg`  | Windows debugging          |
 | `Cutter`  | GUI for radare2            |
+| `IDA Pro` | Debugger, Disassembler, Decompiler | 
+| `Ghidra` | Debugger, Disassembler, Decompiler |
+| `Binary Ninja` | Debugger, Disassembler, Decompiler | 
+
 
 ---
