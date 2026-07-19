@@ -502,9 +502,7 @@ int add(int a, int b) {
 ```
 
 - "=a" → output constraint (EAX)
-
 - "a", "b" → input constraints
-
 - Clobbers can be added with : : : "cc", "memory"
 
 ---
@@ -513,9 +511,7 @@ int add(int a, int b) {
 ### Characteristics of Shellcode
 
 - Must be position-independent
-
 - Avoid null bytes (0x00)
-
 - No external dependencies (no libc)
 
 > [!EXAMPLE]  Example
@@ -541,7 +537,6 @@ _start:
 
 --- 
 ## System V ABI (Linux x64) vs Microsoft x64 ABI
-
 ### System V ABI (Linux/macOS)
 
 
@@ -557,7 +552,6 @@ _start:
 
 
 - Caller-saved: RAX, RCX, RDX, R8–R11
-
 - Callee-saved: RBX, RBP, R12–R15
 
 ### Microsoft x64 ABI (Windows)
@@ -570,7 +564,6 @@ _start:
 | 4          | R9       |
 
  - Return value in RAX
-
 - Stack aligned to 16 bytes before call
 
 --- 
@@ -591,7 +584,6 @@ _start:
 ## Exception Handling and Interrupts (x86)
 
 ### Software Interrupts
-
 ```asm
 int 0x80      ; Linux syscall (x86)
 ```
@@ -599,9 +591,7 @@ int 0x80      ; Linux syscall (x86)
 ### Hardware Interrupt Flow (simplified)
 
 - Interrupt occurs
-
 - CPU pushes flags, CS, and IP onto stack
-
 - Jumps to address in IDT (Interrupt Descriptor Table)
 
 ### Return from Interrupt
@@ -613,9 +603,7 @@ int 0x80      ; Linux syscall (x86)
 
 ### x87 Register Stack
 
-
 - 8 registers: ST(0) to ST(7)
-
 - Stack-style (push/pop) operations
 
 ### Basic FPU Instructions
@@ -633,13 +621,11 @@ int 0x80      ; Linux syscall (x86)
 ### Stack Smashing & Buffer Overflows
 
 - Writing past local variables → overwrite return address
-
 - Use NOP sled and shellcode payload
 
 ### Return-Oriented Programming (ROP)
 
 - Chain together code snippets ("gadgets") ending in RET
-
 -  Used in modern exploits to bypass DEP/NX
 
 ---
@@ -647,9 +633,7 @@ int 0x80      ; Linux syscall (x86)
 ### ELF Format (Linux)
 
 - Header
-
 - Program headers (segments)
-
 - Section headers (.text, .data, .bss)
 
 > [!NOTE]  Note
@@ -662,13 +646,9 @@ readelf -h a.out
 ### PE Format (Windows)
 
 - DOS Header
-
 - PE Header
-
 - Import Address Table
-
 -  .text / .data / .rsrc sections
-
 
 > [!NOTE] Note
 > Use CFF Explorer, x64dbg, or PE-bear to inspect.
@@ -676,7 +656,6 @@ readelf -h a.out
 --- 
 ## CPUID and Feature Detection
 ### Example: Checking for AVX Support
-
 
 ```asm
 mov eax, 1
@@ -695,7 +674,6 @@ jc avx_supported
 | CR2      | Page fault address     |
 | CR3      | Page directory base    |
 | CR4      | Feature flags          |
-
 
 --- 
 ## inking Assembly With C (Multi-File Projects)
@@ -721,7 +699,6 @@ my_asm_func:
 ```
 
 3. Compile & Link:
-
 ```bash
 nasm -f elf64 asmfunc.asm
 gcc -no-pie main.c asmfunc.o
