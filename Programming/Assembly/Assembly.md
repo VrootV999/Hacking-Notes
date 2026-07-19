@@ -312,23 +312,14 @@ Diagram
 --- 
 ##     Function Calling Conventions (cdecl, stdcall, fastcall, sysv, etc.)
 ### What Are Calling Conventions?
-
 - Calling conventions define:
-
  1.    How arguments are passed (via stack or registers)
-
  2.    How return values are passed
-
  3.    Who cleans up the stack (caller vs callee)
-
  4.    Which registers must be preserved
-
  5.    Crucial for:
-
     i.     Cross-language function calls (e.g., C to Assembly)
-
     ii.     Reverse engineering stack frames
-
     iii.    Exploit writing and ROP chains
 
 ### Stack Cleanup Responsibility
@@ -341,27 +332,18 @@ Diagram
 | `SysV`          | Callee        |
 | `Microsoft x64` | Callee        |
 
-
 --- 
 ##     Parameter Passing and Return Values
-
-### 📎 What Is Parameter Passing?
-
+### What Is Parameter Passing?
 - Parameter passing refers to how arguments are transferred to functions or procedures when a call is made. Assembly depends on:
-
    1.  Calling conventions
-
    2.  Architecture (x86 vs x64)
-
    3.  OS ABI (Application Binary Interface)
 
 ###  32-bit (x86) Parameter Passing
 -  Stack-Based (cdecl / stdcall)
-
   1.   Arguments are pushed onto the stack, right to left
-
   2.   Return value: stored in EAX
-
   3.   Accessed in function via [EBP + offset]
 
 ```asm
@@ -386,7 +368,6 @@ add:
 
 --- 
 ##     Looping Constructs in Assembly
-
 ```asm
 MOV ECX, 5
 .loop:
@@ -398,9 +379,9 @@ DEC ECX
 JNZ .loop
 
 ```
+
 --- 
 ##     Working with Strings and Buffers
-
 ### String and Buffer Instruction
 
 | Instruction | Meaning                        |
@@ -414,10 +395,8 @@ JNZ .loop
 | `CMPSB`     | Compare [ESI] with [EDI]       |
 
 
-
 --- 
 ##     Macros and Assembly Directives
-
 
 ```asm
 %macro SAVE_REGS 0
