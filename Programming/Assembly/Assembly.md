@@ -36,7 +36,6 @@
 -  Linker: Resolves symbols and creates an executable (ld, link)
 
 --- 
-
 ##    Endianness: Little vs Big Endian
 - Little Endian: Least significant byte stored first
 > Example: 0x12345678 → 78 56 34 12
@@ -50,38 +49,24 @@ x86/x86_64 are Little Endian
 ##     Instruction Sets: x86, x86_64, ARM, MIPS, RISC-V
 
 - x86: 32-bit Intel architecture (IA-32)
-
 - x86_64: 64-bit extension (AMD64)
-
 - ARM: Widely used in mobile/embedded devices
-
 - MIPS: Common in embedded systems
-
 - RISC-V: Open-source RISC architecture
 
 --- 
 
 ##     CPU Architecture Basics (Registers, ALU, Stack, Heap, etc.)
 - Registers: Small, fast storage inside the CPU
-
   -   General: EAX, EBX, ECX, EDX
-
   -   Stack: ESP, EBP
-
   -   Instruction: EIP (now RIP in x64)
-
 - ALU: Executes arithmetic and logic instructions
-
 - Control Unit: Directs instruction flow
-
 - FPU/SIMD: For floating-point and vector ops
-
 - Stack: LIFO data structure used for function calls
-
 - Heap: Dynamically allocated memory region
-
 - Code segment: Executable code
-
 - Data segment: Static/global variables
 
 --- 
@@ -97,11 +82,8 @@ x86/x86_64 are Little Endian
 | Base + Offset | `MOV EAX, [EBP+8]`     | Stack frame access        |
 | Indexed       | `MOV EAX, [EBX+ECX*4]` | Array access              |
 
-
 --- 
-
 ##     Instruction Format and Syntax (AT&T vs Intel)
-
 ### Mintel or Intel (used by IDA and WinDBG)
 MOV destination, source
 
@@ -109,9 +91,7 @@ MOV destination, source
 mov source, destination
 
 --- 
-
 # II.  Core Assembly Programming Concepts
-
 ##     Registers and Register Classes (General, Segment, Control)
 
 
@@ -135,26 +115,15 @@ mov source, destination
 | R15    | R15D   | R15W   | —          | R15B      | Same                        |
 
 
-
-
 ### Classic Purpose Registers
-
 - RAX / EAX: Return value of functions, accumulator for arithmetic
-
 - RBX: Sometimes preserved between calls (callee-saved)
-
 - RCX: Loop counters, shift amounts, syscall arg (Windows)
-
 - RDX: Second arg in Linux syscalls, math ops (e.g., DIV)
-
 - RSI / RDI: Memory/string operations; argument passing
-
 - RSP: Stack pointer – always points to top of the stack
-
 - RBP: Frame pointer – helps with local variable access
-
 - R8–R15: General-purpose, used for argument passing (SysV ABI)
-
 
 Diagram
 ![Diagram](../../Assets/Registers.jpeg)
@@ -199,6 +168,7 @@ Diagram
 | DQ        | Define quad word   | 8 byte        |
 | DT        | Define ten bytes   | 10 byte       |
 
+
 ## Allocating Storage Space for Uninitialized Data
 
 
@@ -212,7 +182,6 @@ Diagram
 
 
 --- 
-
 ##     Data Movement Instructions (MOV, LEA, etc.)
 
 ### Basic Movement 
@@ -251,7 +220,6 @@ Diagram
 
 
 --- 
-
 ##     Arithmetic and Logic Instructions
 
 ### Arithmetic instructions
@@ -302,7 +270,6 @@ Diagram
 
 
 --- 
-
 ##     Control Flow Instructions (JMP, JZ, JNZ, CALL, RET, etc.)
 
 
@@ -328,7 +295,6 @@ Diagram
 
 
 --- 
-
 ##     Stack Operations (PUSH, POP, CALL, RET)
 
 ### Stack Movement
@@ -344,9 +310,7 @@ Diagram
 
 
 --- 
-
 ##     Function Calling Conventions (cdecl, stdcall, fastcall, sysv, etc.)
-
 ### What Are Calling Conventions?
 
 - Calling conventions define:
@@ -379,7 +343,6 @@ Diagram
 
 
 --- 
-
 ##     Parameter Passing and Return Values
 
 ### 📎 What Is Parameter Passing?
@@ -422,7 +385,6 @@ add:
 ```
 
 --- 
-
 ##     Looping Constructs in Assembly
 
 ```asm
@@ -437,7 +399,6 @@ JNZ .loop
 
 ```
 --- 
-
 ##     Working with Strings and Buffers
 
 ### String and Buffer Instruction
@@ -455,7 +416,6 @@ JNZ .loop
 
 
 --- 
-
 ##     Macros and Assembly Directives
 
 
@@ -488,8 +448,6 @@ LOAD_IMM EAX, 0x1337
 Macros can generate readable, reusable logic blocks for things like syscall wrappers, context switches, saving/restoring register
 
 --- 
-
-
 ##  SIMD and Floating Point Instructions
 
 ### SSE, AVX, and Vector Registers
@@ -514,7 +472,6 @@ Macros can generate readable, reusable logic blocks for things like syscall wrap
 > Requires CPU feature detection and proper alignment for max performance.
 
 ---
- 
 ## II. Position-Independent Code (PIC)
 
 ### What is PIC?
@@ -530,7 +487,6 @@ Position-Independent Code can be loaded at **any memory address** and still func
 ```
 
 ---
-
 ## Inline Assembly (GCC / MSVC / Clang)
 - GCC-Style Inline Assembly (x86/x64)
 ```cpp
@@ -552,8 +508,6 @@ int add(int a, int b) {
 - Clobbers can be added with : : : "cc", "memory"
 
 ---
-
-
 ## Writing Shellcode (Linux/x86_64)
 
 ### Characteristics of Shellcode
@@ -586,7 +540,6 @@ _start:
 
 
 --- 
-
 ## System V ABI (Linux x64) vs Microsoft x64 ABI
 
 ### System V ABI (Linux/macOS)
@@ -621,8 +574,6 @@ _start:
 - Stack aligned to 16 bytes before call
 
 --- 
-
-
 ## Multithreading and Atomic Instructions
 
 ### Atomic Instructions
@@ -637,7 +588,6 @@ _start:
 - Use lock cmpxchg for atomic compare-and-swap loops.
 
 --- 
-
 ## Exception Handling and Interrupts (x86)
 
 ### Software Interrupts
@@ -659,8 +609,7 @@ int 0x80      ; Linux syscall (x86)
 - IRET or IRETD restores execution state
 
 ---
-
-## 📉 Floating Point (x87 FPU)
+## Floating Point (x87 FPU)
 
 ### x87 Register Stack
 
@@ -680,9 +629,7 @@ int 0x80      ; Linux syscall (x86)
 | `FDIV`      | Divide ST(0) / ST(i)      |
 
 --- 
-
-
-## 🔐 Security Concepts in Assembly
+## Security Concepts in Assembly
 ### Stack Smashing & Buffer Overflows
 
 - Writing past local variables → overwrite return address
@@ -695,9 +642,8 @@ int 0x80      ; Linux syscall (x86)
 
 -  Used in modern exploits to bypass DEP/NX
 
-
-## 🔧 Manual Linking and Binary Format (ELF / PE)
-
+---
+## Manual Linking and Binary Format (ELF / PE)
 ### ELF Format (Linux)
 
 - Header
@@ -728,8 +674,7 @@ readelf -h a.out
 > Use CFF Explorer, x64dbg, or PE-bear to inspect.
 
 --- 
-
-## 🔐 CPUID and Feature Detection
+## CPUID and Feature Detection
 ### Example: Checking for AVX Support
 
 
@@ -742,8 +687,7 @@ jc avx_supported
 - Use CPUID to query features, vendor strings, etc.
 
 --- 
-
-## ⚙️ Control and System Registers (x86 only)
+## Control and System Registers (x86 only)
 
 | Register | Use                    |
 | -------- | ---------------------- |
@@ -754,7 +698,6 @@ jc avx_supported
 
 
 --- 
-
 ## inking Assembly With C (Multi-File Projects)
 
 1. C File
@@ -785,7 +728,6 @@ gcc -no-pie main.c asmfunc.o
 ```
 
 --- 
-
 ## Tools to use
 
 | Tool      | Purpose                    |
