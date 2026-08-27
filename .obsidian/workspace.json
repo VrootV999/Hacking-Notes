@@ -34,33 +34,9 @@
               "icon": "lucide-file",
               "title": "main"
             }
-          },
-          {
-            "id": "503192bf10f757db",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.13.6"
-              },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.13.6"
-            }
-          },
-          {
-            "id": "c1202e30d29e79b0",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.13.7"
-              },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.13.7"
-            }
           }
         ],
-        "currentTab": 3
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -212,7 +188,6 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-git:Open Git source control": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -222,7 +197,7 @@
       "bases:Create new base": false
     }
   },
-  "active": "c1202e30d29e79b0",
+  "active": "a7540eda123128e9",
   "lastOpenFiles": [
     "Hacking Techniques Guide/Buffer Overflow/gcc.md",
     "Hacking Techniques Guide/Web App Exploitation/05_XSS/01_Stored_XSS.md",

@@ -1277,7 +1277,9 @@ frida-ps -U        # USB device
 
 # Trace functions
 frida-trace -i "recv*" -i "send*" target
-frida-trace -i "CreateFile*" notepad.exe
+frida-trace -i "CreateFile*" notepad.exe # notepad with that function
+frida-trace -f "location/file.exe" # spawn a file
+frida-trace -f "location/file.exe" -X something.dll # hook a dynamic lib up.
 
 # Discover classes (Android)
 frida-discover -U com.example.app

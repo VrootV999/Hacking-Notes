@@ -49,7 +49,7 @@ Mathematics forms the **backbone of logical reasoning** and analytical thought p
 
 A **relation** is a mathematical concept that describes how elements from one set are related to elements in another set. It defines connections or associations between these elements.
 
-**Definition:** A relation $R$ is a **subset of $A \times A$**.
+**Definition:** A relation $R$ is a **subset of $A\times  A$**.
 
 A relation is typically expressed as a **set of ordered pairs**, where each pair consists of an element from the first set (called the **domain**) and an element from the second set (called the **co-domain**). Relations can model a wide range of real-world scenarios, such as the relationships between people, numbers, or any other objects.
 
@@ -68,13 +68,13 @@ A relation is typically expressed as a **set of ordered pairs**, where each pair
 
 **Definition:** A relation $R$ in a set $A$ is called an **empty relation** if no element of $A$ is related to any element of $A$, i.e.,
 
-$$R = \emptyset \subset A \times A$$
+$$R = \emptyset \subset A\times A$$
 
 #### 2. Universal Relation
 
 **Definition:** A relation $R$ in a set $A$ is called a **universal relation** if each element of $A$ is related to every element of $A$, i.e.,
 
-$$R = A \times A$$
+$$R = A\times A$$
 
 > [!note] Both the **empty** and **universal** relations are also called **trivial relations**.
 
@@ -131,7 +131,6 @@ A relation $R$ in a set $A$ is called:
 > - All **odd integers** are related to one; no even integer is related to one
 
 ---
-
 ### Equivalence Classes and Partitions
 
 The set $E$ of all even integers and the set $O$ of all odd integers are subsets of $\mathbb{Z}$ satisfying:
